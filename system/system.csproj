@@ -59,6 +59,12 @@
     <Compile Include="DlgRoot.Designer.cs">
       <DependentUpon>DlgRoot.cs</DependentUpon>
     </Compile>
+    <Compile Include="DlgTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DlgTest.Designer.cs">
+      <DependentUpon>DlgTest.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -66,6 +72,8 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="jUIButton.cs" />
+    <Compile Include="jUICheckBox.cs" />
+    <Compile Include="jUIComboBox.cs" />
     <Compile Include="jUIControl.cs" />
     <Compile Include="jUIEditable.cs" />
     <Compile Include="jUISystem.cs" />
@@ -74,6 +82,9 @@
     <Compile Include="Renderer.cs" />
     <EmbeddedResource Include="DlgRoot.resx">
       <DependentUpon>DlgRoot.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DlgTest.resx">
+      <DependentUpon>DlgTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

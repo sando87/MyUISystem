@@ -7,25 +7,20 @@ using System.Threading.Tasks;
 
 namespace system
 {
-    enum UIControlType
+    public enum UIControlType
     {
         Dummy, Dialog, Button, CheckBox, Label, TextBox, ComboBox, ListView, ImageBox, 
     }
 
-    public class jMouseEventArgs
-    {
-        public int x;
-        public int y;
-        public int delta;
-        public string type;
-    }
 
-    class jUIControl
+    public class jUIControl
     {
         public string mID;
         public List<jUIControl> mNodes = new List<jUIControl>();
         public jUIControl mParentControl;
         public UIControlType mType;
+        public jUISystem mSystem;
+        public void SetUISystem(jUISystem _system) { mSystem = _system; }
 
         protected Rectangle mRect_A;
         protected Rectangle mRect_R;
@@ -36,18 +31,38 @@ namespace system
         public Point Point { get { return mRect_A.Location; } }
         public Size Size { get { return mRect_A.Size; } }
         public Color mColor = Color.Gray;
-        public bool mIsFocused;
-        public bool mIsEnabled;
-        public bool mIsVisiable;
-        public bool mIsMouseHover;
-        public bool mIsMouseDowned;
 
         public delegate void MouseEvent(jUIControl control, jMouseEventArgs args);
         public MouseEvent OnMouseDown = null;
         public MouseEvent OnMouseUp = null;
-        public MouseEvent OnMouseHover = null;
+        public MouseEvent OnMouseMove = null;
         public MouseEvent OnMouseClick = null;
+        public MouseEvent OnMouseEnter = null;
+        public MouseEvent OnMouseLeave = null;
 
+        public jUIControl NewControl()
+        {
+            jUIControl ctrl = null;
+            switch (mType)
+            {
+            case UIControlType.Button:
+                ctrl = new jUIButton();
+                ctrl.mType = UIControlType.Button;
+                ctrl.SetSize(Size);
+                break;
+            case UIControlType.CheckBox:
+                ctrl = new jUICheckBox();
+                ctrl.mType = UIControlType.CheckBox;
+                ctrl.SetSize(Size);
+                break;
+            case UIControlType.ComboBox:
+                ctrl = new jUIComboBox();
+                ctrl.mType = UIControlType.ComboBox;
+                ctrl.SetSize(Size);
+                break;
+            }
+            return (ctrl==null) ? new jUIControl() : ctrl;
+        }
 
         public void SetSize(Size _size)
         {
@@ -88,8 +103,14 @@ namespace system
             int top = Math.Max(mParentControl.Rect.Top, Rect.Top);
             int bottom = Math.Min(mParentControl.Rect.Bottom, Rect.Bottom);
 
-            Renderer.GetInst().DrawRect(new Rectangle(left, top, right - left, bottom - top), mColor);
-            Renderer.GetInst().DrawOutline(new Rectangle(left, top, right - left, bottom - top), Color.DarkGray);
+            DrawInfo info = new DrawInfo();
+            info.rect = new Rectangle(left, top, right - left, bottom - top);
+            info.color = mColor;
+            mSystem.OnDrawRectFill?.Invoke(info);
+
+            info.color = Color.DarkGray;
+            info.lineWidth = 2;
+            mSystem.OnDrawRectOutline?.Invoke(info);
         }
 
     }

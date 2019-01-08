@@ -35,12 +35,14 @@
             this.chkItemCheckBox = new System.Windows.Forms.CheckBox();
             this.btnInit = new System.Windows.Forms.Button();
             this.pnGLView = new System.Windows.Forms.Panel();
+            this.btnTest = new System.Windows.Forms.Button();
             this.pnControllers.SuspendLayout();
             this.pnControlItems.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnControllers
             // 
+            this.pnControllers.Controls.Add(this.btnTest);
             this.pnControllers.Controls.Add(this.pnControlItems);
             this.pnControllers.Controls.Add(this.btnInit);
             this.pnControllers.Font = new System.Drawing.Font("Malgun Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
@@ -54,9 +56,9 @@
             this.pnControlItems.Controls.Add(this.chkItemComboBox);
             this.pnControlItems.Controls.Add(this.chkItemButton);
             this.pnControlItems.Controls.Add(this.chkItemCheckBox);
-            this.pnControlItems.Location = new System.Drawing.Point(4, 116);
+            this.pnControlItems.Location = new System.Drawing.Point(59, 208);
             this.pnControlItems.Name = "pnControlItems";
-            this.pnControlItems.Size = new System.Drawing.Size(193, 194);
+            this.pnControlItems.Size = new System.Drawing.Size(98, 207);
             this.pnControlItems.TabIndex = 3;
             // 
             // chkItemComboBox
@@ -113,6 +115,16 @@
             this.pnGLView.Size = new System.Drawing.Size(1039, 558);
             this.pnGLView.TabIndex = 1;
             // 
+            // btnTest
+            // 
+            this.btnTest.Location = new System.Drawing.Point(4, 33);
+            this.btnTest.Name = "btnTest";
+            this.btnTest.Size = new System.Drawing.Size(75, 23);
+            this.btnTest.TabIndex = 4;
+            this.btnTest.Text = "Test";
+            this.btnTest.UseVisualStyleBackColor = true;
+            this.btnTest.Click += new System.EventHandler(this.btnTest_Click_1);
+            // 
             // DlgRoot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -137,5 +149,6 @@
         private System.Windows.Forms.Panel pnControlItems;
         private System.Windows.Forms.CheckBox chkItemButton;
         private System.Windows.Forms.CheckBox chkItemComboBox;
+        private System.Windows.Forms.Button btnTest;
     }
 }

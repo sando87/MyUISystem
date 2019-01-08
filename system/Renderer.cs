@@ -11,16 +11,16 @@ using System.Drawing.Imaging;
 
 namespace system
 {
-    class Renderer
+    public class Renderer
     {
-        static private Renderer mInst = null;
-        static public Renderer GetInst() { if (mInst == null) mInst = new Renderer(); return mInst; }
-        private Renderer() { }
+        //static private Renderer mInst = null;
+        //static public Renderer GetInst() { if (mInst == null) mInst = new Renderer(); return mInst; }
+        public Renderer() { }
 
         bool loaded = false;
         public OpenTK.GLControl mGlView = new OpenTK.GLControl();
-        private jUIControl mSelectedControl;
-        public jUIControl SelectedControl { get { return mSelectedControl; } set { mSelectedControl = value; } }
+        public delegate void DelDraw();
+        public DelDraw OnDraw;
 
         private int MIN(int _a, int _b) { return (_a < _b) ? _a : _b; }
         private int MAX(int _a, int _b) { return (_a > _b) ? _a : _b; }
@@ -36,7 +36,6 @@ namespace system
             mGlView.VSync = true;
             mGlView.Load += new EventHandler(this.glControl1_Load);
             mGlView.Paint += new PaintEventHandler(this.glControl1_Paint);
-            SelectedControl = null;
 
             _panel.Controls.Add(mGlView);
 
@@ -87,12 +86,7 @@ namespace system
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
-            jUISystem.GetInst().Draw();
-
-            if(SelectedControl != null)
-            {
-                DrawOutline(SelectedControl.Rect, Color.Blue);
-            }
+            OnDraw?.Invoke();
 
             mGlView.SwapBuffers();
         }
@@ -127,7 +121,6 @@ namespace system
             GL.Disable(EnableCap.Texture2D);
             GL.Disable(EnableCap.Blend);
         }
-
         public void DrawOutline(Rectangle _rect, Color _color, float _lineWidth = 2.0f)
         {
             int left = _rect.Left;
@@ -145,7 +138,6 @@ namespace system
             GL.Vertex2(left, top); //lt
             GL.End();
         }
-
         public void DrawRect(Rectangle _rect, Color _color)
         {
             int left = _rect.Left;

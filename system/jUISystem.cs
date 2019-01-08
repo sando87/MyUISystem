@@ -8,21 +8,48 @@ using System.Threading.Tasks;
 
 namespace system
 {
-    class jUISystem
+    public class jMouseEventArgs
     {
-        const int screenWidth = 640;
-        const int screenHeight = 480;
-        
-        static private jUISystem mInst = null;
-        static public jUISystem GetInst() { if (mInst == null) mInst = new jUISystem(); return mInst; }
-        private jUISystem() { mRoot.mID = GetNextID().ToString(); mRoot.SetSize(new Size(screenWidth, screenHeight)); }
+        public int x;
+        public int y;
+        public int delta;
+        public string type;
+    }
+    public class DrawInfo
+    {
+        public Rectangle rect;
+        public Color color;
+        public int texID;
+        public Bitmap bitmap;
+        public int lineWidth;
+        public string text;
+    }
+    public class jUISystem
+    {
+        //static private jUISystem mInst = null;
+        //static public jUISystem GetInst() { if (mInst == null) mInst = new jUISystem(); return mInst; }
+        public jUISystem(int _w, int _h)
+        {
+            mRoot.mID = GetNextID().ToString();
+            mRoot.SetSize(new Size(_w, _h));
+            mMousedControl = mRoot;
+        }
 
         Dictionary<string, jUIControl> mDicControls = new Dictionary<string, jUIControl>();
         public jUIControl mRoot = new jUIControl();
         int mNextContrlID = 0;
+        private Point mPreMousePoint;
+        private jUIControl mMousedControl;
+        private jUIControl mMouseDownControl;
 
         //true반환시 거기서 loop stop, false 반환시 계속 loop
         public delegate bool DelCtrls(jUIControl control);
+        public delegate void DelDraw(DrawInfo info);
+        public DelDraw OnDrawRequest;
+        public DelDraw OnDrawRectFill;
+        public DelDraw OnDrawRectOutline;
+        public DelDraw OnDrawBitmap;
+        public DelDraw OnDrawText;
 
         private int GetNextID() { return mNextContrlID++; }
 
@@ -31,29 +58,44 @@ namespace system
             jUIControl node = SelectControl(mRoot, _x_a, _y_a);
             control.mParentControl = node;
             control.mID = GetNextID().ToString();
+            control.SetUISystem(this);
             control.SetPos(new Point(_x_a - node.Point.X, _y_a - node.Point.Y));
             mDicControls[control.mID] = control;
             node.mNodes.Add(control);
         }
-        public void TrigMouseDown(jMouseEventArgs args)
+        public void ProcMouseMove(jMouseEventArgs args)
+        {
+            if (mPreMousePoint == new Point(args.x, args.y))
+                return;
+
+            mPreMousePoint.X = args.x;
+            mPreMousePoint.Y = args.y;
+            jUIControl node = SelectControl(mRoot, args.x, args.y);
+
+            if(mMousedControl != node)
+            {
+                mMousedControl.OnMouseLeave?.Invoke(mMousedControl, args);
+                node.OnMouseEnter?.Invoke(node, args);
+                mMousedControl = node;
+            }
+
+            node.OnMouseMove?.Invoke(node, args);
+        }
+        public void ProcMouseDown(jMouseEventArgs args)
         {
             jUIControl node = SelectControl(mRoot, args.x, args.y);
+            mMouseDownControl = node;
             node.OnMouseDown?.Invoke(node, args);
         }
-        public void TrigMouseUp(jMouseEventArgs args)
+        public void ProcMouseUp(jMouseEventArgs args)
         {
             jUIControl node = SelectControl(mRoot, args.x, args.y);
             node.OnMouseUp?.Invoke(node, args);
-        }
-        public void TrigMouseHover(jMouseEventArgs args)
-        {
-            jUIControl node = SelectControl(mRoot, args.x, args.y);
-            node.OnMouseHover?.Invoke(node, args);
-        }
-        public void TrigMouseClick(jMouseEventArgs args)
-        {
-            jUIControl node = SelectControl(mRoot, args.x, args.y);
-            node.OnMouseClick?.Invoke(node, args);
+            if(mMouseDownControl == node)
+            {
+                node.OnMouseClick?.Invoke(node, args);
+            }
+            mMouseDownControl = null;
         }
 
 
@@ -71,7 +113,12 @@ namespace system
             return SelectControl(mRoot, _x_a, _y_a);
         }
 
-        private bool LoopControls(jUIControl _node, DelCtrls _funcPre, DelCtrls _funcPost)
+        public jUIControl GetRoot()
+        {
+            return mRoot;
+        }
+
+        public bool LoopControls(jUIControl _node, DelCtrls _funcPre, DelCtrls _funcPost)
         {
             if (_funcPre != null && _funcPre.Invoke(_node))
                 return true;
@@ -88,7 +135,7 @@ namespace system
 
             return false;
         }
-        private bool LoopControls_Reverse(jUIControl _node, DelCtrls _funcPre, DelCtrls _funcPost)
+        public bool LoopControls_Reverse(jUIControl _node, DelCtrls _funcPre, DelCtrls _funcPost)
         {
             if (_funcPre != null && _funcPre.Invoke(_node))
                 return true;

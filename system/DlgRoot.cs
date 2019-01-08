@@ -12,10 +12,12 @@ namespace system
 {
     public partial class DlgRoot : Form
     {
+        static public int ScreenWidth = 640;
+        static public int ScreenHeight = 480;
         static private DlgRoot mInst = null;
         static public DlgRoot GetInst() { if (mInst == null) mInst = new DlgRoot(); return mInst; }
-        private Renderer mRender = Renderer.GetInst();
-        private jUISystem mUISystem = jUISystem.GetInst();
+        static public Renderer mRender = new Renderer();
+        static public jUISystem mUISystem = new jUISystem(ScreenWidth, ScreenHeight);
         private jUIControl mCurCtrl = null;
         private int mEditMode = 0;
         private bool mIsDown = false;
@@ -33,12 +35,25 @@ namespace system
 
         private void btnTest_Click(object sender, EventArgs e)
         {
-            mRender.Initialize(pnGLView, 640, 480);
+            mUISystem.OnDrawRequest += (param) => { mRender.Draw(); };
+            mUISystem.OnDrawRectFill += (param) => { mRender.DrawRect(param.rect, param.color); };
+            mUISystem.OnDrawRectOutline += (param) => { mRender.DrawOutline(param.rect, param.color, param.lineWidth); };
+
+            mRender.Initialize(pnGLView, ScreenWidth, ScreenHeight);
 
             mRender.mGlView.MouseClick += MGlView_MouseClick;
             mRender.mGlView.MouseMove += MGlView_MouseMove;
             mRender.mGlView.MouseDown += MGlView_MouseDown;
             mRender.mGlView.MouseUp += MGlView_MouseUp;
+            mRender.OnDraw += () =>
+            {
+                DlgRoot.mUISystem.Draw();
+
+                if (mCurCtrl != null)
+                {
+                    mRender.DrawOutline(mCurCtrl.Rect, Color.Blue);
+                }
+            };
         }
 
         private void MGlView_MouseClick(object sender, MouseEventArgs e)
@@ -64,15 +79,10 @@ namespace system
                 mIsFixed = false;
                 jUIControl ctrl = mUISystem.SelectControl(e.X, e.Y);
                 if (ctrl.mID == "0")
-                {
                     mCurCtrl = null;
-                    mRender.SelectedControl = null;
-                }
                 else
-                {
                     mCurCtrl = ctrl;
-                    mRender.SelectedControl = ctrl;
-                }
+
                 mRender.Draw();
             }
             
@@ -198,6 +208,12 @@ namespace system
             int cnt = pnControlItems.Controls.Count;
             for (int i = 0; i < cnt; ++i)
                 ((CheckBox)pnControlItems.Controls[i]).Checked = false;
+        }
+
+        private void btnTest_Click_1(object sender, EventArgs e)
+        {
+            DlgTest dlg = new DlgTest(ScreenWidth, ScreenHeight);
+            dlg.ShowDialog();
         }
     }
 }
