@@ -76,6 +76,8 @@
     <Compile Include="jUIComboBox.cs" />
     <Compile Include="jUIControl.cs" />
     <Compile Include="jUIEditable.cs" />
+    <Compile Include="jUIFontBox.cs" />
+    <Compile Include="jUIScrollV.cs" />
     <Compile Include="jUISystem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

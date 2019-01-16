@@ -33,13 +33,15 @@ namespace system
             mRoot.mID = GetNextID().ToString();
             mRoot.SetSize(new Size(_w, _h));
             mMousedControl = mRoot;
+            mFocusedControl = mRoot;
         }
 
-        Dictionary<string, jUIControl> mDicControls = new Dictionary<string, jUIControl>();
+        public Dictionary<string, jUIControl> mDicControls = new Dictionary<string, jUIControl>();
         public jUIControl mRoot = new jUIControl();
         int mNextContrlID = 0;
         private Point mPreMousePoint;
         private jUIControl mMousedControl;
+        private jUIControl mFocusedControl;
         private jUIControl mMouseDownControl;
 
         //true반환시 거기서 loop stop, false 반환시 계속 loop
@@ -94,6 +96,13 @@ namespace system
             if(mMouseDownControl == node)
             {
                 node.OnMouseClick?.Invoke(node, args);
+
+                if (mFocusedControl != node)
+                {
+                    mFocusedControl.OnFocusOut?.Invoke(mFocusedControl, args);
+                    node.OnFocus?.Invoke(node, args);
+                    mFocusedControl = node;
+                }
             }
             mMouseDownControl = null;
         }
@@ -103,7 +112,9 @@ namespace system
         {
             LoopControls(mRoot, (ctrl) =>
             {
-                ctrl.Draw();
+                if(ctrl.mIsVisiable)
+                    ctrl.Draw();
+
                 return false;
             }, null);
         }

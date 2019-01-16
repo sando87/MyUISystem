@@ -75,6 +75,9 @@ namespace system
                 mSystemTest.Add(newCtrl, ctrl.Point.X, ctrl.Point.Y);
                 return false;
             }, null);
+
+            jUIButton btn = baseSystems.mRoot.mNodes[0] as jUIButton;
+            btn.Init();
         }
     }
 }

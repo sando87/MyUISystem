@@ -9,7 +9,7 @@ namespace system
 {
     public enum UIControlType
     {
-        Dummy, Dialog, Button, CheckBox, Label, TextBox, ComboBox, ListView, ImageBox, 
+        Dummy, Dialog, Button, CheckBox, Label, TextBox, ComboBox, ListView, ImageBox, FontBox
     }
 
 
@@ -21,9 +21,12 @@ namespace system
         public UIControlType mType;
         public jUISystem mSystem;
         public void SetUISystem(jUISystem _system) { mSystem = _system; }
+        public bool mIsVisiable = true;
+        public bool mIsEnable = true;
 
         protected Rectangle mRect_A;
         protected Rectangle mRect_R;
+        
 
         public Rectangle Rect_R { get { return mRect_R; } }
         public Rectangle Rect { get { return mRect_A; } }
@@ -39,6 +42,8 @@ namespace system
         public MouseEvent OnMouseClick = null;
         public MouseEvent OnMouseEnter = null;
         public MouseEvent OnMouseLeave = null;
+        public MouseEvent OnFocus = null;
+        public MouseEvent OnFocusOut = null;
 
         public jUIControl NewControl()
         {
@@ -62,6 +67,11 @@ namespace system
                 break;
             }
             return (ctrl==null) ? new jUIControl() : ctrl;
+        }
+
+        public virtual void Init()
+        {
+
         }
 
         public void SetSize(Size _size)
@@ -90,7 +100,7 @@ namespace system
                 mNodes[i].SetPos(mNodes[i].Point_R);
             }
         }
-        public void Draw()
+        public virtual void Draw()
         {
             if (mParentControl == null)
                 return;
