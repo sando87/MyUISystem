@@ -15,19 +15,21 @@ namespace system
 
     public class jUIControl
     {
-        public string mID;
+        public string mParentID = "";
+        public string mID = "";
         public List<jUIControl> mNodes = new List<jUIControl>();
-        public jUIControl mParentControl;
         public UIControlType mType;
         public jUISystem mSystem;
         public void SetUISystem(jUISystem _system) { mSystem = _system; }
         public bool mIsVisiable = true;
         public bool mIsEnable = true;
+        public string mText = "";
 
         protected Rectangle mRect_A;
         protected Rectangle mRect_R;
-        
 
+
+        public jUIControl Parent { get { return mSystem.GetControl(mParentID); } }
         public Rectangle Rect_R { get { return mRect_R; } }
         public Rectangle Rect { get { return mRect_A; } }
         public Point Point_R { get { return mRect_R.Location; } }
@@ -66,12 +68,11 @@ namespace system
                 ctrl.SetSize(Size);
                 break;
             }
-            return (ctrl==null) ? new jUIControl() : ctrl;
+            return ctrl;
         }
 
         public virtual void Init()
         {
-
         }
 
         public void SetSize(Size _size)
@@ -83,35 +84,41 @@ namespace system
         }
         public void SetPos(Point _point_r)
         {
-            mRect_R.Location = _point_r;
-            //mRect_A.Location = (mParentControl!=null)? Point.Add(mParentControl.mRect_A.Location, _point) : _point;
-            if (mParentControl != null)
+            mRect_R.X = _point_r.X;
+            mRect_R.Y = _point_r.Y;
+        }
+        public void CalcAbsolutePostion()
+        {
+            if (mID != jUISystem.ID_ROOT_CONTROL)
             {
-                mRect_A.X = mParentControl.mRect_A.Location.X + _point_r.X;
-                mRect_A.Y = mParentControl.mRect_A.Location.Y + _point_r.Y;
+                jUIControl ctrl = Parent;
+                mRect_A.X = ctrl.mRect_A.Location.X + mRect_R.X;
+                mRect_A.Y = ctrl.mRect_A.Location.Y + mRect_R.Y;
             }
             else
             {
-                mRect_A.Location = _point_r;
+                mRect_A.X = mRect_R.Location.X;
+                mRect_A.Y = mRect_R.Location.Y;
             }
             int cnt = mNodes.Count;
-            for(int i=0; i<cnt; ++i)
+            for (int i = 0; i < cnt; ++i)
             {
-                mNodes[i].SetPos(mNodes[i].Point_R);
+                mNodes[i].CalcAbsolutePostion();
             }
         }
         public virtual void Draw()
         {
-            if (mParentControl == null)
+            jUIControl parentCtrl = Parent;
+            if (parentCtrl == null)
                 return;
 
-            if (!mParentControl.Rect.IntersectsWith(Rect))
+            if (!parentCtrl.Rect.IntersectsWith(Rect))
                 return;
 
-            int left = Math.Max(mParentControl.Rect.Left, Rect.Left);
-            int right = Math.Min(mParentControl.Rect.Right, Rect.Right);
-            int top = Math.Max(mParentControl.Rect.Top, Rect.Top);
-            int bottom = Math.Min(mParentControl.Rect.Bottom, Rect.Bottom);
+            int left = Math.Max(parentCtrl.Rect.Left, Rect.Left);
+            int right = Math.Min(parentCtrl.Rect.Right, Rect.Right);
+            int top = Math.Max(parentCtrl.Rect.Top, Rect.Top);
+            int bottom = Math.Min(parentCtrl.Rect.Bottom, Rect.Bottom);
 
             DrawInfo info = new DrawInfo();
             info.rect = new Rectangle(left, top, right - left, bottom - top);

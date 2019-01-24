@@ -38,6 +38,7 @@ namespace system
             mUISystem.OnDrawRequest += (param) => { mRender.Draw(); };
             mUISystem.OnDrawRectFill += (param) => { mRender.DrawRect(param.rect, param.color); };
             mUISystem.OnDrawRectOutline += (param) => { mRender.DrawOutline(param.rect, param.color, param.lineWidth); };
+            mUISystem.OnDrawBitmapRect += (param) => { mRender.DrawTextureRect(param.rect, param.texID, param.uv); };
 
             mRender.Initialize(pnGLView, ScreenWidth, ScreenHeight);
 
@@ -54,6 +55,9 @@ namespace system
                     mRender.DrawOutline(mCurCtrl.Rect, Color.Blue);
                 }
             };
+
+            FontManager.GenerateFontImage();
+            FontManager.Settings.TextureID = Renderer.InitTexture(FontManager.Settings.FontBitmapFilename);
         }
 
         private void MGlView_MouseClick(object sender, MouseEventArgs e)
@@ -66,6 +70,7 @@ namespace system
                 control.SetSize(new Size(100, 40));
                 mUISystem.Add(control, e.X, e.Y);
                 UnCheckAllItems();
+                mUISystem.mRoot.CalcAbsolutePostion();
                 mRender.Draw();
                 mCurCtrl = null;
                 mEditMode = 0;
@@ -78,11 +83,12 @@ namespace system
             {
                 mIsFixed = false;
                 jUIControl ctrl = mUISystem.SelectControl(e.X, e.Y);
-                if (ctrl.mID == "0")
+                if (ctrl.mID == jUISystem.ID_ROOT_CONTROL)
                     mCurCtrl = null;
                 else
                     mCurCtrl = ctrl;
 
+                mUISystem.mRoot.CalcAbsolutePostion();
                 mRender.Draw();
             }
             
@@ -145,6 +151,7 @@ namespace system
                         }
                         break;
                 }
+                mUISystem.mRoot.CalcAbsolutePostion();
                 mRender.Draw();
                 return;
             }

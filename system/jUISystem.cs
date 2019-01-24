@@ -17,6 +17,7 @@ namespace system
     }
     public class DrawInfo
     {
+        public RectangleF uv;
         public Rectangle rect;
         public Color color;
         public int texID;
@@ -28,12 +29,17 @@ namespace system
     {
         //static private jUISystem mInst = null;
         //static public jUISystem GetInst() { if (mInst == null) mInst = new jUISystem(); return mInst; }
+        public static string ID_ROOT_CONTROL = "";
         public jUISystem(int _w, int _h)
         {
+            mRoot.SetUISystem(this);
             mRoot.mID = GetNextID().ToString();
+            ID_ROOT_CONTROL = mRoot.mID;
+            mDicControls[mRoot.mID] = mRoot;
             mRoot.SetSize(new Size(_w, _h));
             mMousedControl = mRoot;
             mFocusedControl = mRoot;
+            
         }
 
         public Dictionary<string, jUIControl> mDicControls = new Dictionary<string, jUIControl>();
@@ -51,19 +57,51 @@ namespace system
         public DelDraw OnDrawRectFill;
         public DelDraw OnDrawRectOutline;
         public DelDraw OnDrawBitmap;
-        public DelDraw OnDrawText;
+        public DelDraw OnDrawBitmapRect;
 
         private int GetNextID() { return mNextContrlID++; }
 
+
+        //심플 초기값 세팅 부분과 부모값 세팅 분리 및 계산값 정리 할 것
         public void Add(jUIControl control, int _x_a, int _y_a)
         {
             jUIControl node = SelectControl(mRoot, _x_a, _y_a);
-            control.mParentControl = node;
+            control.mParentID = node.mID;
             control.mID = GetNextID().ToString();
-            control.SetUISystem(this);
             control.SetPos(new Point(_x_a - node.Point.X, _y_a - node.Point.Y));
+
+            control.SetUISystem(this);
             mDicControls[control.mID] = control;
+
             node.mNodes.Add(control);
+
+            control.CalcAbsolutePostion();
+            
+        }
+        public void Registor(jUIControl control)
+        {
+            if (control.mID.Length == 0 || mDicControls.ContainsKey(control.mID))
+                return;
+
+            //control.mID = GetNextID().ToString();
+            control.SetUISystem(this);
+            mDicControls[control.mID] = control;
+        }
+        public void BuildUpTree()
+        {
+            foreach (var item in mDicControls)
+            {
+                jUIControl ctrl = item.Value;
+                string parentID = ctrl.mParentID;
+                if (mDicControls.ContainsKey(parentID))
+                {
+                    mDicControls[parentID].mNodes.Add(ctrl);
+                }
+            }
+        }
+        public jUIControl GetControl(string _id)
+        {
+            return mDicControls.ContainsKey(_id) ? mDicControls[_id] : null;
         }
         public void ProcMouseMove(jMouseEventArgs args)
         {

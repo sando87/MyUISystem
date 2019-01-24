@@ -71,13 +71,43 @@ namespace system
             jUISystem baseSystems = DlgRoot.mUISystem;
             baseSystems.LoopControls(baseSystems.GetRoot(), (ctrl) =>
             {
-                jUIControl newCtrl = ctrl.NewControl();
-                mSystemTest.Add(newCtrl, ctrl.Point.X, ctrl.Point.Y);
+                // 심플 초기값 적용 하는 곳
+                switch (ctrl.mType)
+                {
+                    case UIControlType.Button:
+                        jUIButton btnCtrl = new jUIButton();
+                        btnCtrl.mType = UIControlType.Button;
+                        btnCtrl.mID = ctrl.mID;
+                        btnCtrl.mParentID = ctrl.mParentID;
+                        btnCtrl.SetSize(ctrl.Size);
+                        btnCtrl.SetPos(ctrl.Point_R);
+                        btnCtrl.mText = ctrl.mText;
+                        mSystemTest.Registor(btnCtrl);
+                        break;
+                    case UIControlType.CheckBox:
+                        break;
+                        jUICheckBox chkCtrl = new jUICheckBox();
+                        chkCtrl.mType = UIControlType.CheckBox;
+                        chkCtrl.SetSize(ctrl.Size);
+                        mSystemTest.Registor(chkCtrl);
+                        break;
+                    case UIControlType.ComboBox:
+                        break;
+                        jUIComboBox cbCtrl = new jUIComboBox();
+                        cbCtrl.mType = UIControlType.ComboBox;
+                        cbCtrl.SetSize(ctrl.Size);
+                        mSystemTest.Registor(cbCtrl);
+                        break;
+                }
+
                 return false;
             }, null);
 
-            jUIButton btn = baseSystems.mRoot.mNodes[0] as jUIButton;
-            btn.Init();
+            mSystemTest.BuildUpTree();
+            mSystemTest.mRoot.CalcAbsolutePostion();
+
+            foreach (var item in mSystemTest.mDicControls)
+                item.Value.Init();
         }
     }
 }

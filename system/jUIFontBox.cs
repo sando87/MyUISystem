@@ -24,39 +24,58 @@ namespace system
 
         public override void Init()
         {
-            Size size = GetStringSize(mText);
+            Size size = FontManager.GetStringSize(mText);
             SetSize(size);
             Point rPos = GetStringPosition();
             SetPos(rPos);
         }
         public override void Draw()
         {
-            if (mParentControl == null)
+            jUIControl parentCtrl = Parent;
+            if (parentCtrl == null)
                 return;
 
-            if (!mParentControl.Rect.IntersectsWith(Rect))
+            if (!parentCtrl.Rect.IntersectsWith(Rect))
                 return;
 
             for(int i = 0; i<mText.Length; ++i)
             {
                 char ch = mText[i];
-                //adjust XY, UV;
-                //draw Text;
+                Rectangle chRect = GetCharPosition(i);
+                if (!Rect.IntersectsWith(chRect))
+                    continue;
+
+                Rectangle interRect = new Rectangle(chRect.Location, chRect.Size);
+                interRect.IntersectsWith(Rect);
+                RectangleF charUV = FontManager.GetCharUV(ch);
+
+                //adjust new U float
+                float rateWidthL = (interRect.Left - chRect.Left) / chRect.Width;
+                float newLeftU = charUV.Left + (rateWidthL * charUV.Width);
+                float rateWidthR = (chRect.Right - interRect.Right) / chRect.Width;
+                float newRightU = charUV.Right - (rateWidthR * charUV.Width);
+
+                //adjust new V float
+                float rateHeightT = (interRect.Top - chRect.Top) / chRect.Height;
+                float newTopV = charUV.Top + (rateHeightT * charUV.Height);
+                float rateHeightB = (chRect.Bottom - interRect.Bottom) / chRect.Height;
+                float newBottomV = charUV.Bottom - (rateHeightB * charUV.Height);
+
+                RectangleF charNewUV = new RectangleF(newLeftU, newTopV, newRightU - newLeftU, newBottomV - newTopV);
+                DrawInfo drawInfo = new DrawInfo();
+                drawInfo.texID = FontManager.Settings.TextureID;
+                drawInfo.rect = interRect;
+                drawInfo.uv = charNewUV;
+                mSystem.OnDrawBitmapRect(drawInfo);
             }
         }
 
-        private Size GetStringSize(string _name)
+        private Rectangle GetCharPosition(int _idx)
         {
-            int max = 0;
-            string[] lines = _name.Split('\n');
-            for(int i=0; i<lines.Length; ++i)
-            {
-                max = Math.Max(lines[i].Length, max);
-            }
-            int width = max * Settings.GlyphWidth;
-            int height = lines.Length * Settings.GlyphHeight;
-            return new Size(width,height);
+            int x_step = Size.Width / mText.Length;
+            return new Rectangle(new Point(Point.X + _idx * x_step, Point.Y), new Size(x_step, Size.Height));
         }
+
         private Point GetStringPosition()
         {
             int x = 0;
@@ -71,12 +90,12 @@ namespace system
                 case Align.Top:
                 case Align.Center:
                 case Align.Bottom:
-                    x = (mParentControl.Size.Width - Size.Width) / 2;
+                    x = (Parent.Size.Width - Size.Width) / 2;
                     break;
                 case Align.TopRight:
                 case Align.Right:
                 case Align.BottomRight:
-                    x = mParentControl.Size.Width - Size.Width;
+                    x = Parent.Size.Width - Size.Width;
                     break;
             }
             switch (mAlign)
@@ -89,12 +108,12 @@ namespace system
                 case Align.Left:
                 case Align.Center:
                 case Align.Right:
-                    y = (mParentControl.Size.Height - Size.Height) / 2;
+                    y = (Parent.Size.Height - Size.Height) / 2;
                     break;
                 case Align.BottomLeft:
                 case Align.Bottom:
                 case Align.BottomRight:
-                    y = mParentControl.Size.Height - Size.Height;
+                    y = Parent.Size.Height - Size.Height;
                     break;
             }
             return new Point(x, y);

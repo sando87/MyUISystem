@@ -65,6 +65,7 @@
     <Compile Include="DlgTest.Designer.cs">
       <DependentUpon>DlgTest.cs</DependentUpon>
     </Compile>
+    <Compile Include="FontManager.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
