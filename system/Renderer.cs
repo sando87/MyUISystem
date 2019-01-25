@@ -192,16 +192,51 @@ namespace system
 
             GL.TexCoord2(_uv.Left, _uv.Top);
             GL.TexCoord2(_uv.Left, _uv.Bottom);
-            GL.TexCoord2(_uv.Right, _uv.Bottom);
             GL.TexCoord2(_uv.Right, _uv.Top);
+            GL.TexCoord2(_uv.Right, _uv.Bottom);
 
             GL.Vertex2(left, top); //lt
             GL.Vertex2(left, bottom); //lb
-            GL.Vertex2(right, bottom);//rb
             GL.Vertex2(right, top);//rt
+            GL.Vertex2(right, bottom);//rb
 
             GL.End();
 
+            GL.Disable(EnableCap.Texture2D);
+            GL.Disable(EnableCap.Blend);
+        }
+        public void DrawText(int x, int y, string text)
+        {
+            GL.Enable(EnableCap.Texture2D);
+            GL.BindTexture(TextureTarget.Texture2D, FontManager.Settings.TextureID);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            //GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
+
+            GL.Begin(PrimitiveType.Quads);
+        
+            float u_step = (float)FontManager.Settings.GlyphWidth / (float)FontManager.Settings.TextureWidth;
+            float v_step = (float)FontManager.Settings.GlyphHeight / (float)FontManager.Settings.TextureHeight;
+        
+            for (int n = 0; n < text.Length; n++)
+            {
+                char idx = text[n];
+                float u = (float)(idx % FontManager.Settings.GlyphsPerLine) * u_step;
+                float v = (float)(idx / FontManager.Settings.GlyphsPerLine) * v_step;
+        
+                GL.TexCoord2(u, v);
+                GL.Vertex2(x, y);
+                GL.TexCoord2(u + u_step, v);
+                GL.Vertex2(x + FontManager.Settings.GlyphWidth, y);
+                GL.TexCoord2(u + u_step, v + v_step);
+                GL.Vertex2(x + FontManager.Settings.GlyphWidth, y + FontManager.Settings.GlyphHeight);
+                GL.TexCoord2(u, v + v_step);
+                GL.Vertex2(x, y + FontManager.Settings.GlyphHeight);
+        
+                x += FontManager.Settings.CharXSpacing;
+            }
+        
+            GL.End();
             GL.Disable(EnableCap.Texture2D);
             GL.Disable(EnableCap.Blend);
         }

@@ -34,6 +34,7 @@ namespace system
 
         public override void Init()
         {
+            mFont.Initialize(this);
             //mScrollV = new jUIScrollV();
             //mScrollV.Init(this);
         }

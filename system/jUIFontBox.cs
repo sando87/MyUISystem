@@ -15,19 +15,24 @@ namespace system
             Left,           Center,         Right,
             BottomLeft, Bottom,         BottomRight,
         }
-        public string mText = "test";
         public Align mAlign = Align.Center;
 
         public jUIFontBox()
         {
         }
 
-        public override void Init()
+        public void Initialize(jUIControl _ctrl)
         {
-            Size size = FontManager.GetStringSize(mText);
-            SetSize(size);
-            Point rPos = GetStringPosition();
-            SetPos(rPos);
+            mSystem = _ctrl.mSystem;
+            mText = _ctrl.mText;
+            mType = UIControlType.FontBox;
+            mID = "";
+            mParentID = _ctrl.mID;
+            SetSize(FontManager.GetStringSize(mText));
+            SetPos(GetStringPosition());
+            mSystem.Registor(this);
+            CalcAbsolutePostion();
+            _ctrl.mNodes.Add(this);
         }
         public override void Draw()
         {
@@ -38,7 +43,13 @@ namespace system
             if (!parentCtrl.Rect.IntersectsWith(Rect))
                 return;
 
-            for(int i = 0; i<mText.Length; ++i)
+            //DrawInfo drawInfo2 = new DrawInfo();
+            //drawInfo2.rect = parentCtrl.Rect;
+            //drawInfo2.text = mText;
+            //mSystem.OnDrawText(drawInfo2);
+            //return;
+
+            for (int i = 0; i<mText.Length; ++i)
             {
                 char ch = mText[i];
                 Rectangle chRect = GetCharPosition(i);

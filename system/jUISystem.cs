@@ -58,6 +58,7 @@ namespace system
         public DelDraw OnDrawRectOutline;
         public DelDraw OnDrawBitmap;
         public DelDraw OnDrawBitmapRect;
+        public DelDraw OnDrawText;
 
         private int GetNextID() { return mNextContrlID++; }
 
@@ -80,10 +81,12 @@ namespace system
         }
         public void Registor(jUIControl control)
         {
-            if (control.mID.Length == 0 || mDicControls.ContainsKey(control.mID))
+            if (mDicControls.ContainsKey(control.mID))
                 return;
 
-            //control.mID = GetNextID().ToString();
+            if (control.mID.Length == 0)
+                return; // control.mID = GetNextID().ToString();
+
             control.SetUISystem(this);
             mDicControls[control.mID] = control;
         }
