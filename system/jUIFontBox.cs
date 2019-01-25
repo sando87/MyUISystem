@@ -43,33 +43,27 @@ namespace system
             if (!parentCtrl.Rect.IntersectsWith(Rect))
                 return;
 
-            //DrawInfo drawInfo2 = new DrawInfo();
-            //drawInfo2.rect = parentCtrl.Rect;
-            //drawInfo2.text = mText;
-            //mSystem.OnDrawText(drawInfo2);
-            //return;
-
             for (int i = 0; i<mText.Length; ++i)
             {
                 char ch = mText[i];
                 Rectangle chRect = GetCharPosition(i);
-                if (!Rect.IntersectsWith(chRect))
+                if (!parentCtrl.Rect.IntersectsWith(chRect))
                     continue;
 
                 Rectangle interRect = new Rectangle(chRect.Location, chRect.Size);
-                interRect.IntersectsWith(Rect);
+                interRect.Intersect(parentCtrl.Rect);
                 RectangleF charUV = FontManager.GetCharUV(ch);
 
                 //adjust new U float
-                float rateWidthL = (interRect.Left - chRect.Left) / chRect.Width;
+                float rateWidthL = (float)(interRect.Left - chRect.Left) / chRect.Width;
                 float newLeftU = charUV.Left + (rateWidthL * charUV.Width);
-                float rateWidthR = (chRect.Right - interRect.Right) / chRect.Width;
+                float rateWidthR = (float)(chRect.Right - interRect.Right) / chRect.Width;
                 float newRightU = charUV.Right - (rateWidthR * charUV.Width);
 
                 //adjust new V float
-                float rateHeightT = (interRect.Top - chRect.Top) / chRect.Height;
+                float rateHeightT = (float)(interRect.Top - chRect.Top) / chRect.Height;
                 float newTopV = charUV.Top + (rateHeightT * charUV.Height);
-                float rateHeightB = (chRect.Bottom - interRect.Bottom) / chRect.Height;
+                float rateHeightB = (float)(chRect.Bottom - interRect.Bottom) / chRect.Height;
                 float newBottomV = charUV.Bottom - (rateHeightB * charUV.Height);
 
                 RectangleF charNewUV = new RectangleF(newLeftU, newTopV, newRightU - newLeftU, newBottomV - newTopV);

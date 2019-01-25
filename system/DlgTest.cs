@@ -31,7 +31,6 @@ namespace system
             mSystemTest.OnDrawRectFill += (param) => { mRenderTest.DrawRect(param.rect, param.color); };
             mSystemTest.OnDrawRectOutline += (param) => { mRenderTest.DrawOutline(param.rect, param.color, param.lineWidth); };
             mSystemTest.OnDrawBitmapRect += (param) => { mRenderTest.DrawTextureRect(param.rect, param.texID, param.uv); };
-            mSystemTest.OnDrawText += (param) => { mRenderTest.DrawText(param.rect.X, param.rect.Y, param.text); };
 
             mRenderTest.Initialize(panel1, _w, _h);
 
@@ -83,7 +82,7 @@ namespace system
                         btnCtrl.mParentID = ctrl.mParentID;
                         btnCtrl.SetSize(ctrl.Size);
                         btnCtrl.SetPos(ctrl.Point_R);
-                        btnCtrl.mText = "Test";// ctrl.mText;
+                        btnCtrl.mText = "LSJ";// ctrl.mText;
                         mSystemTest.Registor(btnCtrl);
                         break;
                     case UIControlType.CheckBox:

@@ -58,7 +58,6 @@ namespace system
         public DelDraw OnDrawRectOutline;
         public DelDraw OnDrawBitmap;
         public DelDraw OnDrawBitmapRect;
-        public DelDraw OnDrawText;
 
         private int GetNextID() { return mNextContrlID++; }
 

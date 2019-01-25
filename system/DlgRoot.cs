@@ -49,7 +49,7 @@ namespace system
             mRender.OnDraw += () =>
             {
                 DlgRoot.mUISystem.Draw();
-
+                
                 if (mCurCtrl != null)
                 {
                     mRender.DrawOutline(mCurCtrl.Rect, Color.Blue);
@@ -67,7 +67,7 @@ namespace system
             {
                 jUIControl control = new jUIControl();
                 control.mType = (UIControlType)chk.Tag;
-                control.SetSize(new Size(100, 40));
+                control.SetSize(new Size(105, 40));
                 mUISystem.Add(control, e.X, e.Y);
                 UnCheckAllItems();
                 mUISystem.mRoot.CalcAbsolutePostion();
