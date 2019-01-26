@@ -173,6 +173,7 @@ namespace system
             GL.BindTexture(TextureTarget.Texture2D, _texID);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            //GL.BlendFunc(BlendingFactor.OneMinusSrcAlpha, BlendingFactor.SrcAlpha); //font reverse
             //GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
 
             int left = _rect.Left;
