@@ -9,13 +9,23 @@ namespace system
 {
     class jUIFontBox : jUIControl
     {
+        public class CharInfo
+        {
+            public char ch;
+            public RectangleF uv;
+            public bool isSeleted;
+        }
         public enum Align
         {
             TopLeft,      Top,              TopRight,
             Left,           Center,         Right,
             BottomLeft, Bottom,         BottomRight,
         }
+
         public Align mAlign = Align.Center;
+        List<CharInfo> mListChars = new List<CharInfo>();
+        Rectangle mBlicker;
+        bool mIsBlinker = false;
 
         public jUIFontBox()
         {
@@ -33,6 +43,26 @@ namespace system
             mSystem.Registor(this);
             CalcAbsolutePostion();
             _ctrl.mNodes.Add(this);
+            int cnt = mText.Length;
+            for(int i = 0; i<cnt; ++i)
+            {
+                CharInfo info = new CharInfo();
+                info.ch = mText[i];
+                info.uv = FontManager.GetCharUV(mText[i]);
+                info.isSeleted = false;
+                mListChars.Add(info);
+            }
+            OnFocus += (ctrl, args) => {
+                GetBlinkerRect(args.x, args.y);
+                mIsBlinker = true;
+                mSystem.OnTimerEverySecond += TimerEverySec;
+                mSystem.OnDrawRequest(null);
+            };
+            OnFocusOut += (ctrl, args) => {
+                mIsBlinker = false;
+                mSystem.OnTimerEverySecond -= TimerEverySec;
+                mSystem.OnDrawRequest(null);
+            };
         }
         public override void Draw()
         {
@@ -52,7 +82,7 @@ namespace system
 
                 Rectangle interRect = new Rectangle(chRect.Location, chRect.Size);
                 interRect.Intersect(parentCtrl.Rect);
-                RectangleF charUV = FontManager.GetCharUV(ch);
+                RectangleF charUV = mListChars[i].uv;
 
                 //adjust new U float
                 float rateWidthL = (float)(interRect.Left - chRect.Left) / chRect.Width;
@@ -73,14 +103,42 @@ namespace system
                 drawInfo.uv = charNewUV;
                 mSystem.OnDrawBitmapRect(drawInfo);
             }
+
+            if(mIsFocused && mIsBlinker)
+            {
+                DrawInfo drawInfo = new DrawInfo();
+                drawInfo.rect = mBlicker;
+                drawInfo.color = Color.DarkBlue;
+                mSystem.OnDrawRectFill(drawInfo);
+            }
         }
 
+        private void TimerEverySec()
+        {
+            mIsBlinker = !mIsBlinker;
+            mSystem.OnDrawRequest(null);
+        }
+        private void GetBlinkerRect(int _x, int _y)
+        {
+            mBlicker.Size = new Size(2, 16);
+            for(int i = 0; i<mText.Length; ++i)
+            {
+                Rectangle chRect = GetCharPosition(i);
+                if (Math.Abs(chRect.X - _x) < 4)
+                {
+                    mBlicker.Location = new Point(chRect.X, chRect.Y + 3);
+                    return;
+                }
+            }
+
+            if (Rect.Right < _x)
+                mBlicker.Location = new Point(Rect.Right, Rect.Top + 3);
+        }
         private Rectangle GetCharPosition(int _idx)
         {
             int x_step = Size.Width / mText.Length;
             return new Rectangle(new Point(Point.X + _idx * x_step, Point.Y), new Size(x_step, Size.Height));
         }
-
         private Point GetStringPosition()
         {
             int x = 0;

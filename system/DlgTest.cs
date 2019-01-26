@@ -14,6 +14,7 @@ namespace system
     {
         Renderer mRenderTest = new Renderer();
         jUISystem mSystemTest = new jUISystem(DlgRoot.ScreenWidth, DlgRoot.ScreenHeight);
+        Timer mTimer = new Timer();
 
         public DlgTest(int _w, int _h)
         {
@@ -37,10 +38,35 @@ namespace system
             mRenderTest.mGlView.MouseMove += MGlView_MouseMove;
             mRenderTest.mGlView.MouseDown += MGlView_MouseDown;
             mRenderTest.mGlView.MouseUp += MGlView_MouseUp;
+            mRenderTest.mGlView.KeyDown += MGlView_KeyDown;
+            mRenderTest.mGlView.KeyUp += MGlView_KeyUp;
+            mRenderTest.mGlView.KeyPress += MGlView_KeyPress;
             mRenderTest.OnDraw += () =>
             {
                 mSystemTest.Draw();
             };
+
+            mTimer.Interval = 1000;
+            mTimer.Tick += (send, args)=> { mSystemTest.ProcTimerEverySecond(); };
+            mTimer.Start();
+        }
+
+        private void MGlView_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char keys = e.KeyChar;
+            Console.WriteLine("PRESS: " + keys.ToString());
+        }
+
+        private void MGlView_KeyUp(object sender, KeyEventArgs e)
+        {
+            Keys keys = e.KeyCode;
+            Console.WriteLine("UP: " + keys.ToString());
+        }
+
+        private void MGlView_KeyDown(object sender, KeyEventArgs e)
+        {
+            Keys keys = e.KeyCode;
+            Console.WriteLine("DOWN: " + keys.ToString());
         }
 
         private void MGlView_MouseUp(object sender, MouseEventArgs e)

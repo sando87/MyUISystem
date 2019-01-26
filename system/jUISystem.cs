@@ -50,6 +50,9 @@ namespace system
         private jUIControl mFocusedControl;
         private jUIControl mMouseDownControl;
 
+        public delegate void TimerEvent();
+        public TimerEvent OnTimerEverySecond = null;
+
         //true반환시 거기서 loop stop, false 반환시 계속 loop
         public delegate bool DelCtrls(jUIControl control);
         public delegate void DelDraw(DrawInfo info);
@@ -105,6 +108,10 @@ namespace system
         {
             return mDicControls.ContainsKey(_id) ? mDicControls[_id] : null;
         }
+        public void ProcTimerEverySecond()
+        {
+            OnTimerEverySecond?.Invoke();
+        }
         public void ProcMouseMove(jMouseEventArgs args)
         {
             if (mPreMousePoint == new Point(args.x, args.y))
@@ -139,7 +146,9 @@ namespace system
 
                 if (mFocusedControl != node)
                 {
+                    mFocusedControl.mIsFocused = false;
                     mFocusedControl.OnFocusOut?.Invoke(mFocusedControl, args);
+                    node.mIsFocused = true;
                     node.OnFocus?.Invoke(node, args);
                     mFocusedControl = node;
                 }

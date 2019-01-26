@@ -23,6 +23,7 @@ namespace system
         public void SetUISystem(jUISystem _system) { mSystem = _system; }
         public bool mIsVisiable = true;
         public bool mIsEnable = true;
+        public bool mIsFocused = false;
         public string mText = "";
 
         protected Rectangle mRect_A;
@@ -36,6 +37,7 @@ namespace system
         public Point Point { get { return mRect_A.Location; } }
         public Size Size { get { return mRect_A.Size; } }
         public Color mColor = Color.Gray;
+
 
         public delegate void MouseEvent(jUIControl control, jMouseEventArgs args);
         public MouseEvent OnMouseDown = null;
