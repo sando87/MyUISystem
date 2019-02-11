@@ -13,7 +13,7 @@ namespace system
     public partial class DlgTest : Form
     {
         Renderer mRenderTest = new Renderer();
-        jUISystem mSystemTest = new jUISystem(DlgRoot.ScreenWidth, DlgRoot.ScreenHeight);
+        public static jUISystem mSystemTest = new jUISystem(DlgRoot.ScreenWidth, DlgRoot.ScreenHeight);
         Timer mTimer = new Timer();
 
         public DlgTest(int _w, int _h)
@@ -103,26 +103,28 @@ namespace system
                 {
                     case UIControlType.Button:
                         jUIButton btnCtrl = new jUIButton();
-                        btnCtrl.mType = UIControlType.Button;
                         btnCtrl.mID = ctrl.mID;
                         btnCtrl.mParentID = ctrl.mParentID;
                         btnCtrl.SetSize(ctrl.Size);
                         btnCtrl.SetPos(ctrl.Point_R);
-                        btnCtrl.mText = "LSJ";// ctrl.mText;
+                        //btnCtrl.mText = "LSJ";// ctrl.mText;
+                        btnCtrl.SetScrollV(true);
                         mSystemTest.Registor(btnCtrl);
                         break;
                     case UIControlType.CheckBox:
-                        break;
                         jUICheckBox chkCtrl = new jUICheckBox();
-                        chkCtrl.mType = UIControlType.CheckBox;
+                        chkCtrl.mID = ctrl.mID;
+                        chkCtrl.mParentID = ctrl.mParentID;
                         chkCtrl.SetSize(ctrl.Size);
+                        chkCtrl.SetPos(ctrl.Point_R);
                         mSystemTest.Registor(chkCtrl);
                         break;
                     case UIControlType.ComboBox:
-                        break;
                         jUIComboBox cbCtrl = new jUIComboBox();
-                        cbCtrl.mType = UIControlType.ComboBox;
+                        cbCtrl.mID = ctrl.mID;
+                        cbCtrl.mParentID = ctrl.mParentID;
                         cbCtrl.SetSize(ctrl.Size);
+                        cbCtrl.SetPos(ctrl.Point_R);
                         mSystemTest.Registor(cbCtrl);
                         break;
                 }
@@ -133,8 +135,11 @@ namespace system
             mSystemTest.BuildUpTree();
             mSystemTest.mRoot.CalcAbsolutePostion();
 
-            foreach (var item in mSystemTest.mDicControls)
-                item.Value.Init();
+            int cnt = mSystemTest.mDicControls.Count;
+            for(int i=0; i<cnt; ++i)
+            {
+                mSystemTest.mDicControls.ElementAt(i).Value.Init();
+            }
         }
     }
 }

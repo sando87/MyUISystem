@@ -26,6 +26,7 @@ namespace system
         List<CharInfo> mListChars = new List<CharInfo>();
         Rectangle mBlicker;
         bool mIsBlinker = false;
+        jUIControl mParent = null;
 
         public jUIFontBox()
         {
@@ -33,16 +34,11 @@ namespace system
 
         public void Initialize(jUIControl _ctrl)
         {
-            mSystem = _ctrl.mSystem;
             mText = _ctrl.mText;
-            mType = UIControlType.FontBox;
-            mID = "";
-            mParentID = _ctrl.mID;
+            mParent = _ctrl;
             SetSize(FontManager.GetStringSize(mText));
             SetPos(GetStringPosition());
-            mSystem.Registor(this);
-            CalcAbsolutePostion();
-            _ctrl.mNodes.Add(this);
+
             int cnt = mText.Length;
             for(int i = 0; i<cnt; ++i)
             {
@@ -66,7 +62,7 @@ namespace system
         }
         public override void Draw()
         {
-            jUIControl parentCtrl = Parent;
+            jUIControl parentCtrl = mParent;
             if (parentCtrl == null)
                 return;
 
@@ -153,12 +149,12 @@ namespace system
                 case Align.Top:
                 case Align.Center:
                 case Align.Bottom:
-                    x = (Parent.Size.Width - Size.Width) / 2;
+                    x = (mParent.Size.Width - Size.Width) / 2;
                     break;
                 case Align.TopRight:
                 case Align.Right:
                 case Align.BottomRight:
-                    x = Parent.Size.Width - Size.Width;
+                    x = mParent.Size.Width - Size.Width;
                     break;
             }
             switch (mAlign)
@@ -171,12 +167,12 @@ namespace system
                 case Align.Left:
                 case Align.Center:
                 case Align.Right:
-                    y = (Parent.Size.Height - Size.Height) / 2;
+                    y = (mParent.Size.Height - Size.Height) / 2;
                     break;
                 case Align.BottomLeft:
                 case Align.Bottom:
                 case Align.BottomRight:
-                    y = Parent.Size.Height - Size.Height;
+                    y = mParent.Size.Height - Size.Height;
                     break;
             }
             return new Point(x, y);

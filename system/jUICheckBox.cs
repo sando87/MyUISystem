@@ -10,6 +10,8 @@ namespace system
     {
         public jUICheckBox()
         {
+            mType = UIControlType.CheckBox;
+
             OnMouseEnter += (ctrl, args) =>
             {
                 Console.WriteLine("Enter, chk, " + mID.ToString());

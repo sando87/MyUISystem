@@ -10,6 +10,8 @@ namespace system
     {
         public jUIComboBox()
         {
+            mType = UIControlType.CheckBox;
+
             OnMouseEnter += (ctrl, args) =>
             {
                 Console.WriteLine("Enter, cb, " + mID.ToString());

@@ -9,7 +9,7 @@ namespace system
 {
     public enum UIControlType
     {
-        Dummy, Dialog, Button, CheckBox, Label, TextBox, ComboBox, ListView, ImageBox, FontBox
+        Dummy, Dialog, Button, CheckBox, Label, TextBox, ComboBox, ListView, ImageBox, FontBox, ScrollV
     }
 
 
@@ -25,10 +25,11 @@ namespace system
         public bool mIsEnable = true;
         public bool mIsFocused = false;
         public string mText = "";
+        bool mIsScrollV = false;
+        jUIScrollV mScrollV = null;
 
         protected Rectangle mRect_A;
         protected Rectangle mRect_R;
-
 
         public jUIControl Parent { get { return mSystem.GetControl(mParentID); } }
         public Rectangle Rect_R { get { return mRect_R; } }
@@ -49,32 +50,25 @@ namespace system
         public MouseEvent OnFocus = null;
         public MouseEvent OnFocusOut = null;
 
-        public jUIControl NewControl()
+        public void SetScrollV(bool _set) { mIsScrollV = _set; }
+
+        public void Add(jUIControl _child)
         {
-            jUIControl ctrl = null;
-            switch (mType)
-            {
-            case UIControlType.Button:
-                ctrl = new jUIButton();
-                ctrl.mType = UIControlType.Button;
-                ctrl.SetSize(Size);
-                break;
-            case UIControlType.CheckBox:
-                ctrl = new jUICheckBox();
-                ctrl.mType = UIControlType.CheckBox;
-                ctrl.SetSize(Size);
-                break;
-            case UIControlType.ComboBox:
-                ctrl = new jUIComboBox();
-                ctrl.mType = UIControlType.ComboBox;
-                ctrl.SetSize(Size);
-                break;
-            }
-            return ctrl;
+            if (_child.mID.Length == 0)
+                _child.mID = mID + "." + mNodes.Count.ToString();
+            _child.mParentID = mID;
+            _child.mSystem = mSystem;
+            mSystem.Registor(_child);
+            mNodes.Add(_child);
         }
 
         public virtual void Init()
         {
+            if (mIsScrollV)
+            {
+                mScrollV = new jUIScrollV();
+                mScrollV.Initialize(this);
+            }
         }
 
         public void SetSize(Size _size)
@@ -114,13 +108,21 @@ namespace system
             if (parentCtrl == null)
                 return;
 
-            if (!parentCtrl.Rect.IntersectsWith(Rect))
+            Rectangle myRect = new Rectangle(Rect.X, Rect.Y, Rect.Width, Rect.Height);
+            int offset = 0;
+            if (parentCtrl.mIsScrollV && mType != UIControlType.ScrollV)
+            {
+                offset = parentCtrl.mScrollV.GetCurrentOffset();
+                myRect.Y -= offset;
+            }
+
+            if (!parentCtrl.Rect.IntersectsWith(myRect))
                 return;
 
-            int left = Math.Max(parentCtrl.Rect.Left, Rect.Left);
-            int right = Math.Min(parentCtrl.Rect.Right, Rect.Right);
-            int top = Math.Max(parentCtrl.Rect.Top, Rect.Top);
-            int bottom = Math.Min(parentCtrl.Rect.Bottom, Rect.Bottom);
+            int left = Math.Max(parentCtrl.Rect.Left, myRect.Left);
+            int right = Math.Min(parentCtrl.Rect.Right, myRect.Right);
+            int top = Math.Max(parentCtrl.Rect.Top, myRect.Top);
+            int bottom = Math.Min(parentCtrl.Rect.Bottom, myRect.Bottom);
 
             DrawInfo info = new DrawInfo();
             info.rect = new Rectangle(left, top, right - left, bottom - top);
