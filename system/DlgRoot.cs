@@ -26,6 +26,8 @@ namespace system
 
         private DlgRoot()
         {
+            uiView view = new uiView();
+
             InitializeComponent();
             chkItemButton.Tag = UIControlType.Button;
             chkItemCheckBox.Tag = UIControlType.CheckBox;
