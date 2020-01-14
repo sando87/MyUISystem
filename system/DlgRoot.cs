@@ -35,7 +35,6 @@ namespace system
 
         private void btnTest_Click(object sender, EventArgs e)
         {
-            mUISystem.OnDrawRequest += (param) => { mRender.Draw(); };
             mUISystem.OnDrawRectFill += (param) => { mRender.DrawRect(param.rect, param.color); };
             mUISystem.OnDrawRectOutline += (param) => { mRender.DrawOutline(param.rect, param.color, param.lineWidth); };
             mUISystem.OnDrawBitmapRect += (param) => { mRender.DrawTextureRect(param.rect, param.texID, param.uv); };
@@ -71,7 +70,6 @@ namespace system
                 mUISystem.Add(control, e.X, e.Y);
                 UnCheckAllItems();
                 mUISystem.mRoot.CalcAbsolutePostion();
-                mRender.Draw();
                 mCurCtrl = null;
                 mEditMode = 0;
                 mIsDown = false;
@@ -89,7 +87,6 @@ namespace system
                     mCurCtrl = ctrl;
 
                 mUISystem.mRoot.CalcAbsolutePostion();
-                mRender.Draw();
             }
             
         }
@@ -152,7 +149,6 @@ namespace system
                         break;
                 }
                 mUISystem.mRoot.CalcAbsolutePostion();
-                mRender.Draw();
                 return;
             }
 
@@ -219,8 +215,6 @@ namespace system
 
         private void btnTest_Click_1(object sender, EventArgs e)
         {
-            uiViewEditor dlg = new uiViewEditor(ScreenWidth, ScreenHeight);
-            dlg.ShowDialog();
         }
     }
 }

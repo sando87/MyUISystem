@@ -97,11 +97,6 @@ namespace system
             OnDraw?.Invoke();
 
             mGlView.SwapBuffers();
-        }
-
-
-        public void Draw()
-        {
             mGlView.Invalidate();
         }
 

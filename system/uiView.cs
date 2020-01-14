@@ -41,12 +41,8 @@ namespace system
             Visiable = true;
             Enable = true;
 
-            int localX = int.Parse(JsonNode.LocalX);
-            int localY = int.Parse(JsonNode.LocalY);
-            Point localPt = new Point(localX, localY);
-            int width = int.Parse(JsonNode.Width);
-            int height = int.Parse(JsonNode.Height);
-            Size size = new Size(width, height);
+            Point localPt = new Point(JsonNode.LocalX, JsonNode.LocalY);
+            Size size = new Size(JsonNode.Width, JsonNode.Height);
             RectRelative = new Rectangle(localPt, size);
 
             Point parentAbPt = Parent == null ? new Point() : Parent.RectAbsolute.Location;
@@ -88,6 +84,9 @@ namespace system
         internal void MakeTree(uiViewProperties json)
         {
             JsonNode = json;
+            if (JsonNode.Childs == null)
+                return;
+
             foreach(uiViewProperties child in JsonNode.Childs)
             {
                 uiView view = BornChild(child.Type);

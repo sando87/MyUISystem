@@ -8,17 +8,17 @@ using Newtonsoft.Json.Linq;
 
 namespace system
 {
-    enum uiViewType
+    public enum uiViewType
     { None, View, Button, Checkbox, Image, EditBox, ComboBox }
 
     public class uiViewProperties
     {
         public string Name;
         public uiViewType Type;
-        public string LocalX;
-        public string LocalY;
-        public string Width;
-        public string Height;
+        public int LocalX;
+        public int LocalY;
+        public int Width;
+        public int Height;
         public string Text;
         public uiViewProperties[] Childs;
         public string ToJSON()

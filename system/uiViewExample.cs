@@ -22,7 +22,8 @@ namespace system
 
             InitializeComponent();
             InitRenderer();
-            InitUIManager("test.json");
+            //InitUIManager("test.json");
+            InitUIManager("editorJson.json"); 
 
             mTimer.Tick += Timer_Tick;
             mTimer.Interval = 20;
@@ -32,7 +33,6 @@ namespace system
         private void Timer_Tick(object sender, EventArgs e)
         {
             mUIMgr.MouseEventCall();
-            mRender.Draw();
         }
 
         public void InitRenderer()
@@ -50,7 +50,6 @@ namespace system
             uiViewProperties obj = uiViewProperties.Parse(jsonString);
             mUIMgr.Load(obj);
 
-            mUIMgr.InvokeDrawRefresh += (param) => { mRender.Draw(); };
             mUIMgr.InvokeDrawRectFill += (param) => { mRender.DrawRect(param.rect, param.color); };
             mUIMgr.InvokeDrawRectOutline += (param) => { mRender.DrawOutline(param.rect, param.color, param.lineWidth); };
             mUIMgr.InvokeDrawBitmapRect += (param) => { mRender.DrawTextureRect(param.rect, param.texID, param.uv); };
@@ -61,26 +60,28 @@ namespace system
             uiViewProperties prop = new uiViewProperties();
             prop.Name = "RootView";
             prop.Type = uiViewType.View;
-            prop.LocalX = "10";
-            prop.LocalY = "10";
-            prop.Width = "300";
-            prop.Height = "200";
+            prop.LocalX = 10;
+            prop.LocalY = 10;
+            prop.Width = 300;
+            prop.Height = 200;
             prop.Childs = new uiViewProperties[2];
+            for (int i = 0; i < 2; ++i)
+                prop.Childs[i] = new uiViewProperties();
 
             prop.Childs[0].Name = "Button1";
             prop.Childs[0].Type = uiViewType.Button;
-            prop.Childs[0].LocalX = "10";
-            prop.Childs[0].LocalY = "10";
-            prop.Childs[0].Width = "80";
-            prop.Childs[0].Height = "30";
+            prop.Childs[0].LocalX = 10;
+            prop.Childs[0].LocalY = 10;
+            prop.Childs[0].Width = 80;
+            prop.Childs[0].Height = 30;
             prop.Childs[0].Text = "Button_Left";
 
             prop.Childs[1].Name = "Button2";
             prop.Childs[1].Type = uiViewType.Button;
-            prop.Childs[1].LocalX = "100";
-            prop.Childs[1].LocalY = "10";
-            prop.Childs[1].Width = "80";
-            prop.Childs[1].Height = "30";
+            prop.Childs[1].LocalX = 100;
+            prop.Childs[1].LocalY = 10;
+            prop.Childs[1].Width = 80;
+            prop.Childs[1].Height = 30;
             prop.Childs[1].Text = "Button_Right";
 
             string rets = prop.ToJSON();

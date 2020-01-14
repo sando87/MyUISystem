@@ -43,12 +43,9 @@ namespace system
         internal EventParams PreviousEventInfo;
         internal uiView RootView { get; set; }
 
-        internal uiView FindTopView(int _worldX, int _worldY)
+        internal uiView ProcMouseUpDownClick(EventParams eventInfo)
         {
-            return RootView.FindTopView(_worldX, _worldY);
-        }
-        internal void ProcMouseUpDownClick(EventParams eventInfo)
-        {
+            uiView returnView = PreviousEventInfo.viewDown;
             Point pt = new Point(eventInfo.mouseX, eventInfo.mouseY);
             if (!PreviousEventInfo.mouseDown && eventInfo.mouseDown) //Mouse Down Triggered
             {
@@ -59,9 +56,7 @@ namespace system
                 if (downView != null)
                     downView.InvokeMouseDown?.Invoke(pt);
 
-                PreviousEventInfo = eventInfo;
-                PreviousEventInfo.mouseDown = true;
-                PreviousEventInfo.viewDown = downView;
+                returnView = downView;
             }
             else if (PreviousEventInfo.mouseDown && !eventInfo.mouseDown) //Mouse Up Triggered
             {
@@ -72,17 +67,18 @@ namespace system
                 if (upView != null && upView == PreviousEventInfo.viewDown)
                     upView.InvokeMouseClick?.Invoke(pt); //Mouse Click Invoked in case of same view...
 
-                PreviousEventInfo = eventInfo;
-                PreviousEventInfo.mouseDown = false;
-                PreviousEventInfo.viewDown = null;
+                returnView = null;
             }
+
+            return returnView;
         }
-        internal void ProcMouseEnterLeaveMove(EventParams eventInfo)
+        internal uiView ProcMouseEnterLeaveMove(EventParams eventInfo)
         {
+            uiView returnView = PreviousEventInfo.viewHovered;
             Point pt_pre = new Point(PreviousEventInfo.mouseX, PreviousEventInfo.mouseY);
             Point pt = new Point(eventInfo.mouseX, eventInfo.mouseY);
             if (pt.X == pt_pre.X && pt.Y == pt_pre.Y)
-                return;
+                return returnView;
 
             uiView hoverView = RootView.FindTopView(eventInfo.mouseX, eventInfo.mouseY);
             if(hoverView == null)
@@ -90,8 +86,7 @@ namespace system
                 if (PreviousEventInfo.viewHovered != null)
                     PreviousEventInfo.viewHovered.InvokeMouseLeave?.Invoke(pt);
 
-                PreviousEventInfo = eventInfo;
-                PreviousEventInfo.viewHovered = null;
+                returnView = null;
             }
             else
             {
@@ -105,9 +100,10 @@ namespace system
                     hoverView.InvokeMouseEnter?.Invoke(pt);
                 }
 
-                PreviousEventInfo = eventInfo;
-                PreviousEventInfo.viewHovered = hoverView;
+                returnView = hoverView;
             }
+
+            return returnView;
         }
 
         public uiViewManager()
@@ -123,8 +119,11 @@ namespace system
         }
         public void MouseEventCall()
         {
-            ProcMouseUpDownClick(CurrentEventInfo);
-            ProcMouseEnterLeaveMove(CurrentEventInfo);
+            uiView retViewDown = ProcMouseUpDownClick(CurrentEventInfo);
+            uiView retViewHover = ProcMouseEnterLeaveMove(CurrentEventInfo);
+            PreviousEventInfo = CurrentEventInfo;
+            PreviousEventInfo.viewDown = retViewDown;
+            PreviousEventInfo.viewHovered = retViewHover;
         }
         public void Draw()
         {

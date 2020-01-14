@@ -51,6 +51,11 @@ namespace system
             return new Size(width, height);
         }
 
+        public static Size GetCharSize(char _ch)
+        {
+            return new Size(Settings.GlyphWidth, Settings.GlyphHeight);
+        }
+
         public static RectangleF GetCharUV(char _ch)
         {
             char idx = _ch;

@@ -13,7 +13,7 @@ namespace system
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new uiViewExample());
+            Application.Run(new uiViewEditor());
         }
     }
 }

@@ -9,11 +9,10 @@ namespace system
 {
     class uiViewButton : uiView
     {
-        internal string Text { get; set; }
-        public override void OnLoad()
+        public override void OnLoad(int depth)
         {
-            base.OnLoad();
-            Text = JsonNode["Text"].ToString();
+            base.OnLoad(depth);
+            string Text = JsonNode.Text;
             InvokeMouseClick += (pt) => { Console.WriteLine("Click " + Text); };
             InvokeMouseEnter += (pt) => { Console.WriteLine("Enter " + Text); };
             InvokeMouseLeave += (pt) => { Console.WriteLine("Leave " + Text); };
