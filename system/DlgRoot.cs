@@ -26,8 +26,6 @@ namespace system
 
         private DlgRoot()
         {
-            uiView view = new uiView();
-
             InitializeComponent();
             chkItemButton.Tag = UIControlType.Button;
             chkItemCheckBox.Tag = UIControlType.CheckBox;
@@ -221,7 +219,7 @@ namespace system
 
         private void btnTest_Click_1(object sender, EventArgs e)
         {
-            DlgTest dlg = new DlgTest(ScreenWidth, ScreenHeight);
+            uiViewEditor dlg = new uiViewEditor(ScreenWidth, ScreenHeight);
             dlg.ShowDialog();
         }
     }
