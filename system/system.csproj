@@ -99,6 +99,7 @@
     </Compile>
     <Compile Include="uiViewManager.cs" />
     <Compile Include="uiViewProperties.cs" />
+    <Compile Include="Utils.cs" />
     <EmbeddedResource Include="DlgRoot.resx">
       <DependentUpon>DlgRoot.cs</DependentUpon>
     </EmbeddedResource>

@@ -22,8 +22,8 @@ namespace system
 
             InitializeComponent();
             InitRenderer();
-            //InitUIManager("test.json");
-            InitUIManager("editorJson.json"); 
+            InitUIManager("test.json");
+            //InitUIManager("editorJson.json"); 
 
             mTimer.Tick += Timer_Tick;
             mTimer.Interval = 20;
@@ -47,7 +47,8 @@ namespace system
         public void InitUIManager(string jsonFullname)
         {
             string jsonString = File.ReadAllText(jsonFullname);
-            uiViewProperties obj = uiViewProperties.Parse(jsonString);
+            ViewPropertiesTree obj = new ViewPropertiesTree();
+            obj.Parse(jsonString);
             mUIMgr.Load(obj);
 
             mUIMgr.InvokeDrawRectFill += (param) => { mRender.DrawRect(param.rect, param.color); };
@@ -57,35 +58,42 @@ namespace system
 
         public void CreateTestJson()
         {
-            uiViewProperties prop = new uiViewProperties();
+            ViewProperty prop = new ViewProperty();
             prop.Name = "RootView";
             prop.Type = uiViewType.View;
             prop.LocalX = 10;
             prop.LocalY = 10;
             prop.Width = 300;
             prop.Height = 200;
-            prop.Childs = new uiViewProperties[2];
-            for (int i = 0; i < 2; ++i)
-                prop.Childs[i] = new uiViewProperties();
 
-            prop.Childs[0].Name = "Button1";
-            prop.Childs[0].Type = uiViewType.Button;
-            prop.Childs[0].LocalX = 10;
-            prop.Childs[0].LocalY = 10;
-            prop.Childs[0].Width = 80;
-            prop.Childs[0].Height = 30;
-            prop.Childs[0].Text = "Button_Left";
+            ViewProperty child1 = new ViewProperty();
+            child1.Name = "Button1";
+            child1.Type = uiViewType.View;
+            child1.LocalX = 10;
+            child1.LocalY = 10;
+            child1.Width = 80;
+            child1.Height = 30;
 
-            prop.Childs[1].Name = "Button2";
-            prop.Childs[1].Type = uiViewType.Button;
-            prop.Childs[1].LocalX = 100;
-            prop.Childs[1].LocalY = 10;
-            prop.Childs[1].Width = 80;
-            prop.Childs[1].Height = 30;
-            prop.Childs[1].Text = "Button_Right";
+            ViewProperty child2 = new ViewProperty();
+            child2.Name = "Button2";
+            child2.Type = uiViewType.View;
+            child2.LocalX = 100;
+            child2.LocalY = 10;
+            child2.Width = 80;
+            child2.Height = 30;
 
-            string rets = prop.ToJSON();
+            ViewPropertiesTree ppp = new ViewPropertiesTree();
+            ppp.Me = prop;
+            ppp.Childs.Add(new ViewPropertiesTree());
+            ppp.Childs.Add(new ViewPropertiesTree());
+
+            ppp.Childs[0].Me = child1;
+            ppp.Childs[1].Me = child2;
+
+            string rets = ppp.ToJSON();
             File.WriteAllText("test.json", rets);
+            ViewPropertiesTree ppprets = new ViewPropertiesTree();
+            ppprets.Parse(rets);
         }
     }
 }

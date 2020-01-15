@@ -12,7 +12,7 @@ namespace system
     {
         internal List<uiView> Childs = new List<uiView>();
         internal uiView Parent { get; set; }
-        internal uiViewProperties JsonNode { get; set; }
+        internal ViewProperty JsonNode { get; set; }
 
         internal bool Visiable { get; set; }
         internal bool Enable { get; set; }
@@ -49,8 +49,11 @@ namespace system
             RectAbsolute = new Rectangle(new Point(parentAbPt.X + localPt.X, parentAbPt.Y + localPt.Y), size);
         }
 
-        internal void LoadAll(int depth)
+        internal void LoadAll(int depth = -1)
         {
+            if (depth < 0)
+                depth = Depth;
+
             OnLoad(depth);
             depth++;
             for (int i = 0; i < Childs.Count; ++i)
@@ -81,21 +84,21 @@ namespace system
             Childs.Add(view);
             return view;
         }
-        internal void MakeTree(uiViewProperties json)
+        internal void MakeTree(ViewPropertiesTree json)
         {
-            JsonNode = json;
-            if (JsonNode.Childs == null)
+            JsonNode = json.Me;
+            if (json.Childs == null)
                 return;
 
-            foreach(uiViewProperties child in JsonNode.Childs)
+            foreach(ViewPropertiesTree child in json.Childs)
             {
-                uiView view = BornChild(child.Type);
+                uiView view = BornChild(child.Me.Type);
                 view.MakeTree(child);
             }
         }
         internal uiView FindTopView(int worldX, int worldY)
         {
-            if (!RectAbsolute.Contains(worldX, worldY))
+            if (!Enable || !RectAbsolute.Contains(worldX, worldY))
                 return null;
 
             uiView findView = this;
@@ -109,6 +112,28 @@ namespace system
                 }
             }
             return findView;
+        }
+        internal void ChangeParent(uiView newParent)
+        {
+            if (Parent == newParent)
+                return;
+
+            Parent.Childs.Remove(this);
+            newParent.Childs.Add(this);
+            Parent = newParent;
+            int localX = RectAbsolute.Location.X - newParent.RectAbsolute.Location.X;
+            int localY = RectAbsolute.Location.Y - newParent.RectAbsolute.Location.Y;
+            JsonNode.LocalX = localX;
+            JsonNode.LocalY = localY;
+            LoadAll();
+        }
+        internal ViewPropertiesTree ToPropTree()
+        {
+            ViewPropertiesTree tree = new ViewPropertiesTree();
+            tree.Me = JsonNode;
+            foreach (uiView child in Childs)
+                tree.Childs.Add(child.ToPropTree());
+            return tree;
         }
         
         

@@ -30,6 +30,7 @@
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnSaveJson = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // panel1
@@ -50,11 +51,19 @@
             this.btnSaveJson.UseVisualStyleBackColor = true;
             this.btnSaveJson.Click += new System.EventHandler(this.btnSaveJson_Click);
             // 
+            // panel2
+            // 
+            this.panel2.Location = new System.Drawing.Point(597, 41);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(226, 292);
+            this.panel2.TabIndex = 2;
+            // 
             // uiViewEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(718, 505);
+            this.ClientSize = new System.Drawing.Size(835, 523);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.btnSaveJson);
             this.Controls.Add(this.panel1);
             this.Name = "uiViewEditor";
@@ -67,5 +76,6 @@
 
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnSaveJson;
+        private System.Windows.Forms.Panel panel2;
     }
 }

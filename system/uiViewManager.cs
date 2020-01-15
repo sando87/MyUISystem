@@ -112,7 +112,7 @@ namespace system
             CurrentEventInfo = new EventParams();
             PreviousEventInfo = new EventParams();
         }
-        public void Load(uiViewProperties json)
+        public void Load(ViewPropertiesTree json)
         {
             RootView.MakeTree(json);
             RootView.LoadAll(0);
@@ -138,7 +138,7 @@ namespace system
         }
         public string ToJsonString()
         {
-            return RootView.JsonNode.ToJSON();
+            return RootView.ToPropTree().ToJSON();
         }
     }
 }

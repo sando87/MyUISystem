@@ -97,7 +97,6 @@ namespace system
             OnDraw?.Invoke();
 
             mGlView.SwapBuffers();
-            mGlView.Invalidate();
         }
 
         public void DrawOutline(Rectangle _rect, Color _color, float _lineWidth = 2.0f)
