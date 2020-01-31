@@ -163,6 +163,19 @@ namespace system
             }
             return new byte[0];
         }
+        static public string LoadTextFile(out string _name)
+        {
+            _name = "";
+            using (OpenFileDialog dlg = new OpenFileDialog())
+            {
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    _name = dlg.FileName.Split('\\').Last();
+                    return File.ReadAllText(@dlg.FileName);
+                }
+            }
+            return "";
+        }
         static public string SaveFile(ListView _view, string _filename = null)
         {
             if (_view.Items.Count == 0)
@@ -276,6 +289,38 @@ namespace system
             {
                 //File.WriteAllText(saveFileDialog1.FileName, txt);
                 File.WriteAllLines(saveFileDialog1.FileName, _data);
+                return _filename;
+            }
+            return "";
+        }
+        static public string SaveFile(string _data, string _filename = null)
+        {
+            if (_data.Length == 0)
+                return "";
+
+            if (_filename != null)
+            {
+                string[] path = _filename.Split('\\');
+                if (path.Length > 1)
+                {
+                    CreateFolder(path[0]);
+                }
+
+                using (StreamWriter outputFile = new StreamWriter(@_filename))
+                    outputFile.WriteLine(_data);
+                return _filename;
+            }
+
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            //saveFileDialog1.Filter = "csv(*.csv)|*.csv";
+            saveFileDialog1.Title = DateTime.Now.ToString("HHmmss");
+            saveFileDialog1.ShowDialog();
+            _filename = saveFileDialog1.FileName.Split('\\').Last();
+
+            if (_filename != "")
+            {
+                //File.WriteAllText(saveFileDialog1.FileName, txt);
+                File.WriteAllText(saveFileDialog1.FileName, _data);
                 return _filename;
             }
             return "";
@@ -587,6 +632,11 @@ namespace system
             var gch = GCHandle.Alloc(data, GCHandleType.Pinned);
             Marshal.PtrToStructure(gch.AddrOfPinnedObject(), _obj);
             gch.Free();
+        }
+        static public string GetFileExt(string filename)
+        {
+            string[] pieces = filename.Split('.');
+            return pieces[pieces.Length - 1];
         }
     }
 

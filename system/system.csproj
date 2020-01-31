@@ -59,12 +59,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DlgRoot.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DlgRoot.Designer.cs">
-      <DependentUpon>DlgRoot.cs</DependentUpon>
-    </Compile>
     <Compile Include="uiViewEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,12 +91,10 @@
     <Compile Include="uiViewExample.Designer.cs">
       <DependentUpon>uiViewExample.cs</DependentUpon>
     </Compile>
+    <Compile Include="uiViewImage.cs" />
     <Compile Include="uiViewManager.cs" />
     <Compile Include="uiViewProperties.cs" />
     <Compile Include="Utils.cs" />
-    <EmbeddedResource Include="DlgRoot.resx">
-      <DependentUpon>DlgRoot.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="uiViewEditor.resx">
       <DependentUpon>uiViewEditor.cs</DependentUpon>
     </EmbeddedResource>

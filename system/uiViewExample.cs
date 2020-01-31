@@ -15,24 +15,22 @@ namespace system
     {
         public Renderer mRender = new Renderer();
         public uiViewManager mUIMgr = uiViewManager.Inst;
-        public Timer mTimer = new Timer();
         public uiViewExample()
         {
-            //CreateTestJson();
-
             InitializeComponent();
             InitRenderer();
-            InitUIManager("test.json");
-            //InitUIManager("editorJson.json"); 
+            InitUIManager();
 
-            mTimer.Tick += Timer_Tick;
-            mTimer.Interval = 20;
-            mTimer.Start();
+            Timer timer = new Timer();
+            timer.Tick += Timer_Tick;
+            timer.Interval = 20;
+            timer.Start();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
             mUIMgr.MouseEventCall();
+            mRender.mGlView.Invalidate();
         }
 
         public void InitRenderer()
@@ -44,56 +42,32 @@ namespace system
             mRender.mGlView.MouseUp += (obj, args) => { mUIMgr.SetMouseEvent(new Point(args.X, args.Y), false); };
             mRender.OnDraw += () => { mUIMgr.Draw(); };
         }
-        public void InitUIManager(string jsonFullname)
+        public void InitUIManager()
         {
-            string jsonString = File.ReadAllText(jsonFullname);
-            ViewPropertiesTree obj = new ViewPropertiesTree();
-            obj.Parse(jsonString);
-            mUIMgr.Load(obj);
-
-            mUIMgr.InvokeDrawRectFill += (param) => { mRender.DrawRect(param.rect, param.color); };
-            mUIMgr.InvokeDrawRectOutline += (param) => { mRender.DrawOutline(param.rect, param.color, param.lineWidth); };
-            mUIMgr.InvokeDrawBitmapRect += (param) => { mRender.DrawTextureRect(param.rect, param.texID, param.uv); };
+            mUIMgr.InvokeDrawRectFill += (param) => { mRender.DrawRect(param); };
+            mUIMgr.InvokeDrawRectOutline += (param) => { mRender.DrawOutline(param); };
+            mUIMgr.InvokeDrawBitmap += (param) => { mRender.DrawTexture(param); };
         }
 
-        public void CreateTestJson()
+        private void btnLoad_Click(object sender, EventArgs e)
         {
-            ViewProperty prop = new ViewProperty();
-            prop.Name = "RootView";
-            prop.Type = uiViewType.View;
-            prop.LocalX = 10;
-            prop.LocalY = 10;
-            prop.Width = 300;
-            prop.Height = 200;
+            string filename = "";
+            string text = Utils.LoadTextFile(out filename);
 
-            ViewProperty child1 = new ViewProperty();
-            child1.Name = "Button1";
-            child1.Type = uiViewType.View;
-            child1.LocalX = 10;
-            child1.LocalY = 10;
-            child1.Width = 80;
-            child1.Height = 30;
+            if (filename.Length == 0)
+                return;
 
-            ViewProperty child2 = new ViewProperty();
-            child2.Name = "Button2";
-            child2.Type = uiViewType.View;
-            child2.LocalX = 100;
-            child2.LocalY = 10;
-            child2.Width = 80;
-            child2.Height = 30;
+            if (Utils.GetFileExt(filename) != "json")
+            {
+                MessageBox.Show("No Json");
+                return;
+            }
 
-            ViewPropertiesTree ppp = new ViewPropertiesTree();
-            ppp.Me = prop;
-            ppp.Childs.Add(new ViewPropertiesTree());
-            ppp.Childs.Add(new ViewPropertiesTree());
-
-            ppp.Childs[0].Me = child1;
-            ppp.Childs[1].Me = child2;
-
-            string rets = ppp.ToJSON();
-            File.WriteAllText("test.json", rets);
-            ViewPropertiesTree ppprets = new ViewPropertiesTree();
-            ppprets.Parse(rets);
+            ViewPropertiesTree obj = new ViewPropertiesTree();
+            obj.Parse(text);
+            bool ret = mUIMgr.Load(obj);
+            if (!ret)
+                MessageBox.Show(mUIMgr.ErrorMessage);
         }
     }
 }

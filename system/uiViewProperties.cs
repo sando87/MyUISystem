@@ -9,36 +9,34 @@ using Newtonsoft.Json.Linq;
 namespace system
 {
     public enum uiViewType
-    { None, View, Button, Checkbox, Label, Image, EditBox, ComboBox }
+    { None, View, Button, Image }
 
-    public class ViewPropComboBox : ViewProperty
+    public class RscImage
     {
-        public string items;
+        public string filename;
+        public float left;
+        public float right;
+        public float top;
+        public float bottom;
+        private int texID = -1;
+        public void LoadTexture()
+        {
+            if(texID < 0)
+                texID = Renderer.InitTexture(filename);
+        }
+        public int GetTexID() { return texID; }
     }
-    public class ViewPropEditBox : ViewProperty
+    public class PropImage : ViewProperty
     {
-        public string EditText;
+        public RscImage ImgNormal;
+        public float bright;
+        public PropImage() {
+            ImgNormal = new RscImage();
+        }
     }
-    public class ViewPropImage : ViewProperty
-    {
-        public bool AlphaOn;
-    }
-    public class ViewPropLabel : ViewProperty
-    {
-        public string LabelName;
-    }
-    public class ViewPropCheckBox : ViewProperty
-    {
-        public bool Checked;
-        public string ImgHover;
-        public string ImgDown;
-        public string ImgNormalChecked;
-    }
-    public class ViewPropButton : ViewProperty
+    public class PropButton : ViewProperty
     {
         public string ButtonText;
-        public string ImgHover;
-        public string ImgDown;
     }
     public class ViewProperty
     {
@@ -48,9 +46,8 @@ namespace system
         public int LocalY;
         public int Width;
         public int Height;
-        public string ImgNormal;
+        public string Color;
     }
-
 
     public class ViewPropertiesTree
     {
@@ -64,7 +61,7 @@ namespace system
         }
         public string SerializeJson()
         {
-            string me = JsonConvert.SerializeObject(Me, Formatting.Indented);
+            string me = JsonConvert.SerializeObject(Me);
             string childs = "";
             foreach (ViewPropertiesTree child in Childs)
             {
@@ -72,14 +69,12 @@ namespace system
                 childs += ",";
             }
 
-            me = me.Replace("{", "");
-            me = me.Replace("}", "");
-            me = me.Trim();
+            string subString = me.Substring(0, me.Length - 1);
             string result = "";
             if (childs.Length > 0)
-                result = "{" + me + ",\"Childs\": [" + childs + "]}";
+                result = subString + ",\"Childs\": [" + childs + "]}";
             else
-                result = "{" + me + ",\"Childs\": null}";
+                result = subString + ",\"Childs\": null}";
 
             return result;
         }
@@ -102,15 +97,15 @@ namespace system
         private ViewProperty ToClassObject(JObject obj)
         {
             uiViewType type = obj["Type"].ToObject<uiViewType>();
-            switch(type)
+            switch (type)
             {
                 case uiViewType.View: return obj.ToObject<ViewProperty>();
-                case uiViewType.Button: return obj.ToObject<ViewPropButton>();
-                case uiViewType.Checkbox: return obj.ToObject<ViewPropCheckBox>();
-                case uiViewType.Label: return obj.ToObject<ViewPropLabel>();
-                case uiViewType.Image: return obj.ToObject<ViewPropImage>();
-                case uiViewType.EditBox: return obj.ToObject<ViewPropEditBox>();
-                case uiViewType.ComboBox: return obj.ToObject<ViewPropComboBox>();
+                case uiViewType.Button: return obj.ToObject<PropButton>();
+                case uiViewType.Image: return obj.ToObject<PropImage>();
+                //case uiViewType.Label: return obj.ToObject<ViewPropLabel>();
+                //case uiViewType.Checkbox: return obj.ToObject<ViewPropCheckBox>();
+                //case uiViewType.EditBox: return obj.ToObject<ViewPropEditBox>();
+                //case uiViewType.ComboBox: return obj.ToObject<ViewPropComboBox>();
                 default: break;
             }
             return null;

@@ -22,6 +22,7 @@ namespace system
         public Renderer() { }
 
         bool loaded = false;
+        PaintEventArgs mPaintArgs;
         public OpenTK.GLControl mGlView = new OpenTK.GLControl();
         public delegate void DelDraw();
         public DelDraw OnDraw;
@@ -94,21 +95,22 @@ namespace system
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
+            mPaintArgs = e;
             OnDraw?.Invoke();
 
             mGlView.SwapBuffers();
         }
 
-        public void DrawOutline(Rectangle _rect, Color _color, float _lineWidth = 2.0f)
+        public void DrawOutline(DrawingParams param)
         {
-            int left = _rect.Left;
-            int right = _rect.Right;
-            int top = mGlView.Height - _rect.Top;
-            int bottom = mGlView.Height - _rect.Bottom;
+            int left = param.rect.Left;
+            int right = param.rect.Right;
+            int top = mGlView.Height - param.rect.Top;
+            int bottom = mGlView.Height - param.rect.Bottom;
 
             GL.Begin(PrimitiveType.LineStrip);
             GL.LineWidth(2.0f);
-            GL.Color3(_color);
+            GL.Color3(param.color);
             GL.Vertex2(left, top); //lt
             GL.Vertex2(left, bottom); //lb
             GL.Vertex2(right, bottom);//rb
@@ -116,74 +118,45 @@ namespace system
             GL.Vertex2(left, top); //lt
             GL.End();
         }
-        public void DrawRect(Rectangle _rect, Color _color)
+        public void DrawRect(DrawingParams param)
         {
-            int left = _rect.Left;
-            int right = _rect.Right;
-            int top = mGlView.Height - _rect.Top;
-            int bottom = mGlView.Height - _rect.Bottom;
+            int left = param.rect.Left;
+            int right = param.rect.Right;
+            int top = mGlView.Height - param.rect.Top;
+            int bottom = mGlView.Height - param.rect.Bottom;
 
             GL.Begin(PrimitiveType.TriangleStrip);
-            GL.Color3(_color);
+            GL.Color3(param.color);
             GL.Vertex2(left, top); //lt
             GL.Vertex2(left, bottom); //lb
             GL.Vertex2(right, top);//rt
             GL.Vertex2(right, bottom);//rb
             GL.End();
         }
-
-        public void DrawTexture(Rectangle _rect, int _texID)
+        public void DrawTexture(DrawingParams param)
         {
             GL.Enable(EnableCap.Texture2D);
-            GL.BindTexture(TextureTarget.Texture2D, _texID);
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            //GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
-
-            int left = _rect.Left;
-            int right = _rect.Right;
-            int top = mGlView.Height - _rect.Top;
-            int bottom = mGlView.Height - _rect.Bottom;
-
-            GL.Begin(PrimitiveType.TriangleStrip);
-
-            GL.TexCoord2(0, 1);
-            GL.Vertex2(left, top); //lt
-            GL.TexCoord2(0, 0);
-            GL.Vertex2(left, bottom); //lb
-            GL.TexCoord2(1, 1);
-            GL.Vertex2(right, top);//rt
-            GL.TexCoord2(1, 0);
-            GL.Vertex2(right, bottom);//rb
-
-            GL.End();
-
-            GL.Disable(EnableCap.Texture2D);
-            GL.Disable(EnableCap.Blend);
-        }
-        public void DrawTextureRect(Rectangle _rect, int _texID, RectangleF _uv)
-        {
-            GL.Enable(EnableCap.Texture2D);
-            GL.BindTexture(TextureTarget.Texture2D, _texID);
+            GL.BindTexture(TextureTarget.Texture2D, param.texID);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             //GL.BlendFunc(BlendingFactor.OneMinusSrcAlpha, BlendingFactor.SrcAlpha); //font reverse
             //GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
 
-            int left = _rect.Left;
-            int right = _rect.Right;
-            int top = mGlView.Height - _rect.Top;
-            int bottom = mGlView.Height - _rect.Bottom;
+            int left = param.rect.Left;
+            int right = param.rect.Right;
+            int top = mGlView.Height - param.rect.Top;
+            int bottom = mGlView.Height - param.rect.Bottom;
 
             GL.Begin(PrimitiveType.TriangleStrip);
 
-            GL.TexCoord2(_uv.Left, _uv.Top);
+            GL.Color3(param.color);
+            GL.TexCoord2(param.uv.Left, param.uv.Top);
             GL.Vertex2(left, top); //lt
-            GL.TexCoord2(_uv.Left, _uv.Bottom);
+            GL.TexCoord2(param.uv.Left, param.uv.Bottom);
             GL.Vertex2(left, bottom); //lb
-            GL.TexCoord2(_uv.Right, _uv.Top);
+            GL.TexCoord2(param.uv.Right, param.uv.Top);
             GL.Vertex2(right, top);//rt
-            GL.TexCoord2(_uv.Right, _uv.Bottom);
+            GL.TexCoord2(param.uv.Right, param.uv.Bottom);
             GL.Vertex2(right, bottom);//rb
 
             GL.End();

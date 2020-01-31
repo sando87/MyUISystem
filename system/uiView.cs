@@ -13,7 +13,10 @@ namespace system
         internal List<uiView> Childs = new List<uiView>();
         internal uiView Parent { get; set; }
         internal ViewProperty JsonNode { get; set; }
+        internal DrawingParams RenderParam = new DrawingParams();
 
+        internal bool Downed { get; set; }
+        internal bool Hovered { get; set; }
         internal bool Visiable { get; set; }
         internal bool Enable { get; set; }
         internal int Depth { get; set; }
@@ -47,6 +50,19 @@ namespace system
 
             Point parentAbPt = Parent == null ? new Point() : Parent.RectAbsolute.Location;
             RectAbsolute = new Rectangle(new Point(parentAbPt.X + localPt.X, parentAbPt.Y + localPt.Y), size);
+
+            RenderParam.rect = RectAbsolute;
+            if (JsonNode.Color != null && JsonNode.Color.Length != 0)
+            {
+                string[] argb = JsonNode.Color.Split('.');
+                UInt32 col = 0;
+                for (int i = 0; i < argb.Length; ++i)
+                {
+                    int shift = (argb.Length - i - 1) * 8;
+                    col |= (UInt32.Parse(argb[i]) << shift);
+                }
+                RenderParam.color = Color.FromArgb((int)col);
+            }
         }
 
         internal void LoadAll(int depth = -1)
@@ -75,9 +91,10 @@ namespace system
             {
                 case uiViewType.View: view = new uiView(); break;
                 case uiViewType.Button: view = new uiViewButton(); break;
-                case uiViewType.Checkbox: view = new uiView(); break;
-                case uiViewType.EditBox: view = new uiView(); break;
-                case uiViewType.ComboBox: view = new uiView(); break;
+                case uiViewType.Image: view = new uiViewImage(); break;
+                //case uiViewType.Checkbox: view = new uiView(); break;
+                //case uiViewType.EditBox: view = new uiView(); break;
+                //case uiViewType.ComboBox: view = new uiView(); break;
                 default: break;
             }
             view.Parent = this;
@@ -94,6 +111,7 @@ namespace system
             {
                 uiView view = BornChild(child.Me.Type);
                 view.MakeTree(child);
+                uiViewManager.Inst.RegisterView(view);
             }
         }
         internal uiView FindTopView(int worldX, int worldY)
