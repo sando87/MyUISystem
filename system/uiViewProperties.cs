@@ -49,20 +49,23 @@ namespace system
         public int fontSize;
         public uiViewStyle style;
         public uiViewAlign align;
-        private System.Drawing.Font font;
+        public float gapRate;
+        private FontCapture font;
         private System.Drawing.Size textSize;
         public override bool Load() {
             if(fontName != null && fontName.Length > 0 && fontSize > 0)
             {
-                int n = (int)style;
-                if(n > 0)
-                    n = (int)Math.Pow(2, n - 1);
-                font = new System.Drawing.Font(fontName, fontSize, (System.Drawing.FontStyle)n);
-                textSize = new System.Drawing.Size(fontSize * text.Length, fontSize);
+                if (font != null)
+                    font.ReleaseTexture();
+
+                font = FontCapture.Capture(fontName, fontSize, style);
+                int chWidth = (int)(font.SizeChar.Width * gapRate);
+                int chHeight = (int)font.SizeChar.Height; // (int)(font.SizeChar.Height * gapRate);
+                textSize = new System.Drawing.Size(chWidth * text.Length, chHeight);
             }
             return true;
         }
-        public System.Drawing.Font GetFont { get { return font; } }
+        public FontCapture Font { get { return font; } }
         public System.Drawing.Size GetTextSize { get { return textSize; } }
     }
     public class PropImage : ViewProperty
@@ -129,6 +132,9 @@ namespace system
         {
             Me = ToClassObject(obj);
             var childs = obj["Childs"];
+            if (childs == null)
+                return;
+
             foreach(JObject child in childs)
             {
                 ViewPropertiesTree node = new ViewPropertiesTree();

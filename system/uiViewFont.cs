@@ -35,12 +35,14 @@ namespace system
                     break;
             }
             RenderParam.rect = textRect;
-            RenderParam.font = node.GetFont;
+            RenderParam.font = node.Font;
             RenderParam.text = node.text;
+            RenderParam.gapRate = node.gapRate;
         }
         public override void OnDraw()
         {
-            uiViewManager.Inst.InvokeDrawText?.Invoke(RenderParam);
+            if(RenderParam.font != null)
+                uiViewManager.Inst.InvokeDrawText?.Invoke(RenderParam);
         }
     }
 }

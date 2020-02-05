@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace system
 {
-    class FontCapture
+    public class FontCapture
     {
         public int TextureID { get { return mTextureID; } }
         public SizeF SizeChar { get { return mSizeChar; } }
@@ -19,10 +19,18 @@ namespace system
             float v = (ch / mGlyphsPerLine) * mSizeUV.Height;
             return new RectangleF(new PointF(u,v), mSizeUV);
         }
-        static public FontCapture Capture(string fontname, int size, int style)
+        public void ReleaseTexture()
+        {
+            if (TextureID > 0)
+                Renderer.ReleaseTexture(TextureID);
+        }
+        static public FontCapture Capture(string fontname, int size, uiViewStyle style)
         {
             FontCapture font = new FontCapture();
-            font.LoadFont(fontname, size, style);
+            int n = (int)style;
+            if (n > 0)
+                n = (int)Math.Pow(2, n - 1);
+            font.LoadFont(fontname, size, n);
             return font;
         }
 
@@ -57,6 +65,7 @@ namespace system
                 }
             }
 
+            //mBitmap.Save("test.png");
             mSizeUV = new SizeF(mSizeChar.Width / (float)width, mSizeChar.Height / (float)height); 
             mTextureID = Renderer.InitTexture(mBitmap);
         }

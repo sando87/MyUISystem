@@ -46,6 +46,9 @@ namespace system
         }
         public static int InitTexture(string _filename)
         {
+            if (_filename == null || _filename.Length == 0)
+                return -1;
+
             int texID = 0;
             Bitmap bitmap = new Bitmap(_filename);
             GL.GenTextures(1, out texID);
@@ -70,7 +73,7 @@ namespace system
             return texID;
         }
 
-        public void ReleaseTexture(int _texID)
+        public static void ReleaseTexture(int _texID)
         {
             GL.DeleteTextures(1, ref _texID);
         }
@@ -87,10 +90,10 @@ namespace system
             GL.Ortho(0, w, 0, h, -1, 1); // Bottom-left corner pixel has coordinate (0, 0)
             GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
 
-            FontManager.Settings.TextureID = InitTexture(FontManager.Settings.FontBitmapFilename);
-            Bitmap bitmap = new Bitmap(FontManager.Settings.FontBitmapFilename);
-            FontManager.Settings.TextureWidth = bitmap.Width;
-            FontManager.Settings.TextureHeight = bitmap.Height;
+            //FontManager.Settings.TextureID = InitTexture(FontManager.Settings.FontBitmapFilename);
+            //Bitmap bitmap = new Bitmap(FontManager.Settings.FontBitmapFilename);
+            //FontManager.Settings.TextureWidth = bitmap.Width;
+            //FontManager.Settings.TextureHeight = bitmap.Height;
             //GL.Enable(EnableCap.Texture2D);
             //GL.ClearColor(Color.ForestGreen);
             //GL.MatrixMode(MatrixMode.Projection);
@@ -179,7 +182,7 @@ namespace system
         public void DrawText(DrawingParams param)
         {
             GL.Enable(EnableCap.Texture2D);
-            GL.BindTexture(TextureTarget.Texture2D, FontManager.Settings.TextureID);
+            GL.BindTexture(TextureTarget.Texture2D, param.font.TextureID);
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             //GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
@@ -192,23 +195,24 @@ namespace system
             int top = mGlView.Height - param.rect.Top;
             int bottom = mGlView.Height - param.rect.Bottom;
 
-            float u_step = (float)FontManager.Settings.GlyphWidth / (float)FontManager.Settings.TextureWidth;
-            float v_step = (float)FontManager.Settings.GlyphHeight / (float)FontManager.Settings.TextureHeight;
-
             GL.Color3(param.color);
             for (int n = 0; n < param.text.Length; n++)
             {
                 char idx = param.text[n];
-                float u = (float)(idx % FontManager.Settings.GlyphsPerLine) * u_step;
-                float v = (float)(idx / FontManager.Settings.GlyphsPerLine) * v_step;
+                RectangleF uv = param.font.UVChar(idx);
+                float fixedW = uv.Width * param.gapRate;
+                float fixedH = uv.Height; // uv.Height * param.gapRate;
+                float fixedX = uv.Left + (1 - param.gapRate) * uv.Width / 2;
+                float fixedY = uv.Top; // uv.Top + (1 - param.gapRate) * uv.Height / 2;
+                RectangleF fixedUV = new RectangleF(new PointF(fixedX, fixedY), new SizeF(fixedW, fixedH));
 
-                GL.TexCoord2(u, v);
+                GL.TexCoord2(fixedUV.Left, fixedUV.Top);
                 GL.Vertex2(left + chW * n, top);
-                GL.TexCoord2(u, v + v_step);
+                GL.TexCoord2(fixedUV.Left, fixedUV.Bottom);
                 GL.Vertex2(left + chW * n, bottom);
-                GL.TexCoord2(u + u_step, v);
+                GL.TexCoord2(fixedUV.Right, fixedUV.Top);
                 GL.Vertex2(right + chW * n, top);
-                GL.TexCoord2(u + u_step, v + v_step);
+                GL.TexCoord2(fixedUV.Right, fixedUV.Bottom);
                 GL.Vertex2(right + chW * n, bottom);
             }
         

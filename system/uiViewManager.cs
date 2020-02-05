@@ -21,11 +21,12 @@ namespace system
     {
         public RectangleF uv;
         public Rectangle rect;
-        public Font font;
+        public FontCapture font;
         public Color color;
         public int texID;
         public float bright;
         public int lineWidth;
+        public float gapRate;
         public string text;
     }
 
