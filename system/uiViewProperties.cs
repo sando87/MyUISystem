@@ -9,7 +9,21 @@ using Newtonsoft.Json.Linq;
 namespace system
 {
     public enum uiViewType
-    { None, View, Button, Image }
+    { View, Button, Image, Font }
+    public enum uiViewAlign
+    {
+        TopLeft,      Top,              TopRight,
+        Left,           Center,         Right,
+        BottomLeft, Bottom,         BottomRight,
+    }
+    public enum uiViewStyle
+    {
+        Regular,
+        Bold,
+        Italic,
+        Underline,
+        Strikeout
+    }
 
     public class RscImage
     {
@@ -19,12 +33,37 @@ namespace system
         public float top;
         public float bottom;
         private int texID = -1;
-        public void LoadTexture()
+        public bool LoadTexture()
         {
             if(texID < 0)
                 texID = Renderer.InitTexture(filename);
+            return true;
         }
         public int GetTexID() { return texID; }
+    }
+
+    public class PropFont : ViewProperty
+    {
+        public string text;
+        public string fontName;
+        public int fontSize;
+        public uiViewStyle style;
+        public uiViewAlign align;
+        private System.Drawing.Font font;
+        private System.Drawing.Size textSize;
+        public override bool Load() {
+            if(fontName != null && fontName.Length > 0 && fontSize > 0)
+            {
+                int n = (int)style;
+                if(n > 0)
+                    n = (int)Math.Pow(2, n - 1);
+                font = new System.Drawing.Font(fontName, fontSize, (System.Drawing.FontStyle)n);
+                textSize = new System.Drawing.Size(fontSize * text.Length, fontSize);
+            }
+            return true;
+        }
+        public System.Drawing.Font GetFont { get { return font; } }
+        public System.Drawing.Size GetTextSize { get { return textSize; } }
     }
     public class PropImage : ViewProperty
     {
@@ -33,6 +72,7 @@ namespace system
         public PropImage() {
             ImgNormal = new RscImage();
         }
+        public override bool Load() { return ImgNormal.LoadTexture(); }
     }
     public class PropButton : ViewProperty
     {
@@ -47,6 +87,7 @@ namespace system
         public int Width;
         public int Height;
         public string Color;
+        public virtual bool Load() { return true; }
     }
 
     public class ViewPropertiesTree
@@ -59,7 +100,13 @@ namespace system
             var tmp = JObject.Parse(ret);
             return JsonConvert.SerializeObject(tmp, Formatting.Indented);
         }
-        public string SerializeJson()
+        public void Parse(string json)
+        {
+            JObject obj = JObject.Parse(json);
+            Parse(obj);
+        }
+
+        private string SerializeJson()
         {
             string me = JsonConvert.SerializeObject(Me);
             string childs = "";
@@ -78,12 +125,7 @@ namespace system
 
             return result;
         }
-        public void Parse(string json)
-        {
-            JObject obj = JObject.Parse(json);
-            Parse(obj);
-        }
-        public void Parse(JObject obj)
+        private void Parse(JObject obj)
         {
             Me = ToClassObject(obj);
             var childs = obj["Childs"];
@@ -102,13 +144,24 @@ namespace system
                 case uiViewType.View: return obj.ToObject<ViewProperty>();
                 case uiViewType.Button: return obj.ToObject<PropButton>();
                 case uiViewType.Image: return obj.ToObject<PropImage>();
-                //case uiViewType.Label: return obj.ToObject<ViewPropLabel>();
-                //case uiViewType.Checkbox: return obj.ToObject<ViewPropCheckBox>();
-                //case uiViewType.EditBox: return obj.ToObject<ViewPropEditBox>();
-                //case uiViewType.ComboBox: return obj.ToObject<ViewPropComboBox>();
+                case uiViewType.Font: return obj.ToObject<PropFont>();
                 default: break;
             }
             return null;
+        }
+
+        static public uiView CreateView(uiViewType type)
+        {
+            uiView view = null;
+            switch (type)
+            {
+                case uiViewType.View: view = new uiView(); break;
+                case uiViewType.Button: view = new uiViewButton(); break;
+                case uiViewType.Image: view = new uiViewImage(); break;
+                case uiViewType.Font: view = new uiViewFont(); break;
+                default: break;
+            }
+            return view;
         }
     }
 }

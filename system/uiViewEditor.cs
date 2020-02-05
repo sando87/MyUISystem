@@ -34,6 +34,8 @@ namespace system
         public uiViewEditor()
         {
             InitializeComponent();
+            string[] enums = Enum.GetNames(typeof(uiViewType));
+            cbViewType.Items.AddRange(enums);
             cbViewType.SelectedIndex = 0;
 
             InitRenderer();
@@ -59,6 +61,7 @@ namespace system
             mUIMgr.InvokeDrawRectFill += (param) => { mRender.DrawRect(param); };
             mUIMgr.InvokeDrawRectOutline += (param) => { mRender.DrawOutline(param); };
             mUIMgr.InvokeDrawBitmap += (param) => { mRender.DrawTexture(param); };
+            mUIMgr.InvokeDrawText += (param) => { mRender.DrawText(param); };
         }
 
         //단순히 마우스 Down상태 해제(view클릭으로 간주되면 선택된view를 활성화시킴)
@@ -216,30 +219,22 @@ namespace system
             if (parentView == null)
                 return;
 
-            uiViewType viewType = uiViewType.View;
             ViewProperty defaultProp = new ViewProperty();
-            string type = cbViewType.SelectedItem.ToString();
-            switch (type)
-            {
-                case "Button":
-                    viewType = uiViewType.Button;
-                    defaultProp = new PropButton();
-                    break;
-                case "Image":
-                    viewType = uiViewType.Image;
-                    defaultProp = new PropImage();
-                    break;
-                default:
-                    break;
-            }
+            string viewName = cbViewType.SelectedItem.ToString();
+            uiViewType viewType = (uiViewType)Enum.Parse(typeof(uiViewType), viewName);
             uiView view = parentView.BornChild(viewType);
-            defaultProp.Name = mUIMgr.AutoName(viewType.ToString());
-            defaultProp.Type = viewType;
-            defaultProp.LocalX = clickPtX - parentView.RectAbsolute.Location.X;
-            defaultProp.LocalY = clickPtY - parentView.RectAbsolute.Location.Y;
-            defaultProp.Width = 80;
-            defaultProp.Height = 30;
-            view.JsonNode = defaultProp;
+
+            ViewPropertiesTree newProp = new ViewPropertiesTree();
+            newProp.Me.Name = mUIMgr.AutoName(viewType.ToString());
+            newProp.Me.Type = viewType;
+            newProp.Me.LocalX = clickPtX - parentView.RectAbsolute.Location.X;
+            newProp.Me.LocalY = clickPtY - parentView.RectAbsolute.Location.Y;
+            newProp.Me.Width = 80;
+            newProp.Me.Height = 30;
+            newProp.Me.Color = "255.160.160.160";
+            string jsonString = newProp.ToJSON();
+            newProp.Parse(jsonString);
+            view.JsonNode = newProp.Me;
             view.OnLoad(parentView.Depth + 1);
             mUIMgr.RegisterView(view);
         }
@@ -250,10 +245,7 @@ namespace system
             FieldInfo[] fields = _msg.GetType().GetFields();
             foreach (var field in fields)
             {
-                if (field.IsPrivate)
-                    continue;
-
-                if (field.FieldType.Name == "uiViewType")
+                if (field.FieldType.IsEnum)
                 {
                     ComboBox cb = new ComboBox();
                     cb.Tag = new PropFieldInfo(field, _msg, depth);
@@ -261,11 +253,11 @@ namespace system
                     cb.DropDownStyle = ComboBoxStyle.DropDownList;
                     cb.Name = field.Name;
                     cb.SelectedIndexChanged += new EventHandler(PropertyEditorHandler);
-                    string[] enums = Utils.ToNames(new uiViewType());
+                    string[] enums = System.Enum.GetNames(field.FieldType);
                     cb.Items.AddRange(enums);
-                    cb.Items.Remove(enums[0]);
                     cb.SelectedIndex = (int)field.GetValue(_msg);
-                    cb.Enabled = false;
+                    if(field.FieldType == typeof(uiViewType))
+                        cb.Enabled = false;
                     ctrls.Add(cb);
                 }
                 else if (field.FieldType.Name == "Boolean")
@@ -349,8 +341,7 @@ namespace system
             object msg = propInfo.msg;
             if (ctrl.GetType() == typeof(ComboBox))
             {
-                uiViewType typeIdx = (uiViewType)(ctrl as ComboBox).SelectedIndex;
-                info.SetValue(msg, typeIdx);
+                info.SetValue(msg, (ctrl as ComboBox).SelectedIndex);
             }
             else if (ctrl.GetType() == typeof(CheckBox))
             {

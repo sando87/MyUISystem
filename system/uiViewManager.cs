@@ -21,6 +21,7 @@ namespace system
     {
         public RectangleF uv;
         public Rectangle rect;
+        public Font font;
         public Color color;
         public int texID;
         public float bright;
@@ -38,6 +39,7 @@ namespace system
         public DelegateRender InvokeDrawRectOutline;
         public DelegateRender InvokeDrawBitmap;
         public DelegateRender InvokeDrawBitmapRect;
+        public DelegateRender InvokeDrawText;
 
         internal Dictionary<string, uiView> Views = new Dictionary<string, uiView>();
         internal EventParams CurrentEventInfo;

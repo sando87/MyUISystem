@@ -30,7 +30,7 @@ namespace system
             public static int FontSize = 14;
             public static bool BitmapFont = false;
             public static string FromFile; //= "joystix monospace.ttf";
-            public static string FontName = "Consolas";
+            public static string FontName = "굴림체";
 
 
             public static int TextureWidth = 0;
@@ -102,13 +102,15 @@ namespace system
                         //g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
                     }
 
+                    SizeF size = g.MeasureString("A", font);
+                    //size = new SizeF(size.Width * 0.6f, size.Height * 0.9f);
                     for (int p = 0; p < Settings.GlyphLineCount; p++)
                     {
                         for (int n = 0; n < Settings.GlyphsPerLine; n++)
                         {
                             char c = (char)(n + p * Settings.GlyphsPerLine);
                             g.DrawString(c.ToString(), font, Brushes.White,
-                                n * Settings.GlyphWidth + Settings.AtlasOffsetX, p * Settings.GlyphHeight + Settings.AtlassOffsetY);
+                                n * size.Width, p * size.Height);
                         }
                     }
                 }
@@ -116,34 +118,6 @@ namespace system
             }
             //Process.Start(Settings.FontBitmapFilename);
         }
-
-        //public void DrawText(int x, int y, string text)
-        //{
-        //    GL.Begin(PrimitiveType.Quads);
-        //
-        //    float u_step = (float)Settings.GlyphWidth / (float)TextureWidth;
-        //    float v_step = (float)Settings.GlyphHeight / (float)TextureHeight;
-        //
-        //    for (int n = 0; n < text.Length; n++)
-        //    {
-        //        char idx = text[n];
-        //        float u = (float)(idx % Settings.GlyphsPerLine) * u_step;
-        //        float v = (float)(idx / Settings.GlyphsPerLine) * v_step;
-        //
-        //        GL.TexCoord2(u, v);
-        //        GL.Vertex2(x, y);
-        //        GL.TexCoord2(u + u_step, v);
-        //        GL.Vertex2(x + Settings.GlyphWidth, y);
-        //        GL.TexCoord2(u + u_step, v + v_step);
-        //        GL.Vertex2(x + Settings.GlyphWidth, y + Settings.GlyphHeight);
-        //        GL.TexCoord2(u, v + v_step);
-        //        GL.Vertex2(x, y + Settings.GlyphHeight);
-        //
-        //        x += Settings.CharXSpacing;
-        //    }
-        //
-        //    GL.End();
-        //}
 
     }
 }

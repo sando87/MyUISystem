@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FontCapture.cs" />
     <Compile Include="uiViewEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,6 +92,7 @@
     <Compile Include="uiViewExample.Designer.cs">
       <DependentUpon>uiViewExample.cs</DependentUpon>
     </Compile>
+    <Compile Include="uiViewFont.cs" />
     <Compile Include="uiViewImage.cs" />
     <Compile Include="uiViewManager.cs" />
     <Compile Include="uiViewProperties.cs" />

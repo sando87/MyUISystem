@@ -63,6 +63,8 @@ namespace system
                 }
                 RenderParam.color = Color.FromArgb((int)col);
             }
+
+            JsonNode.Load();
         }
 
         internal void LoadAll(int depth = -1)
@@ -86,17 +88,7 @@ namespace system
         }
         internal uiView BornChild(uiViewType type)
         {
-            uiView view = null;
-            switch (type)
-            {
-                case uiViewType.View: view = new uiView(); break;
-                case uiViewType.Button: view = new uiViewButton(); break;
-                case uiViewType.Image: view = new uiViewImage(); break;
-                //case uiViewType.Checkbox: view = new uiView(); break;
-                //case uiViewType.EditBox: view = new uiView(); break;
-                //case uiViewType.ComboBox: view = new uiView(); break;
-                default: break;
-            }
+            uiView view = ViewPropertiesTree.CreateView(type);
             view.Parent = this;
             Childs.Add(view);
             return view;

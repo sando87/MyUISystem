@@ -22,7 +22,6 @@ namespace system
         public Renderer() { }
 
         bool loaded = false;
-        PaintEventArgs mPaintArgs;
         public OpenTK.GLControl mGlView = new OpenTK.GLControl();
         public delegate void DelDraw();
         public DelDraw OnDraw;
@@ -58,6 +57,18 @@ namespace system
             bitmap.UnlockBits(data);
             return texID;
         }
+        public static int InitTexture(Bitmap bitmap)
+        {
+            int texID = 0;
+            GL.GenTextures(1, out texID);
+            GL.BindTexture(TextureTarget.Texture2D, texID);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            BitmapData data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+            bitmap.UnlockBits(data);
+            return texID;
+        }
 
         public void ReleaseTexture(int _texID)
         {
@@ -76,8 +87,10 @@ namespace system
             GL.Ortho(0, w, 0, h, -1, 1); // Bottom-left corner pixel has coordinate (0, 0)
             GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
 
-
-            //FontTextureID = LoadTexture(Settings.FontBitmapFilename);
+            FontManager.Settings.TextureID = InitTexture(FontManager.Settings.FontBitmapFilename);
+            Bitmap bitmap = new Bitmap(FontManager.Settings.FontBitmapFilename);
+            FontManager.Settings.TextureWidth = bitmap.Width;
+            FontManager.Settings.TextureHeight = bitmap.Height;
             //GL.Enable(EnableCap.Texture2D);
             //GL.ClearColor(Color.ForestGreen);
             //GL.MatrixMode(MatrixMode.Projection);
@@ -95,7 +108,6 @@ namespace system
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
 
-            mPaintArgs = e;
             OnDraw?.Invoke();
 
             mGlView.SwapBuffers();
@@ -164,42 +176,46 @@ namespace system
             GL.Disable(EnableCap.Texture2D);
             GL.Disable(EnableCap.Blend);
         }
-        //public void DrawText(int x, int y, string text)
-        //{
-        //    GL.Enable(EnableCap.Texture2D);
-        //    GL.BindTexture(TextureTarget.Texture2D, FontManager.Settings.TextureID);
-        //    GL.Enable(EnableCap.Blend);
-        //    GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-        //    //GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
-        //
-        //    GL.Begin(PrimitiveType.Quads);
-        //
-        //    float u_step = (float)FontManager.Settings.GlyphWidth / (float)FontManager.Settings.TextureWidth;
-        //    float v_step = (float)FontManager.Settings.GlyphHeight / (float)FontManager.Settings.TextureHeight;
-        //
-        //    for (int n = 0; n < text.Length; n++)
-        //    {
-        //        char idx = text[n];
-        //        float u = (float)(idx % FontManager.Settings.GlyphsPerLine) * u_step;
-        //        float v = (float)(idx / FontManager.Settings.GlyphsPerLine) * v_step;
-        //
-        //        GL.TexCoord2(u, v);
-        //        GL.Vertex2(x, y);
-        //        GL.TexCoord2(u + u_step, v);
-        //        GL.Vertex2(x + FontManager.Settings.GlyphWidth, y);
-        //        GL.TexCoord2(u + u_step, v + v_step);
-        //        GL.Vertex2(x + FontManager.Settings.GlyphWidth, y + FontManager.Settings.GlyphHeight);
-        //        GL.TexCoord2(u, v + v_step);
-        //        GL.Vertex2(x, y + FontManager.Settings.GlyphHeight);
-        //
-        //        x += FontManager.Settings.CharXSpacing;
-        //    }
-        //
-        //    GL.End();
-        //    GL.Disable(EnableCap.Texture2D);
-        //    GL.Disable(EnableCap.Blend);
-        //}
+        public void DrawText(DrawingParams param)
+        {
+            GL.Enable(EnableCap.Texture2D);
+            GL.BindTexture(TextureTarget.Texture2D, FontManager.Settings.TextureID);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            //GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
+        
+            GL.Begin(PrimitiveType.TriangleStrip);
 
+            int chW = param.rect.Width / param.text.Length;
+            int left = param.rect.Left;
+            int right = param.rect.Left + chW;
+            int top = mGlView.Height - param.rect.Top;
+            int bottom = mGlView.Height - param.rect.Bottom;
+
+            float u_step = (float)FontManager.Settings.GlyphWidth / (float)FontManager.Settings.TextureWidth;
+            float v_step = (float)FontManager.Settings.GlyphHeight / (float)FontManager.Settings.TextureHeight;
+
+            GL.Color3(param.color);
+            for (int n = 0; n < param.text.Length; n++)
+            {
+                char idx = param.text[n];
+                float u = (float)(idx % FontManager.Settings.GlyphsPerLine) * u_step;
+                float v = (float)(idx / FontManager.Settings.GlyphsPerLine) * v_step;
+
+                GL.TexCoord2(u, v);
+                GL.Vertex2(left + chW * n, top);
+                GL.TexCoord2(u, v + v_step);
+                GL.Vertex2(left + chW * n, bottom);
+                GL.TexCoord2(u + u_step, v);
+                GL.Vertex2(right + chW * n, top);
+                GL.TexCoord2(u + u_step, v + v_step);
+                GL.Vertex2(right + chW * n, bottom);
+            }
+        
+            GL.End();
+            GL.Disable(EnableCap.Texture2D);
+            GL.Disable(EnableCap.Blend);
+        }
 
     }
 }
