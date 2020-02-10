@@ -32,7 +32,16 @@ namespace system
         public float right;
         public float top;
         public float bottom;
-        private int texID = -1;
+        private int texID;
+        public RscImage()
+        {
+            filename = "defaultImage.png";
+            left = 0.0f;
+            right = 1.0f;
+            top = 0.0f;
+            bottom = 1.0f;
+            texID = -1;
+        }
         public bool LoadTexture()
         {
             if(texID < 0)
@@ -52,6 +61,15 @@ namespace system
         public float gapRate;
         private FontCapture font;
         private System.Drawing.Size textSize;
+        public PropFont()
+        {
+            text = "text";
+            fontName = "굴림체";
+            fontSize = 20;
+            style = uiViewStyle.Regular;
+            align = uiViewAlign.Center;
+            gapRate = 0.6f;
+        }
         public override bool Load() {
             if(fontName != null && fontName.Length > 0 && fontSize > 0)
             {
@@ -71,15 +89,19 @@ namespace system
     public class PropImage : ViewProperty
     {
         public RscImage ImgNormal;
-        public float bright;
         public PropImage() {
             ImgNormal = new RscImage();
         }
         public override bool Load() { return ImgNormal.LoadTexture(); }
     }
-    public class PropButton : ViewProperty
+    public class PropButton : PropFont
     {
-        public string ButtonText;
+        public RscImage ImgNormal;
+        public string ButtonColor;
+        public PropButton() {
+            ImgNormal = new RscImage();
+            ButtonColor = "255.225.225.225";
+        }
     }
     public class ViewProperty
     {
@@ -90,6 +112,16 @@ namespace system
         public int Width;
         public int Height;
         public string Color;
+        public ViewProperty()
+        {
+            Name = "Name";
+            Type = uiViewType.View;
+            LocalX = 0;
+            LocalY = 0;
+            Width = 80;
+            Height = 30;
+            Color = "255.240.240.240";
+        }
         public virtual bool Load() { return true; }
     }
 
@@ -161,10 +193,26 @@ namespace system
             uiView view = null;
             switch (type)
             {
-                case uiViewType.View: view = new uiView(); break;
-                case uiViewType.Button: view = new uiViewButton(); break;
-                case uiViewType.Image: view = new uiViewImage(); break;
-                case uiViewType.Font: view = new uiViewFont(); break;
+                case uiViewType.View:
+                    view = new uiView();
+                    view.JsonNode = new ViewProperty();
+                    view.JsonNode.Type = type;
+                    break;
+                case uiViewType.Button:
+                    view = new uiViewButton();
+                    view.JsonNode = new PropButton();
+                    view.JsonNode.Type = type;
+                    break;
+                case uiViewType.Image:
+                    view = new uiViewImage();
+                    view.JsonNode = new PropImage();
+                    view.JsonNode.Type = type;
+                    break;
+                case uiViewType.Font:
+                    view = new uiViewFont();
+                    view.JsonNode = new PropFont();
+                    view.JsonNode.Type = type;
+                    break;
                 default: break;
             }
             return view;

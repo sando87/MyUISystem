@@ -47,6 +47,7 @@ namespace system
             mUIMgr.InvokeDrawRectFill += (param) => { mRender.DrawRect(param); };
             mUIMgr.InvokeDrawRectOutline += (param) => { mRender.DrawOutline(param); };
             mUIMgr.InvokeDrawBitmap += (param) => { mRender.DrawTexture(param); };
+            mUIMgr.InvokeDrawText += (param) => { mRender.DrawText(param); };
         }
 
         private void btnLoad_Click(object sender, EventArgs e)

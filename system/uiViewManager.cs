@@ -4,9 +4,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.IO;
 
 namespace system
 {
+    public struct ImageRect
+    {
+        public Rectangle rect;
+        public RectangleF uv;
+        public float bright;
+        public void Clip(Rectangle _rect)
+        {
+            Rectangle oriRect = rect;
+            rect.Intersect(_rect);
+            float rateL = (rect.Left - oriRect.Left) / (float)oriRect.Width;
+            float rateR = (rect.Right - oriRect.Left) / (float)oriRect.Width;
+            float rateT = (rect.Top - oriRect.Top) / (float)oriRect.Height;
+            float rateB = (rect.Bottom - oriRect.Top) / (float)oriRect.Height;
+            float uvL = uv.Left + uv.Width * rateL;
+            float uvR = uv.Left + uv.Width * rateR;
+            float uvT = uv.Top + uv.Height * rateT;
+            float uvB = uv.Top + uv.Height * rateB;
+            uv = new RectangleF(uvL, uvT, uvR - uvL, uvB - uvT);
+
+        }
+    }
     public struct EventParams
     {
         public int mouseX;
@@ -19,12 +41,15 @@ namespace system
     }
     public class DrawingParams
     {
+        public ImageRect rectImg;
         public RectangleF uv;
         public Rectangle rect;
+        public Rectangle rectText;
         public FontCapture font;
         public Color color;
+        public Color colorOutline;
+        public Color colorText;
         public int texID;
-        public float bright;
         public int lineWidth;
         public float gapRate;
         public string text;
@@ -39,7 +64,6 @@ namespace system
         public DelegateRender InvokeDrawRectFill;
         public DelegateRender InvokeDrawRectOutline;
         public DelegateRender InvokeDrawBitmap;
-        public DelegateRender InvokeDrawBitmapRect;
         public DelegateRender InvokeDrawText;
 
         internal Dictionary<string, uiView> Views = new Dictionary<string, uiView>();

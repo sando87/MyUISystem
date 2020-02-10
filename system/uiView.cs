@@ -35,7 +35,7 @@ namespace system
         {
             DrawingParams info = new DrawingParams();
             info.rect = RectAbsolute;
-            info.color = Color.Gray;
+            info.color = Utils.ToColor(JsonNode.Color);
             uiViewManager.Inst.InvokeDrawRectFill?.Invoke(info);
         }
         public virtual void OnLoad(int depth)
@@ -53,16 +53,7 @@ namespace system
 
             RenderParam.rect = RectAbsolute;
             if (JsonNode.Color != null && JsonNode.Color.Length != 0)
-            {
-                string[] argb = JsonNode.Color.Split('.');
-                UInt32 col = 0;
-                for (int i = 0; i < argb.Length; ++i)
-                {
-                    int shift = (argb.Length - i - 1) * 8;
-                    col |= (UInt32.Parse(argb[i]) << shift);
-                }
-                RenderParam.color = Color.FromArgb((int)col);
-            }
+                RenderParam.color = Utils.ToColor(JsonNode.Color);
 
             JsonNode.Load();
         }

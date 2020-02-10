@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace system
 {
@@ -637,6 +638,31 @@ namespace system
         {
             string[] pieces = filename.Split('.');
             return pieces[pieces.Length - 1];
+        }
+        static public string GetResPath()
+        {
+            DirectoryInfo di = new DirectoryInfo("./res");
+            if (di.Exists)
+                return "./res/";
+            di = new DirectoryInfo("../res");
+            if (di.Exists)
+                return "../res/";
+            di = new DirectoryInfo("../../res");
+            if (di.Exists)
+                return "../../res/";
+
+            return "";
+        }
+        static public Color ToColor(string _argb)
+        {
+            string[] argb = _argb.Split('.');
+            UInt32 col = 0;
+            for (int i = 0; i < argb.Length; ++i)
+            {
+                int shift = (argb.Length - i - 1) * 8;
+                col |= (UInt32.Parse(argb[i]) << shift);
+            }
+            return Color.FromArgb((int)col);
         }
     }
 

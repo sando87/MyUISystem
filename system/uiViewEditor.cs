@@ -209,7 +209,7 @@ namespace system
 
             DrawingParams param = new DrawingParams();
             param.rect = EditableView.RectAbsolute;
-            param.color = Color.Blue;
+            param.colorOutline = Color.Blue;
             param.lineWidth = 3;
             mRender.DrawOutline(param);
         }
@@ -224,17 +224,9 @@ namespace system
             uiViewType viewType = (uiViewType)Enum.Parse(typeof(uiViewType), viewName);
             uiView view = parentView.BornChild(viewType);
 
-            ViewPropertiesTree newProp = new ViewPropertiesTree();
-            newProp.Me.Name = mUIMgr.AutoName(viewType.ToString());
-            newProp.Me.Type = viewType;
-            newProp.Me.LocalX = clickPtX - parentView.RectAbsolute.Location.X;
-            newProp.Me.LocalY = clickPtY - parentView.RectAbsolute.Location.Y;
-            newProp.Me.Width = 80;
-            newProp.Me.Height = 30;
-            newProp.Me.Color = "255.160.160.160";
-            string jsonString = newProp.ToJSON();
-            newProp.Parse(jsonString);
-            view.JsonNode = newProp.Me;
+            view.JsonNode.Name = mUIMgr.AutoName(viewType.ToString());
+            view.JsonNode.LocalX = clickPtX - parentView.RectAbsolute.Location.X;
+            view.JsonNode.LocalY = clickPtY - parentView.RectAbsolute.Location.Y;
             view.OnLoad(parentView.Depth + 1);
             mUIMgr.RegisterView(view);
         }

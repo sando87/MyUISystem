@@ -9,38 +9,34 @@ namespace system
 {
     class uiViewImage : uiView
     {
-        Color oriColor;
         public override void OnLoad(int depth)
         {
             base.OnLoad(depth);
 
-            oriColor = RenderParam.color;
             PropImage prop = JsonNode as PropImage;
             prop.ImgNormal.LoadTexture();
             RenderParam.texID = prop.ImgNormal.GetTexID();
-            RenderParam.rect = RectAbsolute;
-            RenderParam.rect.Intersect(Parent.RectAbsolute);
-            float rateL = (RenderParam.rect.Left - RectAbsolute.Left) / (float)RectAbsolute.Width;
-            float rateR = (RenderParam.rect.Right - RectAbsolute.Left) / (float)RectAbsolute.Width;
-            float rateT = (RenderParam.rect.Top - RectAbsolute.Top) / (float)RectAbsolute.Height;
-            float rateB = (RenderParam.rect.Bottom - RectAbsolute.Top) / (float)RectAbsolute.Height;
-            float uvL = prop.ImgNormal.left + (prop.ImgNormal.right - prop.ImgNormal.left) * rateL;
-            float uvR = prop.ImgNormal.left + (prop.ImgNormal.right - prop.ImgNormal.left) * rateR;
-            float uvT = prop.ImgNormal.top + (prop.ImgNormal.bottom - prop.ImgNormal.top) * rateT;
-            float uvB = prop.ImgNormal.top + (prop.ImgNormal.bottom - prop.ImgNormal.top) * rateB;
-            RenderParam.uv = new RectangleF(uvL, uvT, uvR - uvL, uvB - uvT);
-
+            RenderParam.rectImg.rect = RectAbsolute;
+            RenderParam.rectImg.uv = new RectangleF(prop.ImgNormal.left, prop.ImgNormal.top, prop.ImgNormal.right - prop.ImgNormal.left, prop.ImgNormal.bottom - prop.ImgNormal.top);
+            RenderParam.rectImg.bright = 1;
+            RenderParam.rectImg.Clip(Parent.RectAbsolute);
         }
         public override void OnDraw()
         {
-            if (Downed)
-                RenderParam.color = Color.Blue;
-            else if (Hovered)
-                RenderParam.color = Color.Red;
-            else
-                RenderParam.color = oriColor;
-
             uiViewManager.Inst.InvokeDrawBitmap?.Invoke(RenderParam);
+        }
+        public void ClipRight(float rate)
+        {
+            Rectangle clipedRect = RectAbsolute;
+            clipedRect.Width = (int)(RectAbsolute.Width * rate);
+            RenderParam.rectImg.Clip(clipedRect);
+        }
+        public void ClipTop(float rate)
+        {
+            int newHeight = (int)(RectAbsolute.Height * rate);
+            int newTop = RectAbsolute.Bottom - newHeight;
+            Rectangle clipedRect = new Rectangle(RectAbsolute.Left, newTop, RectAbsolute.Width, newHeight);
+            RenderParam.rectImg.Clip(clipedRect);
         }
     }
 }

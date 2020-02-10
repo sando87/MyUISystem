@@ -34,7 +34,8 @@ namespace system
                 default:
                     break;
             }
-            RenderParam.rect = textRect;
+            RenderParam.rectText = textRect;
+            RenderParam.colorText = Color.Black;
             RenderParam.font = node.Font;
             RenderParam.text = node.text;
             RenderParam.gapRate = node.gapRate;

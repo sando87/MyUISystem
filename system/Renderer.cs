@@ -50,7 +50,8 @@ namespace system
                 return -1;
 
             int texID = 0;
-            Bitmap bitmap = new Bitmap(_filename);
+            string fullname = Utils.GetResPath() + _filename;
+            Bitmap bitmap = new Bitmap(fullname);
             GL.GenTextures(1, out texID);
             GL.BindTexture(TextureTarget.Texture2D, texID);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
@@ -124,8 +125,8 @@ namespace system
             int bottom = mGlView.Height - param.rect.Bottom;
 
             GL.Begin(PrimitiveType.LineStrip);
-            GL.LineWidth(2.0f);
-            GL.Color3(param.color);
+            GL.LineWidth(param.lineWidth);
+            GL.Color3(param.colorOutline);
             GL.Vertex2(left, top); //lt
             GL.Vertex2(left, bottom); //lb
             GL.Vertex2(right, bottom);//rb
@@ -157,21 +158,23 @@ namespace system
             //GL.BlendFunc(BlendingFactor.OneMinusSrcAlpha, BlendingFactor.SrcAlpha); //font reverse
             //GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
 
-            int left = param.rect.Left;
-            int right = param.rect.Right;
-            int top = mGlView.Height - param.rect.Top;
-            int bottom = mGlView.Height - param.rect.Bottom;
+            int left = param.rectImg.rect.Left;
+            int right = param.rectImg.rect.Right;
+            int top = mGlView.Height - param.rectImg.rect.Top;
+            int bottom = mGlView.Height - param.rectImg.rect.Bottom;
 
             GL.Begin(PrimitiveType.TriangleStrip);
 
-            GL.Color3(param.color);
-            GL.TexCoord2(param.uv.Left, param.uv.Top);
+            int rgb = Math.Min((int)(255 * param.rectImg.bright), 255);
+            Color color = Color.FromArgb(rgb, rgb, rgb);
+            GL.Color3(color);
+            GL.TexCoord2(param.rectImg.uv.Left, param.rectImg.uv.Top);
             GL.Vertex2(left, top); //lt
-            GL.TexCoord2(param.uv.Left, param.uv.Bottom);
+            GL.TexCoord2(param.rectImg.uv.Left, param.rectImg.uv.Bottom);
             GL.Vertex2(left, bottom); //lb
-            GL.TexCoord2(param.uv.Right, param.uv.Top);
+            GL.TexCoord2(param.rectImg.uv.Right, param.rectImg.uv.Top);
             GL.Vertex2(right, top);//rt
-            GL.TexCoord2(param.uv.Right, param.uv.Bottom);
+            GL.TexCoord2(param.rectImg.uv.Right, param.rectImg.uv.Bottom);
             GL.Vertex2(right, bottom);//rb
 
             GL.End();
@@ -189,13 +192,13 @@ namespace system
         
             GL.Begin(PrimitiveType.TriangleStrip);
 
-            int chW = param.rect.Width / param.text.Length;
-            int left = param.rect.Left;
-            int right = param.rect.Left + chW;
-            int top = mGlView.Height - param.rect.Top;
-            int bottom = mGlView.Height - param.rect.Bottom;
+            int chW = param.rectText.Width / param.text.Length;
+            int left = param.rectText.Left;
+            int right = param.rectText.Left + chW;
+            int top = mGlView.Height - param.rectText.Top;
+            int bottom = mGlView.Height - param.rectText.Bottom;
 
-            GL.Color3(param.color);
+            GL.Color3(param.colorText);
             for (int n = 0; n < param.text.Length; n++)
             {
                 char idx = param.text[n];
