@@ -1,0 +1,6 @@
+﻿  Stdafx.cpp
+  AssemblyInfo.cpp
+  CliLib.cpp
+  코드를 생성하고 있습니다...
+  .NETFramework,Version=v4.0.AssemblyAttributes.cpp
+LINK : fatal error LNK1104: 'freetype.lib' 파일을 열 수 없습니다.

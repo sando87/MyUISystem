@@ -11,6 +11,8 @@ using System.IO;
 using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using CliLib;
+using System.Runtime.InteropServices;
 
 namespace system
 {
@@ -21,7 +23,7 @@ namespace system
             public FieldInfo field;
             public object msg;
             public int depth;
-            public PropFieldInfo(FieldInfo _field, object _msg, int _depth) { field = _field;  msg = _msg; depth = _depth; }
+            public PropFieldInfo(FieldInfo _field, object _msg, int _depth) { field = _field; msg = _msg; depth = _depth; }
         };
         public Renderer mRender = new Renderer();
         public uiViewManager mUIMgr = uiViewManager.Inst;
@@ -31,9 +33,38 @@ namespace system
         public uiView TempDownView = null; //단순히 다운된 view(업시 null)
         public Point PreviousPt = new Point(); //마우스 다운시 클릭지점 백업
 
+        public class MyUIEngineCallbacks : CliLib.UIEngineCallbacks
+        {
+            public override void OnDrawFill(RenderParams param)
+            {
+            }
+
+            public override void OnDrawOutline(RenderParams param)
+            {
+            }
+
+            public override void OnDrawTexture(RenderParams param)
+            {
+            }
+
+            public override IntPtr OnLoadTexture(BitmapInfo bitmap)
+            {
+                //Renderer.InitTexture(bitmap.fullname);
+                return (IntPtr)null;
+            }
+
+            public override void OnReleaseTexture(IntPtr ptr)
+            {
+            }
+        };
         public uiViewEditor()
         {
+            UIEngine en = UIEngine.GetInst();
+            en.Init(new MyUIEngineCallbacks());
+            en.Load(@"C:\Users\lee\Downloads\GitProject\MyUISystem\system\bin\Debug\jsonTest.json");
+
             InitializeComponent();
+
             string[] enums = Enum.GetNames(typeof(uiViewType));
             cbViewType.Items.AddRange(enums);
             cbViewType.SelectedIndex = 0;
