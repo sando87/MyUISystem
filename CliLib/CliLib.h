@@ -11,6 +11,15 @@ using namespace System::Runtime::InteropServices;
 
 namespace CliLib {
 
+	public ref class ViewInfo
+	{
+	public:
+		jView *view;
+		String ^jsonString;
+		void Update(String ^json);
+		System::Drawing::Rectangle ^GetRectAbsolute();
+		bool Equal(ViewInfo ^info);
+	};
 	public ref class BitmapInfo
 	{
 	public:
@@ -32,10 +41,10 @@ namespace CliLib {
 		double uv_top;
 		double uv_right;
 		double uv_bottom;
-		char red;
-		char green;
-		char blue;
-		char alpha;
+		unsigned char red;
+		unsigned char green;
+		unsigned char blue;
+		unsigned char alpha;
 		IntPtr texture;
 	};
 	public ref class UIEngineCallbacks
@@ -59,7 +68,14 @@ namespace CliLib {
 		UIEngineCallbacks^ mOps;
 		RenderParams^ mParam;
 		void Init(UIEngineCallbacks^ ops);
+		void SetResourcePath(String^ path);
 		void Load(String ^fullname);
+		void DoMouseEvent();
+		void SetMouseEvent(int mouseX, int mouseY, bool down, bool triggered);
+		void Draw();
+		String^ ToJsonString();
+		ViewInfo^ FindTopView(int mouseX, int mouseY);
+		ViewInfo^ CreateView(int mouseX, int mouseY, int type);
 
 		static void DrawFill(DrawingParams param);
 		static void DrawOutline(DrawingParams param);

@@ -39,6 +39,11 @@ void UIEngine::Init(UIEngineCallbacks^ ops)
 	system->OpLoadTexture = UIEngine::LoadTexture;
 	system->OpReleaseTexture = UIEngine::ReleaseTexture;
 }
+void UIEngine::SetResourcePath(String^ path)
+{
+	std::string _path = marshal_as<std::string>(path);
+	jUISystem::GetInst()->SetResourcePath(_path);
+}
 void UIEngine::Load(String ^fullname)
 {
 	std::string name = marshal_as<std::string>(fullname);
@@ -46,6 +51,48 @@ void UIEngine::Load(String ^fullname)
 	jUISystem *system = jUISystem::GetInst();
 	system->ParseJson(name);
 	system->LoadViews();
+}
+void UIEngine::DoMouseEvent()
+{
+	jUISystem::GetInst()->MouseEventCall();
+}
+void UIEngine::SetMouseEvent(int mouseX, int mouseY, bool down, bool triggered)
+{
+	jUISystem::GetInst()->SetMouseEvent(Point2(mouseX, mouseY), down, triggered);
+}
+void UIEngine::Draw()
+{
+	jUISystem::GetInst()->Draw();
+}
+String^ UIEngine::ToJsonString()
+{
+	string ret = jUISystem::GetInst()->ToJsonString();
+	String^ str = marshal_as<String^>(ret);
+	return str;
+}
+ViewInfo^ UIEngine::FindTopView(int mouseX, int mouseY)
+{
+	jView *topView = jUISystem::GetInst()->FindTopView(mouseX, mouseY);
+	if (topView == nullptr)
+		return nullptr;
+
+	ViewInfo^ view = gcnew ViewInfo();
+	view->view = topView;
+	string str = topView->ToJsonString();
+	view->jsonString = marshal_as<String^>(str);
+	return view;
+}
+ViewInfo^ UIEngine::CreateView(int mouseX, int mouseY, int type)
+{
+	ViewInfo^ view = gcnew ViewInfo();
+	jView *newView = jUISystem::GetInst()->CreateView(mouseX, mouseY, type);
+	if (newView != nullptr)
+	{
+		string str = newView->ToJsonString();
+		view->view = newView;
+		view->jsonString = marshal_as<String^>(str);
+	}
+	return view;
 }
 void UIEngine::DrawFill(DrawingParams param)
 {
@@ -76,4 +123,21 @@ void* UIEngine::LoadTexture(jUIBitmap *bitmap)
 void UIEngine::ReleaseTexture(void *ptr)
 {
 	mInst->mOps->OnReleaseTexture(IntPtr(ptr));
+}
+void ViewInfo::Update(String ^json)
+{
+	jsonString = json;
+	string str = marshal_as<string>(json);
+	jUISystem::GetInst()->UpdateView(view, str);
+}
+System::Drawing::Rectangle ^ViewInfo::GetRectAbsolute()
+{
+	jRectangle rect = view->GetRectAbsolute();
+	return gcnew System::Drawing::Rectangle(rect.Left(), rect.Top(), rect.Width(), rect.Height());
+}
+bool ViewInfo::Equal(ViewInfo ^info)
+{
+	if (info == nullptr)
+		return false;
+	return info->view == view;
 }

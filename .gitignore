@@ -1,4 +1,8 @@
 .vs/
 x64/
+Debug/
+ipch/
 system/bin
 system/obj
+CliLib/x64
+system.VC.db*

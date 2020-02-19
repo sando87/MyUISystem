@@ -8,18 +8,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using CliLib;
+using System.Runtime.InteropServices;
 
 namespace system
 {
     public partial class uiViewExample : Form
     {
         public Renderer mRender = new Renderer();
-        public uiViewManager mUIMgr = uiViewManager.Inst;
+        public UIEngine mUIEngine;
         public uiViewExample()
         {
             InitializeComponent();
             InitRenderer();
-            InitUIManager();
+            InitUIEngine();
 
             Timer timer = new Timer();
             timer.Tick += Timer_Tick;
@@ -29,7 +31,7 @@ namespace system
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            mUIMgr.MouseEventCall();
+            mUIEngine.DoMouseEvent();
             mRender.mGlView.Invalidate();
         }
 
@@ -37,17 +39,16 @@ namespace system
         {
             mRender.Initialize(panel1, panel1.Width, panel1.Height);
 
-            mRender.mGlView.MouseMove += (obj, args) => { mUIMgr.SetMouseEvent(new Point(args.X, args.Y), null); };
-            mRender.mGlView.MouseDown += (obj, args) => { mUIMgr.SetMouseEvent(new Point(args.X, args.Y), true); };
-            mRender.mGlView.MouseUp += (obj, args) => { mUIMgr.SetMouseEvent(new Point(args.X, args.Y), false); };
-            mRender.OnDraw += () => { mUIMgr.Draw(); };
+            mRender.mGlView.MouseMove += (obj, args) => { mUIEngine.SetMouseEvent(args.X, args.Y, false, false); };
+            mRender.mGlView.MouseDown += (obj, args) => { mUIEngine.SetMouseEvent(args.X, args.Y, true, true); };
+            mRender.mGlView.MouseUp += (obj, args) => { mUIEngine.SetMouseEvent(args.X, args.Y, false, true); };
+            mRender.OnDraw += () => { mUIEngine.Draw(); };
         }
-        public void InitUIManager()
+        public void InitUIEngine()
         {
-            mUIMgr.InvokeDrawRectFill += (param) => { mRender.DrawRect(param); };
-            mUIMgr.InvokeDrawRectOutline += (param) => { mRender.DrawOutline(param); };
-            mUIMgr.InvokeDrawBitmap += (param) => { mRender.DrawTexture(param); };
-            mUIMgr.InvokeDrawText += (param) => { mRender.DrawText(param); };
+            mUIEngine = UIEngine.GetInst();
+            mUIEngine.SetResourcePath("../../res/");
+            mUIEngine.Init(new MyUIEngineCallbacks(mRender));
         }
 
         private void btnLoad_Click(object sender, EventArgs e)
@@ -64,11 +65,61 @@ namespace system
                 return;
             }
 
-            ViewPropertiesTree obj = new ViewPropertiesTree();
-            obj.Parse(text);
-            bool ret = mUIMgr.Load(obj);
-            if (!ret)
-                MessageBox.Show(mUIMgr.ErrorMessage);
+            mUIEngine.Load(filename);
         }
+
+        public class MyUIEngineCallbacks : UIEngineCallbacks
+        {
+            Renderer mRender;
+            DrawArgs mArgs = new DrawArgs();
+            int[] mTexIDs = new int[4];
+            public MyUIEngineCallbacks(Renderer render) { mRender = render; }
+            public override void OnDrawFill(RenderParams param)
+            {
+                mArgs.rect.Location = new Point((int)param.left, (int)param.top);
+                mArgs.rect.Size = new Size((int)(param.right - param.left), (int)(param.bottom - param.top));
+                mArgs.color = Color.FromArgb(param.alpha, param.red, param.green, param.blue);
+                mRender.DrawRect(mArgs);
+            }
+
+            public override void OnDrawOutline(RenderParams param)
+            {
+                mArgs.rect.Location = new Point((int)param.left, (int)param.top);
+                mArgs.rect.Size = new Size((int)(param.right - param.left), (int)(param.bottom - param.top));
+                mArgs.color = Color.FromArgb(param.alpha, param.red, param.green, param.blue);
+                mRender.DrawOutline(mArgs);
+            }
+
+            public override void OnDrawTexture(RenderParams param)
+            {
+                mArgs.rect.Location = new Point((int)param.left, (int)param.top);
+                mArgs.rect.Size = new Size((int)(param.right - param.left), (int)(param.bottom - param.top));
+                mArgs.uv.Location = new Point((int)param.uv_left, (int)param.uv_top);
+                mArgs.uv.Size = new Size((int)(param.uv_right - param.uv_left), (int)(param.uv_bottom - param.uv_top));
+                mArgs.color = Color.FromArgb(param.alpha, param.red, param.green, param.blue);
+                Marshal.Copy(param.texture, mTexIDs, 0, 1);
+                mArgs.texID = mTexIDs[0];
+                mRender.DrawTexture(mArgs);
+            }
+
+            public override IntPtr OnLoadTexture(BitmapInfo bitmap)
+            {
+                IntPtr ptr = Marshal.AllocHGlobal(4);
+                int texID = -1;
+                if (bitmap.fullname.Length > 0)
+                    texID = Renderer.InitTexture(bitmap.fullname);
+                else
+                    texID = Renderer.InitTexture(bitmap.buf, bitmap.width, bitmap.height);
+                Marshal.Copy(BitConverter.GetBytes(texID), 0, ptr, 4);
+                return ptr;
+            }
+
+            public override void OnReleaseTexture(IntPtr ptr)
+            {
+                Marshal.Copy(ptr, mTexIDs, 0, 1);
+                Renderer.ReleaseTexture(mTexIDs[0]);
+                Marshal.FreeHGlobal(ptr);
+            }
+        };
     }
 }

@@ -18,51 +18,18 @@ namespace system
 {
     public partial class uiViewEditor : Form
     {
-        public class PropFieldInfo
-        {
-            public FieldInfo field;
-            public object msg;
-            public int depth;
-            public PropFieldInfo(FieldInfo _field, object _msg, int _depth) { field = _field; msg = _msg; depth = _depth; }
-        };
         public Renderer mRender = new Renderer();
-        public uiViewManager mUIMgr = uiViewManager.Inst;
+        //public uiViewManager mUIMgr = uiViewManager.Inst;
+        public UIEngine mUIEngine;
 
         public const int DetectPixelSize = 5; //선택된 view의 외곽선 감지 범위
-        public uiView EditableView = null; //선택된 view
-        public uiView TempDownView = null; //단순히 다운된 view(업시 null)
+        public ViewInfo EditableView = null; //선택된 view
+        public ViewInfo TempDownView = null; //단순히 다운된 view(업시 null)
         public Point PreviousPt = new Point(); //마우스 다운시 클릭지점 백업
+        public JObject EditableJson;
 
-        public class MyUIEngineCallbacks : CliLib.UIEngineCallbacks
-        {
-            public override void OnDrawFill(RenderParams param)
-            {
-            }
-
-            public override void OnDrawOutline(RenderParams param)
-            {
-            }
-
-            public override void OnDrawTexture(RenderParams param)
-            {
-            }
-
-            public override IntPtr OnLoadTexture(BitmapInfo bitmap)
-            {
-                //Renderer.InitTexture(bitmap.fullname);
-                return (IntPtr)null;
-            }
-
-            public override void OnReleaseTexture(IntPtr ptr)
-            {
-            }
-        };
         public uiViewEditor()
         {
-            UIEngine en = UIEngine.GetInst();
-            en.Init(new MyUIEngineCallbacks());
-            en.Load(@"C:\Users\lee\Downloads\GitProject\MyUISystem\system\bin\Debug\jsonTest.json");
-
             InitializeComponent();
 
             string[] enums = Enum.GetNames(typeof(uiViewType));
@@ -74,7 +41,10 @@ namespace system
 
             Timer timer = new Timer();
             timer.Interval = 20;
-            timer.Tick += (ss, ee) => { mRender.mGlView.Invalidate(); };
+            timer.Tick += (ss, ee) => {
+                //mUIEngine.DoMouseEvent();
+                mRender.mGlView.Invalidate();
+            };
             timer.Start();
         }
 
@@ -89,26 +59,29 @@ namespace system
         }
         public void InitUIManager()
         {
-            mUIMgr.InvokeDrawRectFill += (param) => { mRender.DrawRect(param); };
-            mUIMgr.InvokeDrawRectOutline += (param) => { mRender.DrawOutline(param); };
-            mUIMgr.InvokeDrawBitmap += (param) => { mRender.DrawTexture(param); };
-            mUIMgr.InvokeDrawText += (param) => { mRender.DrawText(param); };
+            mUIEngine = UIEngine.GetInst();
+            mUIEngine.SetResourcePath("../../res/");
+            mUIEngine.Init(new MyUIEngineCallbacks(mRender));
         }
 
         //단순히 마우스 Down상태 해제(view클릭으로 간주되면 선택된view를 활성화시킴)
         private void MGlView_MouseUp(object sender, MouseEventArgs e)
         {
-            uiView view = FindTopView(e.X, e.Y);
-            if (view == TempDownView)
+            ViewInfo view = FindTopView(e.X, e.Y);
+            if(view == null)
+            {
+                EditableView = null;
+                EditableJson = null;
+                panel2.Controls.Clear();
+            }
+            else if (view.Equal(TempDownView))
             {
                 EditableView = view;
-                CheckParentLink();
+                EditableJson = JObject.Parse(EditableView.jsonString);
+                //CheckParentLink();
                 panel2.Controls.Clear();
-                if (EditableView != null)
-                {
-                    Control[] ctrls = ToControls(EditableView.JsonNode);
-                    AddControlsToPanel(panel2, ctrls);
-                }
+                Control[] ctrls = ToControls(EditableJson);
+                AddControlsToPanel(panel2, ctrls);
             }
 
             TempDownView = null;
@@ -121,6 +94,7 @@ namespace system
                 CreateNewView(e.X, e.Y);
                 chkNewView.Checked = false;
                 EditableView = null;
+                EditableJson = null;
                 TempDownView = null;
                 return;
             }
@@ -143,16 +117,17 @@ namespace system
 
             if (EditableView != null)
             {
-                Rectangle rect_out = ExpandRect_FixedCenter(EditableView.RectAbsolute, DetectPixelSize);
+                Rectangle editAbsRect = (Rectangle)EditableView.GetRectAbsolute();
+                Rectangle rect_out = ExpandRect_FixedCenter(editAbsRect, DetectPixelSize);
                 if (rect_out.Contains(new Point(e.X, e.Y)))
                 {
-                    Rectangle rect_in = ExpandRect_FixedCenter(EditableView.RectAbsolute, -DetectPixelSize);
+                    Rectangle rect_in = ExpandRect_FixedCenter(editAbsRect, -DetectPixelSize);
                     if (rect_in.Contains(new Point(e.X, e.Y)))
                         Cursor = Cursors.SizeAll;
                     else
                     {
-                        int dtX = Math.Abs(EditableView.RectAbsolute.Right - e.X);
-                        int dtY = Math.Abs(EditableView.RectAbsolute.Bottom - e.Y);
+                        int dtX = Math.Abs(editAbsRect.Right - e.X);
+                        int dtY = Math.Abs(editAbsRect.Bottom - e.Y);
                         if(dtX < DetectPixelSize && dtY < DetectPixelSize)
                             Cursor = Cursors.SizeNWSE;
                         else if(dtX < DetectPixelSize)
@@ -168,50 +143,57 @@ namespace system
         //기본 UI view들을 그린 후 선택된 view의 외곽선을 그린다.
         private void MGlView_Draw()
         {
-            mUIMgr.Draw();
+            mUIEngine.Draw();
             DrawEditableView();
         }
         //선탠된 view의 크기나 위치를 커서 상태에 따라 조정한다.
-        public void DragView(uiView view, int dx, int dy)
+        public void DragView(ViewInfo view, int dx, int dy)
         {
-            if (view != EditableView)
+            if (view != null && !view.Equal(EditableView))
                 return;
 
             if(Cursor == Cursors.SizeAll)
             {
-                view.JsonNode.LocalX += dx;
-                view.JsonNode.LocalY += dy;
+                int newLocalX = (int)EditableJson["LocalX"] + dx;
+                int newLocalY = (int)EditableJson["LocalY"] + dy;
+                EditableJson["LocalX"] = newLocalX;
+                EditableJson["LocalY"] = newLocalY;
             }
             else if (Cursor == Cursors.SizeNWSE)
             {
-                view.JsonNode.Width += dx;
-                view.JsonNode.Height += dy;
+                int newWidth = (int)EditableJson["Width"] + dx;
+                int newHeight = (int)EditableJson["Height"] + dy;
+                EditableJson["Width"] = newWidth;
+                EditableJson["Height"] = newHeight;
             }
             else if (Cursor == Cursors.SizeWE)
             {
-                view.JsonNode.Width += dx;
+                int newWidth = (int)EditableJson["Width"] + dx;
+                EditableJson["Width"] = newWidth;
             }
             else if (Cursor == Cursors.SizeNS)
             {
-                view.JsonNode.Height += dy;
+                int newHeight = (int)EditableJson["Height"] + dy;
+                EditableJson["Height"] = newHeight;
             }
-            view.LoadAll();
+
+            view.Update(EditableJson.ToString());
         }
 
         //MouseUp.. 즉 놓는 순간 부모 자식 관계를 Rect의 모퉁이 기준으로 재정립한다.
-        void CheckParentLink()
-        {
-            if (EditableView == null || Cursor != Cursors.SizeAll)
-                return;
-
-            Point pt = EditableView.RectAbsolute.Location;
-            bool backEn = EditableView.Enable;
-            EditableView.Enable = false;
-            uiView view = mUIMgr.RootView.FindTopView(pt.X, pt.Y);
-            EditableView.Enable = backEn;
-            if (view != null && view != EditableView.Parent)
-                EditableView.ChangeParent(view);
-        }
+        //void CheckParentLink()
+        //{
+        //    if (EditableView == null || Cursor != Cursors.SizeAll)
+        //        return;
+        //
+        //    Point pt = EditableView.RectAbsolute.Location;
+        //    bool backEn = EditableView.Enable;
+        //    EditableView.Enable = false;
+        //    uiView view = mUIMgr.RootView.FindTopView(pt.X, pt.Y);
+        //    EditableView.Enable = backEn;
+        //    if (view != null && view != EditableView.Parent)
+        //        EditableView.ChangeParent(view);
+        //}
         Rectangle ExpandRect_FixedCenter(Rectangle rect, int range)
         {
             Point newPos = rect.Location;
@@ -222,107 +204,147 @@ namespace system
             newSize.Height += range * 2;
             return new Rectangle(newPos, newSize);
         }
-        uiView FindTopView(int x, int y)
+        ViewInfo FindTopView(int x, int y)
         {
-            if (EditableView == null)
-                return mUIMgr.RootView.FindTopView(x, y);
-
-            Rectangle rect_out = ExpandRect_FixedCenter(EditableView.RectAbsolute, DetectPixelSize);
-            if (rect_out.Contains(new Point(x, y)))
-                return EditableView;
-
-            return mUIMgr.RootView.FindTopView(x, y);
+            if (EditableView != null)
+            {
+                Rectangle abRect = (Rectangle)EditableView.GetRectAbsolute();
+                Rectangle rect_out = ExpandRect_FixedCenter(abRect, DetectPixelSize);
+                if (rect_out.Contains(new Point(x, y)))
+                    return EditableView;
+            }
+            return mUIEngine.FindTopView(x, y);
         }
         void DrawEditableView()
         {
             if (EditableView == null)
                 return;
 
-            DrawingParams param = new DrawingParams();
-            param.rect = EditableView.RectAbsolute;
-            param.colorOutline = Color.Blue;
-            param.lineWidth = 3;
+            DrawArgs param = new DrawArgs();
+            param.rect = (Rectangle)EditableView.GetRectAbsolute();
+            param.color = Color.Blue;
             mRender.DrawOutline(param);
         }
         private void CreateNewView(int clickPtX, int clickPtY)
         {
-            uiView parentView = FindTopView(clickPtX, clickPtY);
-            if (parentView == null)
-                return;
-
-            ViewProperty defaultProp = new ViewProperty();
             string viewName = cbViewType.SelectedItem.ToString();
             uiViewType viewType = (uiViewType)Enum.Parse(typeof(uiViewType), viewName);
-            uiView view = parentView.BornChild(viewType);
-
-            view.JsonNode.Name = mUIMgr.AutoName(viewType.ToString());
-            view.JsonNode.LocalX = clickPtX - parentView.RectAbsolute.Location.X;
-            view.JsonNode.LocalY = clickPtY - parentView.RectAbsolute.Location.Y;
-            view.OnLoad(parentView.Depth + 1);
-            mUIMgr.RegisterView(view);
+            mUIEngine.CreateView(clickPtX, clickPtY, (int)viewType);
         }
 
-        private Control[] ToControls(object _msg, int depth = 0)
+        private Control[] ToControls(JObject jsonNode)
         {
             List<Control> ctrls = new List<Control>();
-            FieldInfo[] fields = _msg.GetType().GetFields();
-            foreach (var field in fields)
+            foreach(var node in jsonNode)
             {
-                if (field.FieldType.IsEnum)
+                if (node.Key[0] == '#')
+                    continue;
+
+                if (jsonNode.ContainsKey("#" + node.Key))
                 {
-                    ComboBox cb = new ComboBox();
-                    cb.Tag = new PropFieldInfo(field, _msg, depth);
-                    cb.FormattingEnabled = true;
-                    cb.DropDownStyle = ComboBoxStyle.DropDownList;
-                    cb.Name = field.Name;
-                    cb.SelectedIndexChanged += new EventHandler(PropertyEditorHandler);
-                    string[] enums = System.Enum.GetNames(field.FieldType);
-                    cb.Items.AddRange(enums);
-                    cb.SelectedIndex = (int)field.GetValue(_msg);
-                    if(field.FieldType == typeof(uiViewType))
-                        cb.Enabled = false;
-                    ctrls.Add(cb);
+                    string fieldInfo = jsonNode["#" + node.Key].ToString();
+                    string typename = fieldInfo.Split('&')[0];
+                    if (typename == "Color")
+                    {
+                        Color color = Color.FromArgb((int)node.Value[3], (int)node.Value[0], (int)node.Value[1], (int)node.Value[2]);
+                        Button btn = new Button();
+                        btn.Tag = jsonNode;
+                        btn.Text = ColorTranslator.ToHtml(color);
+                        btn.Name = node.Key;
+                        btn.Click += new EventHandler(PropertyEditorHandler);
+                        ctrls.Add(btn);
+                    }
+                    else if (typename == "Enum")
+                    {
+                        string typeInfo = fieldInfo.Split('&')[1];
+                        string[] enums = typeInfo.Split(',');
+
+                        ComboBox cb = new ComboBox();
+                        cb.Tag = jsonNode;
+                        cb.FormattingEnabled = true;
+                        cb.DropDownStyle = ComboBoxStyle.DropDownList;
+                        cb.Name = node.Key;
+                        cb.SelectedIndexChanged += new EventHandler(PropertyEditorHandler);
+                        cb.Items.AddRange(enums);
+                        cb.SelectedIndex = (int)node.Value;
+                        if (node.Key == "Type")
+                            cb.Enabled = false;
+                        ctrls.Add(cb);
+                    }
                 }
-                else if (field.FieldType.Name == "Boolean")
+                else if (node.Value.Type == JTokenType.Boolean)
                 {
                     CheckBox chk = new CheckBox();
-                    chk.Tag = new PropFieldInfo(field, _msg, depth);
+                    chk.Tag = jsonNode;
                     chk.AutoSize = true;
-                    chk.Name = field.Name;
+                    chk.Name = node.Key;
                     chk.UseVisualStyleBackColor = true;
-                    chk.Checked = (bool)field.GetValue(_msg);
+                    chk.Checked = (bool)node.Value;
                     chk.CheckedChanged += new EventHandler(PropertyEditorHandler);
                     ctrls.Add(chk);
                 }
-                else if (field.FieldType.IsClass && field.FieldType.Name != "String")
+                else if (node.Value.Type == JTokenType.Object)
                 {
-                    Label dummy = new Label();
-                    dummy.Tag = new PropFieldInfo(field, _msg, depth);
-                    dummy.Name = field.Name;
-                    dummy.BackColor = Color.Gray;
-                    dummy.Text = "▼";
-                    dummy.TextAlign = ContentAlignment.MiddleLeft;
-                    ctrls.Add(dummy);
+                    Panel panel = new Panel();
+                    panel.Name = node.Key;
+                    panel.AutoScroll = true;
+                    panel.BackColor = Color.WhiteSmoke;
+                    panel.Paint += (s,e)=>
+                    {
+                        Panel _pn = (Panel)s;
+                        ControlPaint.DrawBorder(e.Graphics, _pn.ClientRectangle, Color.DarkBlue, ButtonBorderStyle.Solid);
+                    };
+                    JObject subObj = (JObject)jsonNode[node.Key];
+                    Control[] subCtrls = ToControls(subObj);
+                    AddControlsToPanel(panel, subCtrls);
 
-                    var subObject = field.GetValue(_msg);
-                    Control[] subCtrls = ToControls(subObject, depth + 1);
-                    ctrls.AddRange(subCtrls);
+                    Button btn = new Button();
+                    btn.Tag = panel;
+                    btn.Text = "▼";
+                    btn.Name = node.Key;
+                    btn.Click += Btn_Click;
+                    ctrls.Add(btn);
                 }
-                else
+                else if (node.Value.Type == JTokenType.Array)
                 {
-                    string value = "";
-                    try { value = field.GetValue(_msg).ToString(); }
-                    catch (Exception) { }
+                    //skip if it's child node
+                }
+                else if(node.Value.Type == JTokenType.Float || node.Value.Type == JTokenType.Integer || node.Value.Type == JTokenType.String)
+                {
                     TextBox tb = new TextBox();
-                    tb.Tag = new PropFieldInfo(field, _msg, depth);
-                    tb.Name = field.Name;
-                    tb.Text = value;
+                    tb.Tag = jsonNode;
+                    tb.Name = node.Key;
+                    tb.Text = node.Value.ToString();
                     tb.Leave += new EventHandler(PropertyEditorHandler);
                     ctrls.Add(tb);
                 }
+
             }
             return ctrls.ToArray();
         }
+
+        private void Btn_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            Panel pn = (Panel)btn.Tag;
+            Control[] ctrls = (Control[])pn.Tag;
+            if (btn.Text == "▼")
+            {
+                btn.Text = "▲";
+                Point pos = new Point(10, btn.Location.Y + btn.Size.Height);
+                pn.Location = pos;
+                Size size = new Size(panel2.Size.Width, panel2.Size.Height / 2);
+                pn.Size = size;
+                panel2.Controls.Add(pn);
+                pn.BringToFront();
+            }
+            else
+            {
+                btn.Text = "▼";
+                panel2.Controls.Remove(pn);
+            }
+        }
+
         private void AddControlsToPanel(Panel panel, Control[] controls)
         {
             int gapX = 3;
@@ -334,7 +356,7 @@ namespace system
             for(int i = 0; i< cnt; ++i)
             {
                 Control ctrl = controls[i];
-                int depth = (ctrl.Tag as PropFieldInfo).depth;
+                int depth = 0;
                 int yOff = (ctrlSize.Height + gapY) * i;
                 int xOff = depth * 10;
 
@@ -349,7 +371,6 @@ namespace system
 
                 ctrl.Location = new Point(baseLocation.X + xOff + labelSize.Width + gapX, baseLocation.Y + yOff);
                 ctrl.Size = ctrlSize;
-                ctrl.TabIndex = i;
                 panel.Controls.Add(ctrl);
             }
         }
@@ -359,26 +380,44 @@ namespace system
                 return;
 
             Control ctrl = sender as Control;
-            PropFieldInfo propInfo = ctrl.Tag as PropFieldInfo;
-            FieldInfo info = propInfo.field;
-            object msg = propInfo.msg;
+            JObject propInfo = ctrl.Tag as JObject;
+            string fieldName = ctrl.Name;
             if (ctrl.GetType() == typeof(ComboBox))
             {
-                info.SetValue(msg, (ctrl as ComboBox).SelectedIndex);
+                propInfo[fieldName] = (ctrl as ComboBox).SelectedIndex;
             }
             else if (ctrl.GetType() == typeof(CheckBox))
             {
                 bool state = (ctrl as CheckBox).Checked;
-                info.SetValue(msg, state);
+                propInfo[fieldName] = state;
+            }
+            else if(ctrl.GetType() == typeof(Button))
+            {
+                Button btn = (Button)ctrl;
+                Color color = ColorTranslator.FromHtml(btn.Text);
+                ColorDialog dlg = new ColorDialog();
+                dlg.CustomColors = new int[] { ColorTranslator.ToOle(color) };
+                dlg.Color = color;
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    btn.Text = ColorTranslator.ToHtml(dlg.Color);
+                    propInfo[fieldName][0] = dlg.Color.R;
+                    propInfo[fieldName][1] = dlg.Color.G;
+                    propInfo[fieldName][2] = dlg.Color.B;
+                    propInfo[fieldName][3] = dlg.Color.A;
+                }
             }
             else if (ctrl.GetType() == typeof(TextBox))
             {
                 try
                 {
                     string data = (ctrl as TextBox).Text;
-                    Type type = Type.GetType(info.FieldType.FullName);
-                    var value = Convert.ChangeType(data, type);
-                    info.SetValue(msg, value);
+                    if(propInfo[fieldName].Type == JTokenType.String)
+                        propInfo[fieldName] = data;
+                    else if (propInfo[fieldName].Type == JTokenType.Float)
+                        propInfo[fieldName] = float.Parse(data);
+                    else if (propInfo[fieldName].Type == JTokenType.Integer)
+                        propInfo[fieldName] = int.Parse(data);
                 }
                 catch(Exception ex)
                 {
@@ -387,13 +426,13 @@ namespace system
             }
             else
                 Console.WriteLine(ctrl.Name);
-
-            EditableView.LoadAll();
+            
+            EditableView.Update(EditableJson.ToString());
         }
 
         private void btnSaveJson_Click(object sender, EventArgs e)
         {
-            string json = mUIMgr.ToJsonString();
+            string json = mUIEngine.ToJsonString();
             Utils.SaveFile(json);
         }
         private void btnLoad_Click(object sender, EventArgs e)
@@ -410,12 +449,63 @@ namespace system
                 return;
             }
 
-            ViewPropertiesTree obj = new ViewPropertiesTree();
-            obj.Parse(text);
-            bool ret = mUIMgr.Load(obj);
-            if (!ret)
-                MessageBox.Show(mUIMgr.ErrorMessage);
+            mUIEngine.Load(filename);
         }
+
+
+        public class MyUIEngineCallbacks : UIEngineCallbacks
+        {
+            Renderer mRender;
+            DrawArgs mArgs = new DrawArgs();
+            int[] mTexIDs = new int[4];
+            public MyUIEngineCallbacks(Renderer render) { mRender = render; }
+            public override void OnDrawFill(RenderParams param)
+            {
+                mArgs.rect.Location = new Point((int)param.left, (int)param.top);
+                mArgs.rect.Size = new Size((int)(param.right - param.left), (int)(param.bottom - param.top));
+                mArgs.color = Color.FromArgb(param.alpha, param.red, param.green, param.blue);
+                mRender.DrawRect(mArgs);
+            }
+
+            public override void OnDrawOutline(RenderParams param)
+            {
+                mArgs.rect.Location = new Point((int)param.left, (int)param.top);
+                mArgs.rect.Size = new Size((int)(param.right - param.left), (int)(param.bottom - param.top));
+                mArgs.color = Color.FromArgb(param.alpha, param.red, param.green, param.blue);
+                mRender.DrawOutline(mArgs);
+            }
+
+            public override void OnDrawTexture(RenderParams param)
+            {
+                mArgs.rect.Location = new Point((int)param.left, (int)param.top);
+                mArgs.rect.Size = new Size((int)(param.right - param.left), (int)(param.bottom - param.top));
+                mArgs.uv.Location = new PointF((float)param.uv_left, (float)param.uv_top);
+                mArgs.uv.Size = new SizeF((float)(param.uv_right - param.uv_left), (float)(param.uv_bottom - param.uv_top));
+                mArgs.color = Color.FromArgb(param.alpha, param.red, param.green, param.blue);
+                Marshal.Copy(param.texture, mTexIDs, 0, 1);
+                mArgs.texID = mTexIDs[0];
+                mRender.DrawTexture(mArgs);
+            }
+
+            public override IntPtr OnLoadTexture(BitmapInfo bitmap)
+            {
+                IntPtr ptr = Marshal.AllocHGlobal(4);
+                int texID = -1;
+                if (bitmap.fullname.Length > 0)
+                    texID = Renderer.InitTexture(bitmap.fullname);
+                else
+                    texID = Renderer.InitTexture(bitmap.buf, bitmap.width, bitmap.height);
+                Marshal.Copy(BitConverter.GetBytes(texID), 0, ptr, 4);
+                return ptr;
+            }
+
+            public override void OnReleaseTexture(IntPtr ptr)
+            {
+                Marshal.Copy(ptr, mTexIDs, 0, 1);
+                Renderer.ReleaseTexture(mTexIDs[0]);
+                Marshal.FreeHGlobal(ptr);
+            }
+        };
     }
 }
 
