@@ -28,6 +28,7 @@ namespace system
         public Point PreviousPt = new Point(); //마우스 다운시 클릭지점 백업
         public JObject EditableJson;
 
+
         public uiViewEditor()
         {
             InitializeComponent();
@@ -47,11 +48,11 @@ namespace system
             };
             timer.Start();
         }
-
         public void InitRenderer()
         {
             mRender.Initialize(panel1, panel1.Width, panel1.Height);
 
+            mRender.mGlView.KeyDown += MGlView_KeyDown;
             mRender.mGlView.MouseMove += MGlView_MouseMove;
             mRender.mGlView.MouseDown += MGlView_MouseDown;
             mRender.mGlView.MouseUp += MGlView_MouseUp;
@@ -63,6 +64,29 @@ namespace system
             mUIEngine.SetResourcePath("../../res/");
             mUIEngine.Init(new MyUIEngineCallbacks(mRender));
         }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            JObject json = new JObject();
+            json["Name"] = "RootView";
+            json["Type"] = 0;
+            json["LocalX"] = 0;
+            json["LocalY"] = 0;
+            json["Width"] = panel1.Width;
+            json["Height"] = panel1.Height;
+            JArray color = new JArray();
+            color.Add(100);
+            color.Add(100);
+            color.Add(100);
+            color.Add(255);
+            json["Color"] = color;
+            json["Enable"] = true;
+            json["Visiable"] = true;
+
+            string jsonDefaultText = json.ToString();
+            mUIEngine.LoadJson(jsonDefaultText);
+            UpdateTreeView();
+        }
+
 
         //단순히 마우스 Down상태 해제(view클릭으로 간주되면 선택된view를 활성화시킴)
         private void MGlView_MouseUp(object sender, MouseEventArgs e)
@@ -70,9 +94,7 @@ namespace system
             ViewInfo view = FindTopView(e.X, e.Y);
             if(view == null)
             {
-                EditableView = null;
-                EditableJson = null;
-                panel2.Controls.Clear();
+                UnSelectView();
             }
             else if (view.Equal(TempDownView))
             {
@@ -90,10 +112,9 @@ namespace system
             if(chkNewView.Checked)
             {
                 CreateNewView(e.X, e.Y);
+                UpdateTreeView();
                 chkNewView.Checked = false;
-                EditableView = null;
-                EditableJson = null;
-                TempDownView = null;
+                UnSelectView();
                 return;
             }
             TempDownView = FindTopView(e.X, e.Y);
@@ -177,21 +198,6 @@ namespace system
 
             view.Update(EditableJson.ToString());
         }
-
-        //MouseUp.. 즉 놓는 순간 부모 자식 관계를 Rect의 모퉁이 기준으로 재정립한다.
-        //void CheckParentLink()
-        //{
-        //    if (EditableView == null || Cursor != Cursors.SizeAll)
-        //        return;
-        //
-        //    Point pt = EditableView.RectAbsolute.Location;
-        //    bool backEn = EditableView.Enable;
-        //    EditableView.Enable = false;
-        //    uiView view = mUIMgr.RootView.FindTopView(pt.X, pt.Y);
-        //    EditableView.Enable = backEn;
-        //    if (view != null && view != EditableView.Parent)
-        //        EditableView.ChangeParent(view);
-        //}
         Rectangle ExpandRect_FixedCenter(Rectangle rect, int range)
         {
             Point newPos = rect.Location;
@@ -201,6 +207,40 @@ namespace system
             newSize.Width += range * 2;
             newSize.Height += range * 2;
             return new Rectangle(newPos, newSize);
+        }
+        void DrawEditableView()
+        {
+            if (EditableView == null)
+                return;
+
+            DrawArgs param = new DrawArgs();
+            param.rect = (Rectangle)EditableView.GetRectAbsolute();
+            param.color = Color.Blue;
+            mRender.DrawOutline(param);
+        }
+
+
+        private void SelectView(ViewInfo view)
+        {
+            EditableView = view;
+            EditableJson = JObject.Parse(EditableView.jsonString);
+            panel2.Controls.Clear();
+            Control[] ctrls = ToControls(EditableJson);
+            AddControlsToPanel(panel2, ctrls);
+        }
+        private void UnSelectView()
+        {
+            EditableView = null;
+            EditableJson = null;
+            TempDownView = null;
+            panel2.Controls.Clear();
+            treeView1.SelectedNode = null;
+        }
+        private void CreateNewView(int clickPtX, int clickPtY)
+        {
+            string viewName = cbViewType.SelectedItem.ToString();
+            uiViewType viewType = (uiViewType)Enum.Parse(typeof(uiViewType), viewName);
+            mUIEngine.CreateView(clickPtX, clickPtY, (int)viewType);
         }
         ViewInfo FindTopView(int x, int y)
         {
@@ -213,35 +253,71 @@ namespace system
             }
             return mUIEngine.FindTopView(x, y);
         }
-        void DrawEditableView()
+        private void UpdateTreeView()
         {
-            if (EditableView == null)
-                return;
+            string jsonStr = mUIEngine.ToJsonString();
+            JObject obj = JObject.Parse(jsonStr);
+            TreeNode rootNode = CreateNodeTree(obj);
+            treeView1.Nodes.Clear();
+            treeView1.Nodes.Add(rootNode);
+            if (EditableView != null)
+                SelectTreeNode(EditableView.GetID());
+        }
+        private TreeNode CreateNodeTree(JObject jsonNode)
+        {
+            string name = jsonNode["Name"].ToString();
+            int id = (int)jsonNode["#ID"];
+            TreeNode node = new TreeNode();
+            node.Name = name;
+            node.Text = name;
+            node.Tag = id;
+            if (!jsonNode.ContainsKey("Childs"))
+                return node;
 
-            DrawArgs param = new DrawArgs();
-            param.rect = (Rectangle)EditableView.GetRectAbsolute();
-            param.color = Color.Blue;
-            mRender.DrawOutline(param);
+            if (jsonNode["Childs"].Type != JTokenType.Array)
+                return node;
+
+            JArray childs = (JArray)jsonNode["Childs"];
+            int cnt = childs.Count;
+            for (int i = 0; i < cnt; ++i)
+            {
+                TreeNode childNode = CreateNodeTree((JObject)childs[i]);
+                node.Nodes.Add(childNode);
+            }
+
+            return node;
         }
-        private void CreateNewView(int clickPtX, int clickPtY)
+        private void SelectTreeNode(int id)
         {
-            string viewName = cbViewType.SelectedItem.ToString();
-            uiViewType viewType = (uiViewType)Enum.Parse(typeof(uiViewType), viewName);
-            mUIEngine.CreateView(clickPtX, clickPtY, (int)viewType);
+            TreeNode findNode = null;
+            foreach (TreeNode node in treeView1.Nodes)
+            {
+                findNode = FromID(id, node);
+                if (findNode != null)
+                    break;
+            }
+            treeView1.SelectedNode = findNode;
+            treeView1.Select();
+        }
+        public TreeNode FromID(int id, TreeNode rootNode)
+        {
+            if (rootNode.Tag.Equals(id))
+                return rootNode;
+
+            foreach (TreeNode node in rootNode.Nodes)
+            {
+                TreeNode next = FromID(id, node);
+                if (next != null)
+                    return next;
+            }
+            return null;
         }
 
-        private void SelectView(ViewInfo view)
-        {
-            EditableView = view;
-            EditableJson = JObject.Parse(EditableView.jsonString);
-            panel2.Controls.Clear();
-            Control[] ctrls = ToControls(EditableJson);
-            AddControlsToPanel(panel2, ctrls);
-        }
+
         private Control[] ToControls(JObject jsonNode)
         {
             List<Control> ctrls = new List<Control>();
-            foreach(var node in jsonNode)
+            foreach (var node in jsonNode)
             {
                 if (node.Key[0] == '#')
                     continue;
@@ -295,7 +371,7 @@ namespace system
                     panel.Name = node.Key;
                     panel.AutoScroll = true;
                     panel.BackColor = Color.WhiteSmoke;
-                    panel.Paint += (s,e)=>
+                    panel.Paint += (s, e) =>
                     {
                         Panel _pn = (Panel)s;
                         ControlPaint.DrawBorder(e.Graphics, _pn.ClientRectangle, Color.DarkBlue, ButtonBorderStyle.Solid);
@@ -315,7 +391,7 @@ namespace system
                 {
                     //skip if it's child node
                 }
-                else if(node.Value.Type == JTokenType.Float || node.Value.Type == JTokenType.Integer || node.Value.Type == JTokenType.String)
+                else if (node.Value.Type == JTokenType.Float || node.Value.Type == JTokenType.Integer || node.Value.Type == JTokenType.String)
                 {
                     TextBox tb = new TextBox();
                     tb.Tag = jsonNode;
@@ -328,86 +404,6 @@ namespace system
             }
             return ctrls.ToArray();
         }
-        private void UpdateTreeView()
-        {
-            string jsonStr = mUIEngine.ToJsonString();
-            JObject obj = JObject.Parse(jsonStr);
-            TreeNode rootNode = CreateNodeTree(obj);
-            treeView1.Nodes.Clear();
-            treeView1.Nodes.Add(rootNode);
-        }
-        private TreeNode CreateNodeTree(JObject jsonNode)
-        {
-            string name = jsonNode["Name"].ToString();
-            int id = (int)jsonNode["#ID"];
-            TreeNode node = new TreeNode();
-            node.Name = name;
-            node.Text = name;
-            node.Tag = id;
-            if (!jsonNode.ContainsKey("Childs"))
-                return node;
-
-            if (jsonNode["Childs"].Type != JTokenType.Array)
-                return node;
-
-            JArray childs = (JArray)jsonNode["Childs"];
-            int cnt = childs.Count;
-            for (int i = 0; i < cnt; ++i)
-            {
-                TreeNode childNode = CreateNodeTree((JObject)childs[i]);
-                node.Nodes.Add(childNode);
-            }
-
-            return node;
-        }
-        private void SelectTreeNode(int id)
-        {
-            TreeNode findNode = null;
-            foreach (TreeNode node in treeView1.Nodes)
-            {
-                findNode = FromID(id, node);
-                if (findNode != null)
-                    break;
-            }
-            treeView1.SelectedNode = findNode;
-            treeView1.Select();
-        }
-        public TreeNode FromID(int id, TreeNode rootNode)
-        {
-            if (rootNode.Tag.Equals(id))
-                return rootNode;
-
-            foreach (TreeNode node in rootNode.Nodes)
-            {
-                TreeNode next = FromID(id, node);
-                if (next != null)
-                    return next;
-            }
-            return null;
-        }
-
-        private void Btn_Click(object sender, EventArgs e)
-        {
-            Button btn = (Button)sender;
-            Panel pn = (Panel)btn.Tag;
-            Control[] ctrls = (Control[])pn.Tag;
-            if (btn.Text == "▼")
-            {
-                btn.Text = "▲";
-                Point pos = new Point(10, btn.Location.Y + btn.Size.Height);
-                pn.Location = pos;
-                Size size = new Size(panel2.Size.Width, panel2.Size.Height / 2);
-                pn.Size = size;
-                panel2.Controls.Add(pn);
-                pn.BringToFront();
-            }
-            else
-            {
-                btn.Text = "▼";
-                panel2.Controls.Remove(pn);
-            }
-        }
-
         private void AddControlsToPanel(Panel panel, Control[] controls)
         {
             int gapX = 3;
@@ -491,7 +487,31 @@ namespace system
                 Console.WriteLine(ctrl.Name);
             
             EditableView.Update(EditableJson.ToString());
+            if (fieldName == "Name")
+                UpdateTreeView();
         }
+        private void Btn_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            Panel pn = (Panel)btn.Tag;
+            Control[] ctrls = (Control[])pn.Tag;
+            if (btn.Text == "▼")
+            {
+                btn.Text = "▲";
+                Point pos = new Point(10, btn.Location.Y + btn.Size.Height);
+                pn.Location = pos;
+                Size size = new Size(panel2.Size.Width, panel2.Size.Height / 2);
+                pn.Size = size;
+                panel2.Controls.Add(pn);
+                pn.BringToFront();
+            }
+            else
+            {
+                btn.Text = "▼";
+                panel2.Controls.Remove(pn);
+            }
+        }
+
 
         private void btnSaveJson_Click(object sender, EventArgs e)
         {
@@ -514,6 +534,42 @@ namespace system
 
             mUIEngine.Load(filename);
             UpdateTreeView();
+        }
+        private void MGlView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                if (EditableView != null)
+                {
+                    mUIEngine.RemoveView(EditableView.GetID());
+                    UpdateTreeView();
+                    UnSelectView();
+                }
+
+            }
+        }
+        private void uiViewEditor_MouseDown(object sender, MouseEventArgs e)
+        {
+            UnSelectView();
+        }
+        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            int id = (int)e.Node.Tag;
+            ViewInfo view = mUIEngine.FindView(id);
+            SelectView(view);
+        }
+        private void treeView1_ChangeHiraki(bool parentMode, int thisID, int targetID)
+        {
+            if (thisID == targetID)
+                return;
+
+            if (parentMode)
+                mUIEngine.ChangeParent(thisID, targetID);
+            else
+                mUIEngine.ChangeNeighbor(thisID, targetID);
+
+            UpdateTreeView();
+            SelectTreeNode(thisID);
         }
 
 
@@ -571,85 +627,39 @@ namespace system
             }
         };
 
-        private void uiViewEditor_MouseDown(object sender, MouseEventArgs e)
+
+        #region TreeView Drag&Drop
+
+        private TreeNode sourceNode;
+        private TreeNode preNode = null;
+        private void treeView1_ItemDrag(object sender, ItemDragEventArgs e)
         {
-            EditableView = null;
-            EditableJson = null;
-            panel2.Controls.Clear();
-            TempDownView = null;
-            treeView1.SelectedNode = null;
+            sourceNode = (TreeNode)e.Item;
+            DoDragDrop(e.Item.ToString(), DragDropEffects.Move | DragDropEffects.Copy);
         }
-
-        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            int id = (int)e.Node.Tag;
-            ViewInfo view = mUIEngine.FindView(id);
-            SelectView(view);
-        }
-
-
-        //===========================================================================
-
-
-
-        private void treeView1_DragDrop(object sender, DragEventArgs e)
-        {
-            Point pos = treeView1.PointToClient(new Point(e.X, e.Y));
-            TreeNode targetNode = treeView1.GetNodeAt(pos);
-
-            if (targetNode != null)
-            {
-                //nodeCopy = new TreeNode(sourceNode.Text, sourceNode.ImageIndex, sourceNode.SelectedImageIndex);
-
-                sourceNode.Remove();
-
-                if (sourceNode.Index > targetNode.Index)
-                    targetNode.Parent.Nodes.Insert(targetNode.Index, sourceNode);
-                else
-                    targetNode.Parent.Nodes.Insert(targetNode.Index + 1, sourceNode);
-
-
-                treeView1.Invalidate();
-            }
-        }
-
         private void treeView1_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.Text))
                 e.Effect = DragDropEffects.Move;
             else
                 e.Effect = DragDropEffects.None;
-
         }
-
-        private void treeView1_ItemDrag(object sender, ItemDragEventArgs e)
+        private void treeView1_DragDrop(object sender, DragEventArgs e)
         {
-            sourceNode = (TreeNode)e.Item;
-            DoDragDrop(e.Item.ToString(), DragDropEffects.Move | DragDropEffects.Copy);
+            Point pos = treeView1.PointToClient(new Point(e.X, e.Y));
+            TreeNode targetNode = treeView1.GetNodeAt(pos);
 
-        }
+            if (preNode != null)
+                preNode.BackColor = Color.Transparent;
 
-        private TreeNode sourceNode;
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            TreeNode root = null;
-            for (int i = 0; i < 101; i++)
+            if (targetNode != null)
             {
-                if (i % 10 == 0)
-                {
-                    if (root != null) treeView1.Nodes.Add(root);
-                    root = new TreeNode(i.ToString());
-                }
+                if (targetNode.Bounds.Contains(pos.X, pos.Y))
+                    treeView1_ChangeHiraki(true, (int)sourceNode.Tag, (int)targetNode.Tag);
                 else
-                {
-                    TreeNode child = new TreeNode(i.ToString());
-                    root.Nodes.Add(child);
-                }
+                    treeView1_ChangeHiraki(false, (int)sourceNode.Tag, (int)targetNode.Tag);
             }
-
         }
-
-        TreeNode preNode = null;
         private void treeView1_DragOver(object sender, DragEventArgs e)
         {
             Point pos = treeView1.PointToClient(new Point(e.X, e.Y));
@@ -662,18 +672,12 @@ namespace system
             {
                 if (targetNode.Bounds.Contains(pos.X, pos.Y))
                 {
-                    targetNode.BackColor = Color.Red;
+                    targetNode.BackColor = Color.Gray;
                     preNode = targetNode;
                 }
-
             }
-
         }
-
-        private void treeView1_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
-        {
-            Console.WriteLine(e.Node.Text);
-        }
+        #endregion
     }
 }
 

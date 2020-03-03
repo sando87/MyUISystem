@@ -52,6 +52,14 @@ void UIEngine::Load(String ^fullname)
 	system->ParseJson(name);
 	system->LoadViews();
 }
+void UIEngine::LoadJson(String ^jsonText)
+{
+	std::string text = marshal_as<std::string>(jsonText);
+
+	jUISystem *system = jUISystem::GetInst();
+	system->ParseJsonString(text);
+	system->LoadViews();
+}
 void UIEngine::DoMouseEvent()
 {
 	jUISystem::GetInst()->MouseEventCall();
@@ -63,6 +71,14 @@ void UIEngine::SetMouseEvent(int mouseX, int mouseY, bool down, bool triggered)
 void UIEngine::Draw()
 {
 	jUISystem::GetInst()->Draw();
+}
+void CliLib::UIEngine::ChangeParent(int id, int parentID)
+{
+	jUISystem::GetInst()->ChangeParent(id, parentID);
+}
+void CliLib::UIEngine::ChangeNeighbor(int id, int neighborID)
+{
+	jUISystem::GetInst()->ChangeNeighbor(id, neighborID);
 }
 String^ UIEngine::ToJsonString()
 {
@@ -105,6 +121,10 @@ ViewInfo^ UIEngine::CreateView(int mouseX, int mouseY, int type)
 		view->jsonString = marshal_as<String^>(str);
 	}
 	return view;
+}
+void UIEngine::RemoveView(int id)
+{
+	jUISystem::GetInst()->DeleteView(id);
 }
 void UIEngine::DrawFill(DrawingParams param)
 {

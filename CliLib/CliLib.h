@@ -71,13 +71,17 @@ namespace CliLib {
 		void Init(UIEngineCallbacks^ ops);
 		void SetResourcePath(String^ path);
 		void Load(String ^fullname);
+		void LoadJson(String ^jsonText);
 		void DoMouseEvent();
 		void SetMouseEvent(int mouseX, int mouseY, bool down, bool triggered);
 		void Draw();
+		void ChangeParent(int id, int parentID);
+		void ChangeNeighbor(int id, int neighborID);
 		String^ ToJsonString();
 		ViewInfo^ FindTopView(int mouseX, int mouseY);
 		ViewInfo^ FindView(int id);
 		ViewInfo^ CreateView(int mouseX, int mouseY, int type);
+		void RemoveView(int id);
 
 		static void DrawFill(DrawingParams param);
 		static void DrawOutline(DrawingParams param);
