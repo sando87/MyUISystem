@@ -76,12 +76,10 @@ namespace system
             }
             else if (view.Equal(TempDownView))
             {
-                EditableView = view;
-                EditableJson = JObject.Parse(EditableView.jsonString);
-                //CheckParentLink();
-                panel2.Controls.Clear();
-                Control[] ctrls = ToControls(EditableJson);
-                AddControlsToPanel(panel2, ctrls);
+                SelectView(view);
+
+                int id = (int)EditableJson["#ID"];
+                SelectTreeNode(id);
             }
 
             TempDownView = null;
@@ -232,6 +230,14 @@ namespace system
             mUIEngine.CreateView(clickPtX, clickPtY, (int)viewType);
         }
 
+        private void SelectView(ViewInfo view)
+        {
+            EditableView = view;
+            EditableJson = JObject.Parse(EditableView.jsonString);
+            panel2.Controls.Clear();
+            Control[] ctrls = ToControls(EditableJson);
+            AddControlsToPanel(panel2, ctrls);
+        }
         private Control[] ToControls(JObject jsonNode)
         {
             List<Control> ctrls = new List<Control>();
@@ -321,6 +327,63 @@ namespace system
 
             }
             return ctrls.ToArray();
+        }
+        private void UpdateTreeView()
+        {
+            string jsonStr = mUIEngine.ToJsonString();
+            JObject obj = JObject.Parse(jsonStr);
+            TreeNode rootNode = CreateNodeTree(obj);
+            treeView1.Nodes.Clear();
+            treeView1.Nodes.Add(rootNode);
+        }
+        private TreeNode CreateNodeTree(JObject jsonNode)
+        {
+            string name = jsonNode["Name"].ToString();
+            int id = (int)jsonNode["#ID"];
+            TreeNode node = new TreeNode();
+            node.Name = name;
+            node.Text = name;
+            node.Tag = id;
+            if (!jsonNode.ContainsKey("Childs"))
+                return node;
+
+            if (jsonNode["Childs"].Type != JTokenType.Array)
+                return node;
+
+            JArray childs = (JArray)jsonNode["Childs"];
+            int cnt = childs.Count;
+            for (int i = 0; i < cnt; ++i)
+            {
+                TreeNode childNode = CreateNodeTree((JObject)childs[i]);
+                node.Nodes.Add(childNode);
+            }
+
+            return node;
+        }
+        private void SelectTreeNode(int id)
+        {
+            TreeNode findNode = null;
+            foreach (TreeNode node in treeView1.Nodes)
+            {
+                findNode = FromID(id, node);
+                if (findNode != null)
+                    break;
+            }
+            treeView1.SelectedNode = findNode;
+            treeView1.Select();
+        }
+        public TreeNode FromID(int id, TreeNode rootNode)
+        {
+            if (rootNode.Tag.Equals(id))
+                return rootNode;
+
+            foreach (TreeNode node in rootNode.Nodes)
+            {
+                TreeNode next = FromID(id, node);
+                if (next != null)
+                    return next;
+            }
+            return null;
         }
 
         private void Btn_Click(object sender, EventArgs e)
@@ -450,6 +513,7 @@ namespace system
             }
 
             mUIEngine.Load(filename);
+            UpdateTreeView();
         }
 
 
@@ -506,6 +570,110 @@ namespace system
                 Marshal.FreeHGlobal(ptr);
             }
         };
+
+        private void uiViewEditor_MouseDown(object sender, MouseEventArgs e)
+        {
+            EditableView = null;
+            EditableJson = null;
+            panel2.Controls.Clear();
+            TempDownView = null;
+            treeView1.SelectedNode = null;
+        }
+
+        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            int id = (int)e.Node.Tag;
+            ViewInfo view = mUIEngine.FindView(id);
+            SelectView(view);
+        }
+
+
+        //===========================================================================
+
+
+
+        private void treeView1_DragDrop(object sender, DragEventArgs e)
+        {
+            Point pos = treeView1.PointToClient(new Point(e.X, e.Y));
+            TreeNode targetNode = treeView1.GetNodeAt(pos);
+
+            if (targetNode != null)
+            {
+                //nodeCopy = new TreeNode(sourceNode.Text, sourceNode.ImageIndex, sourceNode.SelectedImageIndex);
+
+                sourceNode.Remove();
+
+                if (sourceNode.Index > targetNode.Index)
+                    targetNode.Parent.Nodes.Insert(targetNode.Index, sourceNode);
+                else
+                    targetNode.Parent.Nodes.Insert(targetNode.Index + 1, sourceNode);
+
+
+                treeView1.Invalidate();
+            }
+        }
+
+        private void treeView1_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.Text))
+                e.Effect = DragDropEffects.Move;
+            else
+                e.Effect = DragDropEffects.None;
+
+        }
+
+        private void treeView1_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            sourceNode = (TreeNode)e.Item;
+            DoDragDrop(e.Item.ToString(), DragDropEffects.Move | DragDropEffects.Copy);
+
+        }
+
+        private TreeNode sourceNode;
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            TreeNode root = null;
+            for (int i = 0; i < 101; i++)
+            {
+                if (i % 10 == 0)
+                {
+                    if (root != null) treeView1.Nodes.Add(root);
+                    root = new TreeNode(i.ToString());
+                }
+                else
+                {
+                    TreeNode child = new TreeNode(i.ToString());
+                    root.Nodes.Add(child);
+                }
+            }
+
+        }
+
+        TreeNode preNode = null;
+        private void treeView1_DragOver(object sender, DragEventArgs e)
+        {
+            Point pos = treeView1.PointToClient(new Point(e.X, e.Y));
+            TreeNode targetNode = treeView1.GetNodeAt(pos);
+
+            if (preNode != null)
+                preNode.BackColor = Color.Transparent;
+
+            if (targetNode != null)
+            {
+                if (targetNode.Bounds.Contains(pos.X, pos.Y))
+                {
+                    targetNode.BackColor = Color.Red;
+                    preNode = targetNode;
+                }
+
+            }
+
+        }
+
+        private void treeView1_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
+        {
+            Console.WriteLine(e.Node.Text);
+        }
     }
 }
 

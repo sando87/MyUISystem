@@ -82,6 +82,18 @@ ViewInfo^ UIEngine::FindTopView(int mouseX, int mouseY)
 	view->jsonString = marshal_as<String^>(str);
 	return view;
 }
+ViewInfo^ UIEngine::FindView(int id)
+{
+	jView *findView = jUISystem::GetInst()->FindView(id);
+	if (findView == nullptr)
+		return nullptr;
+
+	ViewInfo^ view = gcnew ViewInfo();
+	view->view = findView;
+	string str = findView->ToJsonString();
+	view->jsonString = marshal_as<String^>(str);
+	return view;
+}
 ViewInfo^ UIEngine::CreateView(int mouseX, int mouseY, int type)
 {
 	ViewInfo^ view = gcnew ViewInfo();
@@ -140,4 +152,8 @@ bool ViewInfo::Equal(ViewInfo ^info)
 	if (info == nullptr)
 		return false;
 	return info->view == view;
+}
+int ViewInfo::GetID()
+{
+	return view->GetID();
 }
