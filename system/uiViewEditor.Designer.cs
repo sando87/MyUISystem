@@ -41,13 +41,13 @@
             // 
             this.panel1.Location = new System.Drawing.Point(185, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(673, 321);
+            this.panel1.Size = new System.Drawing.Size(1300, 820);
             this.panel1.TabIndex = 0;
             // 
             // btnSaveJson
             // 
             this.btnSaveJson.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnSaveJson.Location = new System.Drawing.Point(864, 12);
+            this.btnSaveJson.Location = new System.Drawing.Point(1491, 12);
             this.btnSaveJson.Name = "btnSaveJson";
             this.btnSaveJson.Size = new System.Drawing.Size(75, 23);
             this.btnSaveJson.TabIndex = 1;
@@ -58,7 +58,7 @@
             // panel2
             // 
             this.panel2.AutoScroll = true;
-            this.panel2.Location = new System.Drawing.Point(864, 41);
+            this.panel2.Location = new System.Drawing.Point(1491, 41);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(226, 292);
             this.panel2.TabIndex = 2;
@@ -66,7 +66,7 @@
             // btnLoad
             // 
             this.btnLoad.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnLoad.Location = new System.Drawing.Point(945, 12);
+            this.btnLoad.Location = new System.Drawing.Point(1572, 12);
             this.btnLoad.Name = "btnLoad";
             this.btnLoad.Size = new System.Drawing.Size(75, 23);
             this.btnLoad.TabIndex = 1;
@@ -79,7 +79,7 @@
             this.cbViewType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbViewType.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.cbViewType.FormattingEnabled = true;
-            this.cbViewType.Location = new System.Drawing.Point(185, 339);
+            this.cbViewType.Location = new System.Drawing.Point(186, 838);
             this.cbViewType.Name = "cbViewType";
             this.cbViewType.Size = new System.Drawing.Size(121, 25);
             this.cbViewType.TabIndex = 3;
@@ -89,7 +89,7 @@
             this.chkNewView.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkNewView.AutoSize = true;
             this.chkNewView.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.chkNewView.Location = new System.Drawing.Point(313, 339);
+            this.chkNewView.Location = new System.Drawing.Point(314, 838);
             this.chkNewView.Name = "chkNewView";
             this.chkNewView.Size = new System.Drawing.Size(87, 27);
             this.chkNewView.TabIndex = 4;
@@ -101,7 +101,7 @@
             this.treeView1.AllowDrop = true;
             this.treeView1.Location = new System.Drawing.Point(13, 12);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(166, 321);
+            this.treeView1.Size = new System.Drawing.Size(166, 820);
             this.treeView1.TabIndex = 5;
             this.treeView1.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.treeView1_ItemDrag);
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
@@ -114,7 +114,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1097, 523);
+            this.ClientSize = new System.Drawing.Size(1884, 911);
             this.Controls.Add(this.treeView1);
             this.Controls.Add(this.chkNewView);
             this.Controls.Add(this.cbViewType);

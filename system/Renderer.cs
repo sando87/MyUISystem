@@ -126,13 +126,18 @@ namespace system
             int top = mGlView.Height - param.rect.Top;
             int bottom = mGlView.Height - param.rect.Bottom;
 
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
             GL.Begin(PrimitiveType.TriangleStrip);
-            GL.Color3(param.color);
+            GL.Color4(param.color);
             GL.Vertex2(left, top); //lt
             GL.Vertex2(left, bottom); //lb
             GL.Vertex2(right, top);//rt
             GL.Vertex2(right, bottom);//rb
             GL.End();
+
+            GL.Disable(EnableCap.Blend);
         }
         public void DrawOutline(DrawArgs param)
         {
@@ -167,7 +172,7 @@ namespace system
 
             GL.Begin(PrimitiveType.TriangleStrip);
 
-            GL.Color3(param.color);
+            GL.Color4(param.color);
             GL.TexCoord2(param.uv.Left, param.uv.Top);
             GL.Vertex2(left, top); //lt
             GL.TexCoord2(param.uv.Left, param.uv.Bottom);

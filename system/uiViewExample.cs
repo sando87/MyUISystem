@@ -94,8 +94,8 @@ namespace system
             {
                 mArgs.rect.Location = new Point((int)param.left, (int)param.top);
                 mArgs.rect.Size = new Size((int)(param.right - param.left), (int)(param.bottom - param.top));
-                mArgs.uv.Location = new Point((int)param.uv_left, (int)param.uv_top);
-                mArgs.uv.Size = new Size((int)(param.uv_right - param.uv_left), (int)(param.uv_bottom - param.uv_top));
+                mArgs.uv.Location = new PointF((float)param.uv_left, (float)param.uv_top);
+                mArgs.uv.Size = new SizeF((float)(param.uv_right - param.uv_left), (float)(param.uv_bottom - param.uv_top));
                 mArgs.color = Color.FromArgb(param.alpha, param.red, param.green, param.blue);
                 Marshal.Copy(param.texture, mTexIDs, 0, 1);
                 mArgs.texID = mTexIDs[0];

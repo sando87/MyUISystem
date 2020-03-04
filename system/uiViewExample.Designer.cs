@@ -36,13 +36,13 @@
             // 
             this.panel1.Location = new System.Drawing.Point(13, 13);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(537, 318);
+            this.panel1.Size = new System.Drawing.Size(1300, 820);
             this.panel1.TabIndex = 0;
             // 
             // btnLoad
             // 
             this.btnLoad.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.btnLoad.Location = new System.Drawing.Point(557, 13);
+            this.btnLoad.Location = new System.Drawing.Point(1319, 13);
             this.btnLoad.Name = "btnLoad";
             this.btnLoad.Size = new System.Drawing.Size(75, 23);
             this.btnLoad.TabIndex = 1;
@@ -54,7 +54,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(645, 539);
+            this.ClientSize = new System.Drawing.Size(1401, 861);
             this.Controls.Add(this.btnLoad);
             this.Controls.Add(this.panel1);
             this.Name = "uiViewExample";
