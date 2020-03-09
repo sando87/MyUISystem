@@ -160,7 +160,7 @@
 						},
 						{
 							"#Color" : "Color",
-							"#ID" : 12,
+							"#ID" : 9,
 							"#Type" : "Enum&View,Button,Font,Image",
 							"Align" : 4,
 							"Childs" : null,
@@ -215,7 +215,7 @@
 						},
 						{
 							"#Color" : "Color",
-							"#ID" : 13,
+							"#ID" : 10,
 							"#Type" : "Enum&View,Button,Font,Image",
 							"Align" : 4,
 							"Childs" : null,
@@ -270,7 +270,7 @@
 						},
 						{
 							"#Color" : "Color",
-							"#ID" : 14,
+							"#ID" : 11,
 							"#Type" : "Enum&View,Button,Font,Image",
 							"Align" : 4,
 							"Childs" : null,
@@ -358,12 +358,231 @@
 			],
 			"Enable" : true,
 			"Height" : 159,
-			"LocalX" : 187,
-			"LocalY" : 631,
+			"LocalX" : 201,
+			"LocalY" : 626,
 			"Name" : "Panel",
 			"Type" : 0,
 			"Visiable" : true,
 			"Width" : 895
+		},
+		{
+			"#Color" : "Color",
+			"#ID" : 12,
+			"#Type" : "Enum&View,Button,Font,Image",
+			"Childs" : 
+			[
+				{
+					"#Color" : "Color",
+					"#ID" : 13,
+					"#Type" : "Enum&View,Button,Font,Image",
+					"Childs" : 
+					[
+						{
+							"#Color" : "Color",
+							"#ID" : 15,
+							"#Type" : "Enum&View,Button,Font,Image",
+							"Align" : 4,
+							"Childs" : null,
+							"Color" : 
+							[
+								240,
+								240,
+								240,
+								255
+							],
+							"ColorButton" : 
+							[
+								225,
+								225,
+								225,
+								255
+							],
+							"ColorFont" : 
+							[
+								0,
+								0,
+								0,
+								255
+							],
+							"ColorOutline" : 
+							[
+								173,
+								173,
+								173,
+								255
+							],
+							"Enable" : true,
+							"FontName" : "malgun.ttf",
+							"FontSize" : 20,
+							"Height" : 20,
+							"Image" : 
+							{
+								"bottom" : 1.0,
+								"filename" : "PlusClose.png",
+								"left" : 0.5,
+								"right" : 1.0,
+								"top" : 0.0
+							},
+							"LocalX" : 412,
+							"LocalY" : 30,
+							"Name" : "Close",
+							"Style" : 0,
+							"Text" : "text",
+							"Type" : 1,
+							"Visiable" : true,
+							"Width" : 20
+						},
+						{
+							"#Color" : "Color",
+							"#ID" : 14,
+							"#Type" : "Enum&View,Button,Font,Image",
+							"Align" : 4,
+							"Childs" : null,
+							"Color" : 
+							[
+								240,
+								240,
+								240,
+								255
+							],
+							"ColorButton" : 
+							[
+								225,
+								225,
+								225,
+								255
+							],
+							"ColorFont" : 
+							[
+								0,
+								0,
+								0,
+								255
+							],
+							"ColorOutline" : 
+							[
+								173,
+								173,
+								173,
+								255
+							],
+							"Enable" : true,
+							"FontName" : "malgun.ttf",
+							"FontSize" : 20,
+							"Height" : 25,
+							"Image" : 
+							{
+								"bottom" : 1.0,
+								"filename" : "PlusClose.png",
+								"left" : 0.0,
+								"right" : 0.5,
+								"top" : 0.0
+							},
+							"LocalX" : 356,
+							"LocalY" : 129,
+							"Name" : "btnPA",
+							"Style" : 0,
+							"Text" : "text",
+							"Type" : 1,
+							"Visiable" : true,
+							"Width" : 25
+						},
+						{
+							"#Color" : "Color",
+							"#ID" : 16,
+							"#Type" : "Enum&View,Button,Font,Image",
+							"Align" : 4,
+							"Childs" : null,
+							"Color" : 
+							[
+								240,
+								240,
+								240,
+								255
+							],
+							"ColorButton" : 
+							[
+								225,
+								225,
+								225,
+								255
+							],
+							"ColorFont" : 
+							[
+								0,
+								0,
+								0,
+								255
+							],
+							"ColorOutline" : 
+							[
+								173,
+								173,
+								173,
+								255
+							],
+							"Enable" : true,
+							"FontName" : "malgun.ttf",
+							"FontSize" : 20,
+							"Height" : 25,
+							"Image" : 
+							{
+								"bottom" : 1.0,
+								"filename" : "PlusClose.png",
+								"left" : 0.0,
+								"right" : 0.5,
+								"top" : 0.0
+							},
+							"LocalX" : 355,
+							"LocalY" : 189,
+							"Name" : "btnMA",
+							"Style" : 0,
+							"Text" : "text",
+							"Type" : 1,
+							"Visiable" : true,
+							"Width" : 25
+						}
+					],
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"Enable" : true,
+					"Height" : 590,
+					"Image" : 
+					{
+						"bottom" : 1.0,
+						"filename" : "panelStat.png",
+						"left" : 0.0,
+						"right" : 1.0,
+						"top" : 0.0
+					},
+					"LocalX" : 5,
+					"LocalY" : 5,
+					"Name" : "BackStat",
+					"Type" : 2,
+					"Visiable" : true,
+					"Width" : 450
+				}
+			],
+			"Color" : 
+			[
+				240,
+				240,
+				240,
+				255
+			],
+			"Enable" : true,
+			"Height" : 600,
+			"LocalX" : 15,
+			"LocalY" : 15,
+			"Name" : "StatePanel",
+			"Type" : 0,
+			"Visiable" : true,
+			"Width" : 460
 		}
 	],
 	"Color" : 

@@ -60,7 +60,7 @@
             this.panel2.AutoScroll = true;
             this.panel2.Location = new System.Drawing.Point(1491, 41);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(226, 292);
+            this.panel2.Size = new System.Drawing.Size(226, 791);
             this.panel2.TabIndex = 2;
             // 
             // btnLoad
