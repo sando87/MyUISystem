@@ -9,7 +9,7 @@ namespace system
 {
     public enum uiViewType
     {
-        View, Button, Image, Font
+        View, Button, Image, Font, Grid
     }
     public class DrawArgs
     {
