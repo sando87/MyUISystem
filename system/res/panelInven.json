@@ -1,0 +1,132 @@
+{
+	"#Color" : "Color",
+	"#ID" : 17,
+	"#Type" : "Enum&View,Button,Font,Image,Grid",
+	"Childs" : 
+	[
+		{
+			"#Color" : "Color",
+			"#ID" : 18,
+			"#Type" : "Enum&View,Button,Font,Image,Grid",
+			"Childs" : 
+			[
+				{
+					"#Color" : "Color",
+					"#ID" : 19,
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"ColumnCount" : 5,
+					"Enable" : true,
+					"Height" : 99,
+					"ImageCell" : 
+					{
+						"bottom" : 3.0,
+						"filename" : "invenCell.png",
+						"left" : 0.0,
+						"right" : 5.0,
+						"top" : 0.0
+					},
+					"LocalX" : 16,
+					"LocalY" : 190,
+					"Name" : "InvenGrid",
+					"RowCount" : 3,
+					"Tag" : "",
+					"Type" : 4,
+					"Visiable" : true,
+					"Width" : 165
+				},
+				{
+					"#Color" : "Color",
+					"#ID" : 21,
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"Enable" : true,
+					"Height" : 43,
+					"LocalX" : 41,
+					"LocalY" : 102,
+					"Name" : "SlotA",
+					"Tag" : "",
+					"Type" : 0,
+					"Visiable" : true,
+					"Width" : 43
+				},
+				{
+					"#Color" : "Color",
+					"#ID" : 22,
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"Enable" : true,
+					"Height" : 43,
+					"LocalX" : 109,
+					"LocalY" : 104,
+					"Name" : "SlotB",
+					"Tag" : "",
+					"Type" : 0,
+					"Visiable" : true,
+					"Width" : 43
+				}
+			],
+			"Color" : 
+			[
+				240,
+				240,
+				240,
+				255
+			],
+			"Enable" : true,
+			"Height" : 359,
+			"Image" : 
+			{
+				"bottom" : 1.0,
+				"filename" : "inventory.png",
+				"left" : 0.0,
+				"right" : 1.0,
+				"top" : 0.0
+			},
+			"LocalX" : 8,
+			"LocalY" : 8,
+			"Name" : "Inventory",
+			"Tag" : "",
+			"Type" : 2,
+			"Visiable" : true,
+			"Width" : 195
+		}
+	],
+	"Color" : 
+	[
+		240,
+		240,
+		240,
+		255
+	],
+	"Enable" : true,
+	"Height" : 380,
+	"LocalX" : 10,
+	"LocalY" : 10,
+	"Name" : "InvenPanel",
+	"Tag" : "",
+	"Type" : 0,
+	"Visiable" : true,
+	"Width" : 213
+}

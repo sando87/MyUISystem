@@ -20,6 +20,7 @@ namespace CliLib {
 		System::Drawing::Rectangle ^GetRectAbsolute();
 		bool Equal(ViewInfo ^info);
 		int GetID();
+		int GetParentID();
 	};
 	public ref class BitmapInfo
 	{
@@ -80,7 +81,7 @@ namespace CliLib {
 		String^ ToJsonString();
 		ViewInfo^ FindTopView(int mouseX, int mouseY);
 		ViewInfo^ FindView(int id);
-		ViewInfo^ CreateView(int mouseX, int mouseY, int type);
+		ViewInfo^ CreateView(int type);
 		void RemoveView(int id);
 
 		static void DrawFill(DrawingParams param);

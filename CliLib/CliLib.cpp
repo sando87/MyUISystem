@@ -110,10 +110,10 @@ ViewInfo^ UIEngine::FindView(int id)
 	view->jsonString = marshal_as<String^>(str);
 	return view;
 }
-ViewInfo^ UIEngine::CreateView(int mouseX, int mouseY, int type)
+ViewInfo^ UIEngine::CreateView(int type)
 {
 	ViewInfo^ view = gcnew ViewInfo();
-	jView *newView = jUISystem::GetInst()->CreateView(mouseX, mouseY, type);
+	jView *newView = jUISystem::GetInst()->CreateView((jViewType)type);
 	if (newView != nullptr)
 	{
 		string str = newView->ToJsonString();
@@ -176,4 +176,9 @@ bool ViewInfo::Equal(ViewInfo ^info)
 int ViewInfo::GetID()
 {
 	return view->GetID();
+}
+int ViewInfo::GetParentID()
+{
+	jView* parent = view->GetParent();
+	return parent == nullptr ? -1 : parent->GetID();
 }

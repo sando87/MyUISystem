@@ -1,19 +1,19 @@
 {
 	"#Color" : "Color",
 	"#ID" : 2,
-	"#Type" : "Enum&View,Button,Font,Image",
+	"#Type" : "Enum&View,Button,Font,Image,Grid",
 	"Childs" : 
 	[
 		{
 			"#Color" : "Color",
 			"#ID" : 3,
-			"#Type" : "Enum&View,Button,Font,Image",
+			"#Type" : "Enum&View,Button,Font,Image,Grid",
 			"Childs" : 
 			[
 				{
 					"#Color" : "Color",
 					"#ID" : 4,
-					"#Type" : "Enum&View,Button,Font,Image",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
 					"Childs" : null,
 					"Color" : 
 					[
@@ -35,6 +35,7 @@
 					"LocalX" : 98,
 					"LocalY" : 27,
 					"Name" : "HP",
+					"Tag" : "",
 					"Type" : 2,
 					"Visiable" : true,
 					"Width" : 120
@@ -42,7 +43,7 @@
 				{
 					"#Color" : "Color",
 					"#ID" : 5,
-					"#Type" : "Enum&View,Button,Font,Image",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
 					"Childs" : null,
 					"Color" : 
 					[
@@ -64,6 +65,7 @@
 					"LocalX" : 676,
 					"LocalY" : 29,
 					"Name" : "MP",
+					"Tag" : "",
 					"Type" : 2,
 					"Visiable" : true,
 					"Width" : 120
@@ -71,7 +73,7 @@
 				{
 					"#Color" : "Color",
 					"#ID" : 6,
-					"#Type" : "Enum&View,Button,Font,Image",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
 					"Childs" : null,
 					"Color" : 
 					[
@@ -93,6 +95,7 @@
 					"LocalX" : 212,
 					"LocalY" : 83,
 					"Name" : "EXP",
+					"Tag" : "",
 					"Type" : 2,
 					"Visiable" : true,
 					"Width" : 467
@@ -100,13 +103,13 @@
 				{
 					"#Color" : "Color",
 					"#ID" : 7,
-					"#Type" : "Enum&View,Button,Font,Image",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
 					"Childs" : 
 					[
 						{
 							"#Color" : "Color",
 							"#ID" : 8,
-							"#Type" : "Enum&View,Button,Font,Image",
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
 							"Align" : 4,
 							"Childs" : null,
 							"Color" : 
@@ -153,6 +156,7 @@
 							"LocalY" : 66,
 							"Name" : "SkillA",
 							"Style" : 0,
+							"Tag" : "",
 							"Text" : "text",
 							"Type" : 1,
 							"Visiable" : true,
@@ -161,7 +165,7 @@
 						{
 							"#Color" : "Color",
 							"#ID" : 9,
-							"#Type" : "Enum&View,Button,Font,Image",
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
 							"Align" : 4,
 							"Childs" : null,
 							"Color" : 
@@ -208,6 +212,7 @@
 							"LocalY" : 66,
 							"Name" : "SkillB",
 							"Style" : 0,
+							"Tag" : "",
 							"Text" : "text",
 							"Type" : 1,
 							"Visiable" : true,
@@ -216,7 +221,7 @@
 						{
 							"#Color" : "Color",
 							"#ID" : 10,
-							"#Type" : "Enum&View,Button,Font,Image",
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
 							"Align" : 4,
 							"Childs" : null,
 							"Color" : 
@@ -263,6 +268,7 @@
 							"LocalY" : 66,
 							"Name" : "SkillC",
 							"Style" : 0,
+							"Tag" : "",
 							"Text" : "text",
 							"Type" : 1,
 							"Visiable" : true,
@@ -271,7 +277,7 @@
 						{
 							"#Color" : "Color",
 							"#ID" : 11,
-							"#Type" : "Enum&View,Button,Font,Image",
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
 							"Align" : 4,
 							"Childs" : null,
 							"Color" : 
@@ -318,6 +324,7 @@
 							"LocalY" : 66,
 							"Name" : "SkillD",
 							"Style" : 0,
+							"Tag" : "",
 							"Text" : "text",
 							"Type" : 1,
 							"Visiable" : true,
@@ -344,6 +351,7 @@
 					"LocalX" : 8,
 					"LocalY" : 27,
 					"Name" : "Back",
+					"Tag" : "",
 					"Type" : 2,
 					"Visiable" : true,
 					"Width" : 876
@@ -361,6 +369,7 @@
 			"LocalX" : 201,
 			"LocalY" : 626,
 			"Name" : "Panel",
+			"Tag" : "",
 			"Type" : 0,
 			"Visiable" : true,
 			"Width" : 895
@@ -368,19 +377,19 @@
 		{
 			"#Color" : "Color",
 			"#ID" : 12,
-			"#Type" : "Enum&View,Button,Font,Image",
+			"#Type" : "Enum&View,Button,Font,Image,Grid",
 			"Childs" : 
 			[
 				{
 					"#Color" : "Color",
 					"#ID" : 13,
-					"#Type" : "Enum&View,Button,Font,Image",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
 					"Childs" : 
 					[
 						{
 							"#Color" : "Color",
-							"#ID" : 15,
-							"#Type" : "Enum&View,Button,Font,Image",
+							"#ID" : 14,
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
 							"Align" : 4,
 							"Childs" : null,
 							"Color" : 
@@ -427,6 +436,7 @@
 							"LocalY" : 30,
 							"Name" : "Close",
 							"Style" : 0,
+							"Tag" : "",
 							"Text" : "text",
 							"Type" : 1,
 							"Visiable" : true,
@@ -434,8 +444,8 @@
 						},
 						{
 							"#Color" : "Color",
-							"#ID" : 14,
-							"#Type" : "Enum&View,Button,Font,Image",
+							"#ID" : 15,
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
 							"Align" : 4,
 							"Childs" : null,
 							"Color" : 
@@ -482,6 +492,7 @@
 							"LocalY" : 129,
 							"Name" : "btnPA",
 							"Style" : 0,
+							"Tag" : "",
 							"Text" : "text",
 							"Type" : 1,
 							"Visiable" : true,
@@ -490,7 +501,7 @@
 						{
 							"#Color" : "Color",
 							"#ID" : 16,
-							"#Type" : "Enum&View,Button,Font,Image",
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
 							"Align" : 4,
 							"Childs" : null,
 							"Color" : 
@@ -537,6 +548,7 @@
 							"LocalY" : 189,
 							"Name" : "btnMA",
 							"Style" : 0,
+							"Tag" : "",
 							"Text" : "text",
 							"Type" : 1,
 							"Visiable" : true,
@@ -563,6 +575,7 @@
 					"LocalX" : 5,
 					"LocalY" : 5,
 					"Name" : "BackStat",
+					"Tag" : "",
 					"Type" : 2,
 					"Visiable" : true,
 					"Width" : 450
@@ -580,9 +593,142 @@
 			"LocalX" : 15,
 			"LocalY" : 15,
 			"Name" : "StatePanel",
+			"Tag" : "",
 			"Type" : 0,
 			"Visiable" : true,
 			"Width" : 460
+		},
+		{
+			"#Color" : "Color",
+			"#ID" : 17,
+			"#Type" : "Enum&View,Button,Font,Image,Grid",
+			"Childs" : 
+			[
+				{
+					"#Color" : "Color",
+					"#ID" : 18,
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Childs" : 
+					[
+						{
+							"#Color" : "Color",
+							"#ID" : 19,
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
+							"Childs" : null,
+							"Color" : 
+							[
+								240,
+								240,
+								240,
+								255
+							],
+							"ColumnCount" : 5,
+							"Enable" : true,
+							"Height" : 99,
+							"ImageCell" : 
+							{
+								"bottom" : 3.0,
+								"filename" : "invenCell.png",
+								"left" : 0.0,
+								"right" : 5.0,
+								"top" : 0.0
+							},
+							"LocalX" : 16,
+							"LocalY" : 190,
+							"Name" : "InvenGrid",
+							"RowCount" : 3,
+							"Tag" : "",
+							"Type" : 4,
+							"Visiable" : true,
+							"Width" : 165
+						},
+						{
+							"#Color" : "Color",
+							"#ID" : 21,
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
+							"Childs" : null,
+							"Color" : 
+							[
+								240,
+								240,
+								240,
+								255
+							],
+							"Enable" : true,
+							"Height" : 43,
+							"LocalX" : 41,
+							"LocalY" : 102,
+							"Name" : "SlotA",
+							"Tag" : "",
+							"Type" : 0,
+							"Visiable" : true,
+							"Width" : 43
+						},
+						{
+							"#Color" : "Color",
+							"#ID" : 22,
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
+							"Childs" : null,
+							"Color" : 
+							[
+								240,
+								240,
+								240,
+								255
+							],
+							"Enable" : true,
+							"Height" : 43,
+							"LocalX" : 109,
+							"LocalY" : 104,
+							"Name" : "SlotB",
+							"Tag" : "",
+							"Type" : 0,
+							"Visiable" : true,
+							"Width" : 43
+						}
+					],
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"Enable" : true,
+					"Height" : 359,
+					"Image" : 
+					{
+						"bottom" : 1.0,
+						"filename" : "inventory.png",
+						"left" : 0.0,
+						"right" : 1.0,
+						"top" : 0.0
+					},
+					"LocalX" : 8,
+					"LocalY" : 8,
+					"Name" : "Inventory",
+					"Tag" : "",
+					"Type" : 2,
+					"Visiable" : true,
+					"Width" : 195
+				}
+			],
+			"Color" : 
+			[
+				240,
+				240,
+				240,
+				255
+			],
+			"Enable" : true,
+			"Height" : 380,
+			"LocalX" : 917,
+			"LocalY" : 49,
+			"Name" : "InvenPanel",
+			"Tag" : "",
+			"Type" : 0,
+			"Visiable" : true,
+			"Width" : 213
 		}
 	],
 	"Color" : 
@@ -597,6 +743,7 @@
 	"LocalX" : 10,
 	"LocalY" : 10,
 	"Name" : "RootView",
+	"Tag" : "",
 	"Type" : 0,
 	"Visiable" : true,
 	"Width" : 1280

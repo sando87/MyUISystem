@@ -69,10 +69,14 @@ namespace system
             JObject json = new JObject();
             json["Name"] = "RootView";
             json["Type"] = 0;
-            json["LocalX"] = 0;
-            json["LocalY"] = 0;
-            json["Width"] = panel1.Width;
-            json["Height"] = panel1.Height;
+            json["LocalFromX"] = "0";
+            json["LocalFromY"] = "0";
+            json["LocalToX"] = "0";
+            json["LocalToY"] = "0";
+            json["LocalX"] = "0";
+            json["LocalY"] = "0";
+            json["Width"] = panel1.Width.ToString();
+            json["Height"] = panel1.Height.ToString();
             JArray color = new JArray();
             color.Add(100);
             color.Add(100);
@@ -171,29 +175,35 @@ namespace system
             if (view != null && !view.Equal(EditableView))
                 return;
 
-            if(Cursor == Cursors.SizeAll)
+            int parentID = EditableView.GetParentID();
+            Rectangle pRect;
+            if(parentID > 0)
             {
-                int newLocalX = (int)EditableJson["LocalX"] + dx;
-                int newLocalY = (int)EditableJson["LocalY"] + dy;
-                EditableJson["LocalX"] = newLocalX;
-                EditableJson["LocalY"] = newLocalY;
+                ViewInfo pView = mUIEngine.FindView(parentID);
+                pRect = (Rectangle)pView.GetRectAbsolute();
+            }
+            else
+            {
+                pRect = new Rectangle(0, 0, panel1.Width, panel2.Height);
+            }
+
+            if (Cursor == Cursors.SizeAll)
+            {
+                EditField("LocalX", pRect.Width, dx);
+                EditField("LocalY", pRect.Height, dy);
             }
             else if (Cursor == Cursors.SizeNWSE)
             {
-                int newWidth = (int)EditableJson["Width"] + dx;
-                int newHeight = (int)EditableJson["Height"] + dy;
-                EditableJson["Width"] = newWidth;
-                EditableJson["Height"] = newHeight;
+                EditField("Width", pRect.Width, dx);
+                EditField("Height", pRect.Height, dy);
             }
             else if (Cursor == Cursors.SizeWE)
             {
-                int newWidth = (int)EditableJson["Width"] + dx;
-                EditableJson["Width"] = newWidth;
+                EditField("Width", pRect.Width, dx);
             }
             else if (Cursor == Cursors.SizeNS)
             {
-                int newHeight = (int)EditableJson["Height"] + dy;
-                EditableJson["Height"] = newHeight;
+                EditField("Height", pRect.Height, dy);
             }
 
             view.Update(EditableJson.ToString());
@@ -240,7 +250,16 @@ namespace system
         {
             string viewName = cbViewType.SelectedItem.ToString();
             uiViewType viewType = (uiViewType)Enum.Parse(typeof(uiViewType), viewName);
-            mUIEngine.CreateView(clickPtX, clickPtY, (int)viewType);
+            ViewInfo parent = mUIEngine.FindTopView(clickPtX, clickPtY);
+            Rectangle parentAbRect = (Rectangle)parent.GetRectAbsolute();
+            ViewInfo newView = mUIEngine.CreateView((int)viewType);
+            JObject newViewProps = JObject.Parse(newView.jsonString);
+            int localX = clickPtX - parentAbRect.X;
+            int localY = clickPtY - parentAbRect.Y;
+            newViewProps["LocalX"] = localX.ToString();
+            newViewProps["LocalY"] = localY.ToString();
+            mUIEngine.ChangeParent(newView.GetID(), parent.GetID());
+            newView.Update(newViewProps.ToString());
         }
         ViewInfo FindTopView(int x, int y)
         {
@@ -311,6 +330,39 @@ namespace system
                     return next;
             }
             return null;
+        }
+        public bool IsRateType(string val)
+        {
+            foreach (char ch in val)
+                if (ch == '.')
+                    return true;
+            return false;
+        }
+        public float ToPixel(string fieldname, int pxSize)
+        {
+            string val = EditableJson[fieldname].ToString();
+            if (!IsRateType(val))
+                return int.Parse(val);
+
+            float rate = float.Parse(val);
+            return pxSize * rate;
+        }
+        public string ToField(string fieldname, int pxSize, float pxVal)
+        {
+            string val = EditableJson[fieldname].ToString();
+            if (!IsRateType(val))
+                return ((int)pxVal).ToString();
+
+            float rate = pxVal / pxSize;
+            return rate.ToString();
+        }
+        public void EditField(string fieldname, int pxSize, float deltaVal)
+        {
+            if (EditableJson[fieldname].ToString().Length == 0)
+                return;
+
+            float newPixel = ToPixel(fieldname, pxSize) + deltaVal;
+            EditableJson[fieldname] = ToField(fieldname, pxSize, newPixel);
         }
 
 
