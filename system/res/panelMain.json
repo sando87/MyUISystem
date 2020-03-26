@@ -1,0 +1,425 @@
+{
+	"#Color" : "Color",
+	"#ID" : 19,
+	"#Type" : "Enum&View,Button,Font,Image,Grid",
+	"Childs" : 
+	[
+		{
+			"#Color" : "Color",
+			"#ID" : 20,
+			"#Type" : "Enum&View,Button,Font,Image,Grid",
+			"Childs" : null,
+			"ClipRateBottom" : 0.0,
+			"ClipRateLeft" : 0.0,
+			"ClipRateRight" : 0.0,
+			"ClipRateTop" : 0.0,
+			"Color" : 
+			[
+				240,
+				240,
+				240,
+				255
+			],
+			"Enable" : true,
+			"Height" : "1.0",
+			"Image" : 
+			{
+				"bottom" : 1.0,
+				"filename" : "hp.png",
+				"left" : 0.0,
+				"right" : 1.0,
+				"top" : 0.0
+			},
+			"LocalFromX" : "0",
+			"LocalFromY" : "0",
+			"LocalToX" : "0.5",
+			"LocalToY" : "0.5",
+			"LocalX" : "0.17",
+			"LocalY" : "0.5",
+			"Name" : "HP",
+			"Type" : 2,
+			"Visiable" : true,
+			"Width" : "0.13"
+		},
+		{
+			"#Color" : "Color",
+			"#ID" : 21,
+			"#Type" : "Enum&View,Button,Font,Image,Grid",
+			"Childs" : null,
+			"ClipRateBottom" : 0.0,
+			"ClipRateLeft" : 0.0,
+			"ClipRateRight" : 0.0,
+			"ClipRateTop" : 0.0,
+			"Color" : 
+			[
+				240,
+				240,
+				240,
+				255
+			],
+			"Enable" : true,
+			"Height" : "1.0",
+			"Image" : 
+			{
+				"bottom" : 1.0,
+				"filename" : "mp.png",
+				"left" : 0.0,
+				"right" : 1.0,
+				"top" : 0.0
+			},
+			"LocalFromX" : "0",
+			"LocalFromY" : "0",
+			"LocalToX" : "0.5",
+			"LocalToY" : "0.5",
+			"LocalX" : "0.83",
+			"LocalY" : "0.5",
+			"Name" : "MP",
+			"Type" : 2,
+			"Visiable" : true,
+			"Width" : "0.13"
+		},
+		{
+			"#Color" : "Color",
+			"#ID" : 22,
+			"#Type" : "Enum&View,Button,Font,Image,Grid",
+			"Childs" : null,
+			"ClipRateBottom" : 0.0,
+			"ClipRateLeft" : 0.0,
+			"ClipRateRight" : 0.0,
+			"ClipRateTop" : 0.0,
+			"Color" : 
+			[
+				240,
+				240,
+				240,
+				255
+			],
+			"Enable" : true,
+			"Height" : "0.07",
+			"Image" : 
+			{
+				"bottom" : 1.0,
+				"filename" : "exp.png",
+				"left" : 0.0,
+				"right" : 1.0,
+				"top" : 0.0
+			},
+			"LocalFromX" : "0.5",
+			"LocalFromY" : "0.5",
+			"LocalToX" : "0.5",
+			"LocalToY" : "0.5",
+			"LocalX" : "0",
+			"LocalY" : "0",
+			"Name" : "EXP",
+			"Type" : 2,
+			"Visiable" : true,
+			"Width" : "0.53"
+		},
+		{
+			"#Color" : "Color",
+			"#ID" : 23,
+			"#Type" : "Enum&View,Button,Font,Image,Grid",
+			"Childs" : 
+			[
+				{
+					"#Align" : "Enum&TopLeft,Top,TopRight,Left,Center,Right,BottomLeft,Bottom,BottomRight",
+					"#Color" : "Color",
+					"#ColorFont" : "Color",
+					"#ID" : 24,
+					"#Style" : "Enum&Regular,Bold,Italic,Underline,Strikeout",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Align" : 4,
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"ColorButton" : 
+					[
+						225,
+						225,
+						225,
+						255
+					],
+					"ColorFont" : 
+					[
+						0,
+						0,
+						0,
+						255
+					],
+					"ColorOutline" : 
+					[
+						173,
+						173,
+						173,
+						255
+					],
+					"Enable" : true,
+					"FontName" : "malgun.ttf",
+					"FontSize" : 20,
+					"Height" : "0.33",
+					"Image" : 
+					{
+						"bottom" : 0.25,
+						"filename" : "skills.png",
+						"left" : 0.0,
+						"right" : 1.0,
+						"top" : 0.0
+					},
+					"LocalFromX" : "",
+					"LocalFromY" : "",
+					"LocalToX" : "",
+					"LocalToY" : "",
+					"LocalX" : "0.24",
+					"LocalY" : "0.56",
+					"Name" : "SkillA",
+					"Style" : 0,
+					"Text" : "text",
+					"Type" : 1,
+					"Visiable" : true,
+					"Width" : "0.047"
+				},
+				{
+					"#Align" : "Enum&TopLeft,Top,TopRight,Left,Center,Right,BottomLeft,Bottom,BottomRight",
+					"#Color" : "Color",
+					"#ColorFont" : "Color",
+					"#ID" : 25,
+					"#Style" : "Enum&Regular,Bold,Italic,Underline,Strikeout",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Align" : 4,
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"ColorButton" : 
+					[
+						225,
+						225,
+						225,
+						255
+					],
+					"ColorFont" : 
+					[
+						0,
+						0,
+						0,
+						255
+					],
+					"ColorOutline" : 
+					[
+						173,
+						173,
+						173,
+						255
+					],
+					"Enable" : true,
+					"FontName" : "malgun.ttf",
+					"FontSize" : 20,
+					"Height" : "0.33",
+					"Image" : 
+					{
+						"bottom" : 0.5,
+						"filename" : "skills.png",
+						"left" : 0.0,
+						"right" : 1.0,
+						"top" : 0.25
+					},
+					"LocalFromX" : "",
+					"LocalFromY" : "",
+					"LocalToX" : "",
+					"LocalToY" : "",
+					"LocalX" : "0.294",
+					"LocalY" : "0.56",
+					"Name" : "SkillB",
+					"Style" : 0,
+					"Text" : "text",
+					"Type" : 1,
+					"Visiable" : true,
+					"Width" : "0.047"
+				},
+				{
+					"#Align" : "Enum&TopLeft,Top,TopRight,Left,Center,Right,BottomLeft,Bottom,BottomRight",
+					"#Color" : "Color",
+					"#ColorFont" : "Color",
+					"#ID" : 26,
+					"#Style" : "Enum&Regular,Bold,Italic,Underline,Strikeout",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Align" : 4,
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"ColorButton" : 
+					[
+						225,
+						225,
+						225,
+						255
+					],
+					"ColorFont" : 
+					[
+						0,
+						0,
+						0,
+						255
+					],
+					"ColorOutline" : 
+					[
+						173,
+						173,
+						173,
+						255
+					],
+					"Enable" : true,
+					"FontName" : "malgun.ttf",
+					"FontSize" : 20,
+					"Height" : "0.33",
+					"Image" : 
+					{
+						"bottom" : 0.75,
+						"filename" : "skills.png",
+						"left" : 0.0,
+						"right" : 1.0,
+						"top" : 0.5
+					},
+					"LocalFromX" : "",
+					"LocalFromY" : "",
+					"LocalToX" : "",
+					"LocalToY" : "",
+					"LocalX" : "0.3455557",
+					"LocalY" : "0.56",
+					"Name" : "SkillC",
+					"Style" : 0,
+					"Text" : "text",
+					"Type" : 1,
+					"Visiable" : true,
+					"Width" : "0.047"
+				},
+				{
+					"#Align" : "Enum&TopLeft,Top,TopRight,Left,Center,Right,BottomLeft,Bottom,BottomRight",
+					"#Color" : "Color",
+					"#ColorFont" : "Color",
+					"#ID" : 27,
+					"#Style" : "Enum&Regular,Bold,Italic,Underline,Strikeout",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Align" : 4,
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"ColorButton" : 
+					[
+						225,
+						225,
+						225,
+						255
+					],
+					"ColorFont" : 
+					[
+						0,
+						0,
+						0,
+						255
+					],
+					"ColorOutline" : 
+					[
+						173,
+						173,
+						173,
+						255
+					],
+					"Enable" : true,
+					"FontName" : "malgun.ttf",
+					"FontSize" : 20,
+					"Height" : "0.33",
+					"Image" : 
+					{
+						"bottom" : 1.0,
+						"filename" : "skills.png",
+						"left" : 0.0,
+						"right" : 1.0,
+						"top" : 0.75
+					},
+					"LocalFromX" : "",
+					"LocalFromY" : "",
+					"LocalToX" : "",
+					"LocalToY" : "",
+					"LocalX" : "0.397778",
+					"LocalY" : "0.56",
+					"Name" : "SkillD",
+					"Style" : 0,
+					"Text" : "text",
+					"Type" : 1,
+					"Visiable" : true,
+					"Width" : "0.047"
+				}
+			],
+			"ClipRateBottom" : 0.0,
+			"ClipRateLeft" : 0.0,
+			"ClipRateRight" : 0.0,
+			"ClipRateTop" : 0.0,
+			"Color" : 
+			[
+				240,
+				240,
+				240,
+				255
+			],
+			"Enable" : true,
+			"Height" : "1.0",
+			"Image" : 
+			{
+				"bottom" : 1.0,
+				"filename" : "panel.png",
+				"left" : 0.0,
+				"right" : 1.0,
+				"top" : 0.0
+			},
+			"LocalFromX" : "",
+			"LocalFromY" : "",
+			"LocalToX" : "",
+			"LocalToY" : "",
+			"LocalX" : "0.0",
+			"LocalY" : "0.0",
+			"Name" : "Back",
+			"Type" : 2,
+			"Visiable" : true,
+			"Width" : "1.0"
+		}
+	],
+	"Color" : 
+	[
+		240,
+		240,
+		240,
+		255
+	],
+	"Enable" : true,
+	"Height" : "75",
+	"LocalFromX" : "",
+	"LocalFromY" : "",
+	"LocalToX" : "",
+	"LocalToY" : "",
+	"LocalX" : "10",
+	"LocalY" : "10",
+	"Name" : "PanelMain",
+	"Type" : 0,
+	"Visiable" : true,
+	"Width" : "550"
+}

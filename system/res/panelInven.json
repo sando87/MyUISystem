@@ -1,20 +1,517 @@
 {
 	"#Color" : "Color",
-	"#ID" : 17,
+	"#ID" : 2,
 	"#Type" : "Enum&View,Button,Font,Image,Grid",
 	"Childs" : 
 	[
 		{
 			"#Color" : "Color",
-			"#ID" : 18,
+			"#ID" : 3,
 			"#Type" : "Enum&View,Button,Font,Image,Grid",
 			"Childs" : 
 			[
 				{
 					"#Color" : "Color",
-					"#ID" : 19,
+					"#ID" : 4,
 					"#Type" : "Enum&View,Button,Font,Image,Grid",
-					"Childs" : null,
+					"Childs" : 
+					[
+						{
+							"#Color" : "Color",
+							"#ID" : 7,
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
+							"Childs" : null,
+							"Color" : 
+							[
+								240,
+								240,
+								240,
+								255
+							],
+							"Enable" : false,
+							"Height" : "33",
+							"Image" : 
+							{
+								"bottom" : 1.0,
+								"filename" : "invenCell.png",
+								"left" : 0.0,
+								"right" : 1.0,
+								"top" : 0.0
+							},
+							"LocalFromX" : "0",
+							"LocalFromY" : "0",
+							"LocalToX" : "0",
+							"LocalToY" : "0",
+							"LocalX" : "0",
+							"LocalY" : "0",
+							"Name" : "Name",
+							"Type" : 2,
+							"Visiable" : true,
+							"Width" : "33"
+						},
+						{
+							"#Color" : "Color",
+							"#ID" : 8,
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
+							"Childs" : null,
+							"Color" : 
+							[
+								240,
+								240,
+								240,
+								255
+							],
+							"Enable" : false,
+							"Height" : "33",
+							"Image" : 
+							{
+								"bottom" : 1.0,
+								"filename" : "invenCell.png",
+								"left" : 0.0,
+								"right" : 1.0,
+								"top" : 0.0
+							},
+							"LocalFromX" : "0",
+							"LocalFromY" : "0",
+							"LocalToX" : "0",
+							"LocalToY" : "0",
+							"LocalX" : "33",
+							"LocalY" : "0",
+							"Name" : "Name",
+							"Type" : 2,
+							"Visiable" : true,
+							"Width" : "33"
+						},
+						{
+							"#Color" : "Color",
+							"#ID" : 9,
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
+							"Childs" : null,
+							"Color" : 
+							[
+								240,
+								240,
+								240,
+								255
+							],
+							"Enable" : false,
+							"Height" : "33",
+							"Image" : 
+							{
+								"bottom" : 1.0,
+								"filename" : "invenCell.png",
+								"left" : 0.0,
+								"right" : 1.0,
+								"top" : 0.0
+							},
+							"LocalFromX" : "0",
+							"LocalFromY" : "0",
+							"LocalToX" : "0",
+							"LocalToY" : "0",
+							"LocalX" : "66",
+							"LocalY" : "0",
+							"Name" : "Name",
+							"Type" : 2,
+							"Visiable" : true,
+							"Width" : "33"
+						},
+						{
+							"#Color" : "Color",
+							"#ID" : 10,
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
+							"Childs" : null,
+							"Color" : 
+							[
+								240,
+								240,
+								240,
+								255
+							],
+							"Enable" : false,
+							"Height" : "33",
+							"Image" : 
+							{
+								"bottom" : 1.0,
+								"filename" : "invenCell.png",
+								"left" : 0.0,
+								"right" : 1.0,
+								"top" : 0.0
+							},
+							"LocalFromX" : "0",
+							"LocalFromY" : "0",
+							"LocalToX" : "0",
+							"LocalToY" : "0",
+							"LocalX" : "99",
+							"LocalY" : "0",
+							"Name" : "Name",
+							"Type" : 2,
+							"Visiable" : true,
+							"Width" : "33"
+						},
+						{
+							"#Color" : "Color",
+							"#ID" : 11,
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
+							"Childs" : null,
+							"Color" : 
+							[
+								240,
+								240,
+								240,
+								255
+							],
+							"Enable" : false,
+							"Height" : "33",
+							"Image" : 
+							{
+								"bottom" : 1.0,
+								"filename" : "invenCell.png",
+								"left" : 0.0,
+								"right" : 1.0,
+								"top" : 0.0
+							},
+							"LocalFromX" : "0",
+							"LocalFromY" : "0",
+							"LocalToX" : "0",
+							"LocalToY" : "0",
+							"LocalX" : "132",
+							"LocalY" : "0",
+							"Name" : "Name",
+							"Type" : 2,
+							"Visiable" : true,
+							"Width" : "33"
+						},
+						{
+							"#Color" : "Color",
+							"#ID" : 12,
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
+							"Childs" : null,
+							"Color" : 
+							[
+								240,
+								240,
+								240,
+								255
+							],
+							"Enable" : false,
+							"Height" : "33",
+							"Image" : 
+							{
+								"bottom" : 1.0,
+								"filename" : "invenCell.png",
+								"left" : 0.0,
+								"right" : 1.0,
+								"top" : 0.0
+							},
+							"LocalFromX" : "0",
+							"LocalFromY" : "0",
+							"LocalToX" : "0",
+							"LocalToY" : "0",
+							"LocalX" : "0",
+							"LocalY" : "33",
+							"Name" : "Name",
+							"Type" : 2,
+							"Visiable" : true,
+							"Width" : "33"
+						},
+						{
+							"#Color" : "Color",
+							"#ID" : 13,
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
+							"Childs" : null,
+							"Color" : 
+							[
+								240,
+								240,
+								240,
+								255
+							],
+							"Enable" : false,
+							"Height" : "33",
+							"Image" : 
+							{
+								"bottom" : 1.0,
+								"filename" : "invenCell.png",
+								"left" : 0.0,
+								"right" : 1.0,
+								"top" : 0.0
+							},
+							"LocalFromX" : "0",
+							"LocalFromY" : "0",
+							"LocalToX" : "0",
+							"LocalToY" : "0",
+							"LocalX" : "33",
+							"LocalY" : "33",
+							"Name" : "Name",
+							"Type" : 2,
+							"Visiable" : true,
+							"Width" : "33"
+						},
+						{
+							"#Color" : "Color",
+							"#ID" : 14,
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
+							"Childs" : null,
+							"Color" : 
+							[
+								240,
+								240,
+								240,
+								255
+							],
+							"Enable" : false,
+							"Height" : "33",
+							"Image" : 
+							{
+								"bottom" : 1.0,
+								"filename" : "invenCell.png",
+								"left" : 0.0,
+								"right" : 1.0,
+								"top" : 0.0
+							},
+							"LocalFromX" : "0",
+							"LocalFromY" : "0",
+							"LocalToX" : "0",
+							"LocalToY" : "0",
+							"LocalX" : "66",
+							"LocalY" : "33",
+							"Name" : "Name",
+							"Type" : 2,
+							"Visiable" : true,
+							"Width" : "33"
+						},
+						{
+							"#Color" : "Color",
+							"#ID" : 15,
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
+							"Childs" : null,
+							"Color" : 
+							[
+								240,
+								240,
+								240,
+								255
+							],
+							"Enable" : false,
+							"Height" : "33",
+							"Image" : 
+							{
+								"bottom" : 1.0,
+								"filename" : "invenCell.png",
+								"left" : 0.0,
+								"right" : 1.0,
+								"top" : 0.0
+							},
+							"LocalFromX" : "0",
+							"LocalFromY" : "0",
+							"LocalToX" : "0",
+							"LocalToY" : "0",
+							"LocalX" : "99",
+							"LocalY" : "33",
+							"Name" : "Name",
+							"Type" : 2,
+							"Visiable" : true,
+							"Width" : "33"
+						},
+						{
+							"#Color" : "Color",
+							"#ID" : 16,
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
+							"Childs" : null,
+							"Color" : 
+							[
+								240,
+								240,
+								240,
+								255
+							],
+							"Enable" : false,
+							"Height" : "33",
+							"Image" : 
+							{
+								"bottom" : 1.0,
+								"filename" : "invenCell.png",
+								"left" : 0.0,
+								"right" : 1.0,
+								"top" : 0.0
+							},
+							"LocalFromX" : "0",
+							"LocalFromY" : "0",
+							"LocalToX" : "0",
+							"LocalToY" : "0",
+							"LocalX" : "132",
+							"LocalY" : "33",
+							"Name" : "Name",
+							"Type" : 2,
+							"Visiable" : true,
+							"Width" : "33"
+						},
+						{
+							"#Color" : "Color",
+							"#ID" : 17,
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
+							"Childs" : null,
+							"Color" : 
+							[
+								240,
+								240,
+								240,
+								255
+							],
+							"Enable" : false,
+							"Height" : "33",
+							"Image" : 
+							{
+								"bottom" : 1.0,
+								"filename" : "invenCell.png",
+								"left" : 0.0,
+								"right" : 1.0,
+								"top" : 0.0
+							},
+							"LocalFromX" : "0",
+							"LocalFromY" : "0",
+							"LocalToX" : "0",
+							"LocalToY" : "0",
+							"LocalX" : "0",
+							"LocalY" : "66",
+							"Name" : "Name",
+							"Type" : 2,
+							"Visiable" : true,
+							"Width" : "33"
+						},
+						{
+							"#Color" : "Color",
+							"#ID" : 18,
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
+							"Childs" : null,
+							"Color" : 
+							[
+								240,
+								240,
+								240,
+								255
+							],
+							"Enable" : false,
+							"Height" : "33",
+							"Image" : 
+							{
+								"bottom" : 1.0,
+								"filename" : "invenCell.png",
+								"left" : 0.0,
+								"right" : 1.0,
+								"top" : 0.0
+							},
+							"LocalFromX" : "0",
+							"LocalFromY" : "0",
+							"LocalToX" : "0",
+							"LocalToY" : "0",
+							"LocalX" : "33",
+							"LocalY" : "66",
+							"Name" : "Name",
+							"Type" : 2,
+							"Visiable" : true,
+							"Width" : "33"
+						},
+						{
+							"#Color" : "Color",
+							"#ID" : 19,
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
+							"Childs" : null,
+							"Color" : 
+							[
+								240,
+								240,
+								240,
+								255
+							],
+							"Enable" : false,
+							"Height" : "33",
+							"Image" : 
+							{
+								"bottom" : 1.0,
+								"filename" : "invenCell.png",
+								"left" : 0.0,
+								"right" : 1.0,
+								"top" : 0.0
+							},
+							"LocalFromX" : "0",
+							"LocalFromY" : "0",
+							"LocalToX" : "0",
+							"LocalToY" : "0",
+							"LocalX" : "66",
+							"LocalY" : "66",
+							"Name" : "Name",
+							"Type" : 2,
+							"Visiable" : true,
+							"Width" : "33"
+						},
+						{
+							"#Color" : "Color",
+							"#ID" : 20,
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
+							"Childs" : null,
+							"Color" : 
+							[
+								240,
+								240,
+								240,
+								255
+							],
+							"Enable" : false,
+							"Height" : "33",
+							"Image" : 
+							{
+								"bottom" : 1.0,
+								"filename" : "invenCell.png",
+								"left" : 0.0,
+								"right" : 1.0,
+								"top" : 0.0
+							},
+							"LocalFromX" : "0",
+							"LocalFromY" : "0",
+							"LocalToX" : "0",
+							"LocalToY" : "0",
+							"LocalX" : "99",
+							"LocalY" : "66",
+							"Name" : "Name",
+							"Type" : 2,
+							"Visiable" : true,
+							"Width" : "33"
+						},
+						{
+							"#Color" : "Color",
+							"#ID" : 21,
+							"#Type" : "Enum&View,Button,Font,Image,Grid",
+							"Childs" : null,
+							"Color" : 
+							[
+								240,
+								240,
+								240,
+								255
+							],
+							"Enable" : false,
+							"Height" : "33",
+							"Image" : 
+							{
+								"bottom" : 1.0,
+								"filename" : "invenCell.png",
+								"left" : 0.0,
+								"right" : 1.0,
+								"top" : 0.0
+							},
+							"LocalFromX" : "0",
+							"LocalFromY" : "0",
+							"LocalToX" : "0",
+							"LocalToY" : "0",
+							"LocalX" : "132",
+							"LocalY" : "66",
+							"Name" : "Name",
+							"Type" : 2,
+							"Visiable" : true,
+							"Width" : "33"
+						}
+					],
 					"Color" : 
 					[
 						240,
@@ -24,45 +521,76 @@
 					],
 					"ColumnCount" : 5,
 					"Enable" : true,
-					"Height" : 99,
+					"Height" : "99",
 					"ImageCell" : 
 					{
-						"bottom" : 3.0,
+						"bottom" : 1.0,
 						"filename" : "invenCell.png",
 						"left" : 0.0,
-						"right" : 5.0,
+						"right" : 1.0,
 						"top" : 0.0
 					},
-					"LocalX" : 16,
-					"LocalY" : 190,
+					"LocalFromX" : "",
+					"LocalFromY" : "",
+					"LocalToX" : "",
+					"LocalToY" : "",
+					"LocalX" : "16",
+					"LocalY" : "190",
 					"Name" : "InvenGrid",
 					"RowCount" : 3,
-					"Tag" : "",
 					"Type" : 4,
 					"Visiable" : true,
-					"Width" : 165
+					"Width" : "165"
 				},
 				{
 					"#Color" : "Color",
-					"#ID" : 21,
+					"#ID" : 5,
 					"#Type" : "Enum&View,Button,Font,Image,Grid",
 					"Childs" : null,
 					"Color" : 
 					[
-						240,
-						240,
-						240,
+						128,
+						128,
+						128,
 						255
 					],
 					"Enable" : true,
-					"Height" : 43,
-					"LocalX" : 41,
-					"LocalY" : 102,
-					"Name" : "SlotA",
-					"Tag" : "",
+					"Height" : "33",
+					"LocalFromX" : "",
+					"LocalFromY" : "",
+					"LocalToX" : "",
+					"LocalToY" : "",
+					"LocalX" : "83",
+					"LocalY" : "81",
+					"Name" : "armor",
 					"Type" : 0,
 					"Visiable" : true,
-					"Width" : 43
+					"Width" : "33"
+				},
+				{
+					"#Color" : "Color",
+					"#ID" : 6,
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Childs" : null,
+					"Color" : 
+					[
+						128,
+						128,
+						128,
+						255
+					],
+					"Enable" : true,
+					"Height" : "33",
+					"LocalFromX" : "",
+					"LocalFromY" : "",
+					"LocalToX" : "",
+					"LocalToY" : "",
+					"LocalX" : "30",
+					"LocalY" : "130",
+					"Name" : "gloves",
+					"Type" : 0,
+					"Visiable" : true,
+					"Width" : "33"
 				},
 				{
 					"#Color" : "Color",
@@ -71,20 +599,48 @@
 					"Childs" : null,
 					"Color" : 
 					[
-						240,
-						240,
-						240,
+						128,
+						128,
+						128,
 						255
 					],
 					"Enable" : true,
-					"Height" : 43,
-					"LocalX" : 109,
-					"LocalY" : 104,
-					"Name" : "SlotB",
-					"Tag" : "",
+					"Height" : "33",
+					"LocalFromX" : "0",
+					"LocalFromY" : "0",
+					"LocalToX" : "0",
+					"LocalToY" : "0",
+					"LocalX" : "82",
+					"LocalY" : "130",
+					"Name" : "leg",
 					"Type" : 0,
 					"Visiable" : true,
-					"Width" : 43
+					"Width" : "33"
+				},
+				{
+					"#Color" : "Color",
+					"#ID" : 23,
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Childs" : null,
+					"Color" : 
+					[
+						128,
+						128,
+						128,
+						255
+					],
+					"Enable" : true,
+					"Height" : "33",
+					"LocalFromX" : "0",
+					"LocalFromY" : "0",
+					"LocalToX" : "0",
+					"LocalToY" : "0",
+					"LocalX" : "132",
+					"LocalY" : "130",
+					"Name" : "shoes",
+					"Type" : 0,
+					"Visiable" : true,
+					"Width" : "33"
 				}
 			],
 			"Color" : 
@@ -95,7 +651,7 @@
 				255
 			],
 			"Enable" : true,
-			"Height" : 359,
+			"Height" : "359",
 			"Image" : 
 			{
 				"bottom" : 1.0,
@@ -104,13 +660,16 @@
 				"right" : 1.0,
 				"top" : 0.0
 			},
-			"LocalX" : 8,
-			"LocalY" : 8,
+			"LocalFromX" : "",
+			"LocalFromY" : "",
+			"LocalToX" : "",
+			"LocalToY" : "",
+			"LocalX" : "8",
+			"LocalY" : "8",
 			"Name" : "Inventory",
-			"Tag" : "",
 			"Type" : 2,
 			"Visiable" : true,
-			"Width" : 195
+			"Width" : "195"
 		}
 	],
 	"Color" : 
@@ -121,12 +680,15 @@
 		255
 	],
 	"Enable" : true,
-	"Height" : 380,
-	"LocalX" : 10,
-	"LocalY" : 10,
+	"Height" : "380",
+	"LocalFromX" : "",
+	"LocalFromY" : "",
+	"LocalToX" : "",
+	"LocalToY" : "",
+	"LocalX" : "10",
+	"LocalY" : "10",
 	"Name" : "InvenPanel",
-	"Tag" : "",
 	"Type" : 0,
 	"Visiable" : true,
-	"Width" : 213
+	"Width" : "213"
 }

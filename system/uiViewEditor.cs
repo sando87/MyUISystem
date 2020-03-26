@@ -664,7 +664,13 @@ namespace system
                 IntPtr ptr = Marshal.AllocHGlobal(4);
                 int texID = -1;
                 if (bitmap.fullname.Length > 0)
+                {
+                    Bitmap bit = new Bitmap(bitmap.fullname);
+                    bitmap.width = bit.Width;
+                    bitmap.height = bit.Height;
+                    bitmap.byteperpixel = 4;
                     texID = Renderer.InitTexture(bitmap.fullname);
+                }
                 else
                     texID = Renderer.InitTexture(bitmap.buf, bitmap.width, bitmap.height);
                 Marshal.Copy(BitConverter.GetBytes(texID), 0, ptr, 4);

@@ -1,0 +1,820 @@
+{
+	"#Color" : "Color",
+	"#ID" : 2,
+	"#Type" : "Enum&View,Button,Font,Image,Grid",
+	"Childs" : 
+	[
+		{
+			"#Color" : "Color",
+			"#ID" : 3,
+			"#Type" : "Enum&View,Button,Font,Image,Grid",
+			"Childs" : 
+			[
+				{
+					"#Align" : "Enum&TopLeft,Top,TopRight,Left,Center,Right,BottomLeft,Bottom,BottomRight",
+					"#Color" : "Color",
+					"#ColorFont" : "Color",
+					"#ID" : 4,
+					"#Style" : "Enum&Regular,Bold,Italic,Underline,Strikeout",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Align" : 4,
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"ColorButton" : 
+					[
+						225,
+						225,
+						225,
+						255
+					],
+					"ColorFont" : 
+					[
+						0,
+						0,
+						0,
+						255
+					],
+					"ColorOutline" : 
+					[
+						173,
+						173,
+						173,
+						255
+					],
+					"Enable" : true,
+					"FontName" : "malgun.ttf",
+					"FontSize" : 20,
+					"Height" : "20",
+					"Image" : 
+					{
+						"bottom" : 1.0,
+						"filename" : "PlusClose.png",
+						"left" : 0.5,
+						"right" : 1.0,
+						"top" : 0.0
+					},
+					"LocalFromX" : "",
+					"LocalFromY" : "",
+					"LocalToX" : "",
+					"LocalToY" : "",
+					"LocalX" : "412",
+					"LocalY" : "30",
+					"Name" : "Close",
+					"Style" : 0,
+					"Text" : "text",
+					"Type" : 1,
+					"Visiable" : true,
+					"Width" : "20"
+				},
+				{
+					"#Align" : "Enum&TopLeft,Top,TopRight,Left,Center,Right,BottomLeft,Bottom,BottomRight",
+					"#Color" : "Color",
+					"#ColorFont" : "Color",
+					"#ID" : 5,
+					"#Style" : "Enum&Regular,Bold,Italic,Underline,Strikeout",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Align" : 4,
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"ColorButton" : 
+					[
+						225,
+						225,
+						225,
+						255
+					],
+					"ColorFont" : 
+					[
+						0,
+						0,
+						0,
+						255
+					],
+					"ColorOutline" : 
+					[
+						173,
+						173,
+						173,
+						255
+					],
+					"Enable" : true,
+					"FontName" : "malgun.ttf",
+					"FontSize" : 20,
+					"Height" : "25",
+					"Image" : 
+					{
+						"bottom" : 1.0,
+						"filename" : "PlusClose.png",
+						"left" : 0.0,
+						"right" : 0.5,
+						"top" : 0.0
+					},
+					"LocalFromX" : "",
+					"LocalFromY" : "",
+					"LocalToX" : "",
+					"LocalToY" : "",
+					"LocalX" : "356",
+					"LocalY" : "129",
+					"Name" : "btnPA",
+					"Style" : 0,
+					"Text" : "text",
+					"Type" : 1,
+					"Visiable" : true,
+					"Width" : "25"
+				},
+				{
+					"#Align" : "Enum&TopLeft,Top,TopRight,Left,Center,Right,BottomLeft,Bottom,BottomRight",
+					"#Color" : "Color",
+					"#ColorFont" : "Color",
+					"#ID" : 6,
+					"#Style" : "Enum&Regular,Bold,Italic,Underline,Strikeout",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Align" : 4,
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"ColorButton" : 
+					[
+						225,
+						225,
+						225,
+						255
+					],
+					"ColorFont" : 
+					[
+						0,
+						0,
+						0,
+						255
+					],
+					"ColorOutline" : 
+					[
+						173,
+						173,
+						173,
+						255
+					],
+					"Enable" : true,
+					"FontName" : "malgun.ttf",
+					"FontSize" : 20,
+					"Height" : "25",
+					"Image" : 
+					{
+						"bottom" : 1.0,
+						"filename" : "PlusClose.png",
+						"left" : 0.0,
+						"right" : 0.5,
+						"top" : 0.0
+					},
+					"LocalFromX" : "",
+					"LocalFromY" : "",
+					"LocalToX" : "",
+					"LocalToY" : "",
+					"LocalX" : "355",
+					"LocalY" : "189",
+					"Name" : "btnMA",
+					"Style" : 0,
+					"Text" : "text",
+					"Type" : 1,
+					"Visiable" : true,
+					"Width" : "25"
+				},
+				{
+					"#Align" : "Enum&TopLeft,Top,TopRight,Left,Center,Right,BottomLeft,Bottom,BottomRight",
+					"#Color" : "Color",
+					"#ColorFont" : "Color",
+					"#ID" : 7,
+					"#Style" : "Enum&Regular,Bold,Italic,Underline,Strikeout",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Align" : 4,
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"ColorButton" : 
+					[
+						225,
+						225,
+						225,
+						255
+					],
+					"ColorFont" : 
+					[
+						0,
+						0,
+						0,
+						255
+					],
+					"ColorOutline" : 
+					[
+						173,
+						173,
+						173,
+						255
+					],
+					"Enable" : true,
+					"FontName" : "malgun.ttf",
+					"FontSize" : 20,
+					"Height" : "25",
+					"Image" : 
+					{
+						"bottom" : 1.0,
+						"filename" : "PlusClose.png",
+						"left" : 0.0,
+						"right" : 0.5,
+						"top" : 0.0
+					},
+					"LocalFromX" : "0",
+					"LocalFromY" : "0",
+					"LocalToX" : "0",
+					"LocalToY" : "0",
+					"LocalX" : "355",
+					"LocalY" : "252",
+					"Name" : "btnPD",
+					"Style" : 0,
+					"Text" : "text",
+					"Type" : 1,
+					"Visiable" : true,
+					"Width" : "25"
+				},
+				{
+					"#Align" : "Enum&TopLeft,Top,TopRight,Left,Center,Right,BottomLeft,Bottom,BottomRight",
+					"#Color" : "Color",
+					"#ColorFont" : "Color",
+					"#ID" : 8,
+					"#Style" : "Enum&Regular,Bold,Italic,Underline,Strikeout",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Align" : 4,
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"ColorButton" : 
+					[
+						225,
+						225,
+						225,
+						255
+					],
+					"ColorFont" : 
+					[
+						0,
+						0,
+						0,
+						255
+					],
+					"ColorOutline" : 
+					[
+						173,
+						173,
+						173,
+						255
+					],
+					"Enable" : true,
+					"FontName" : "malgun.ttf",
+					"FontSize" : 20,
+					"Height" : "25",
+					"Image" : 
+					{
+						"bottom" : 1.0,
+						"filename" : "PlusClose.png",
+						"left" : 0.0,
+						"right" : 0.5,
+						"top" : 0.0
+					},
+					"LocalFromX" : "0",
+					"LocalFromY" : "0",
+					"LocalToX" : "0",
+					"LocalToY" : "0",
+					"LocalX" : "354",
+					"LocalY" : "312",
+					"Name" : "btnMD",
+					"Style" : 0,
+					"Text" : "text",
+					"Type" : 1,
+					"Visiable" : true,
+					"Width" : "25"
+				},
+				{
+					"#Align" : "Enum&TopLeft,Top,TopRight,Left,Center,Right,BottomLeft,Bottom,BottomRight",
+					"#Color" : "Color",
+					"#ColorFont" : "Color",
+					"#ID" : 9,
+					"#Style" : "Enum&Regular,Bold,Italic,Underline,Strikeout",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Align" : 4,
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"ColorButton" : 
+					[
+						225,
+						225,
+						225,
+						255
+					],
+					"ColorFont" : 
+					[
+						0,
+						0,
+						0,
+						255
+					],
+					"ColorOutline" : 
+					[
+						173,
+						173,
+						173,
+						255
+					],
+					"Enable" : true,
+					"FontName" : "malgun.ttf",
+					"FontSize" : 20,
+					"Height" : "25",
+					"Image" : 
+					{
+						"bottom" : 1.0,
+						"filename" : "PlusClose.png",
+						"left" : 0.0,
+						"right" : 0.5,
+						"top" : 0.0
+					},
+					"LocalFromX" : "0",
+					"LocalFromY" : "0",
+					"LocalToX" : "0",
+					"LocalToY" : "0",
+					"LocalX" : "353",
+					"LocalY" : "373",
+					"Name" : "btnHP",
+					"Style" : 0,
+					"Text" : "text",
+					"Type" : 1,
+					"Visiable" : true,
+					"Width" : "25"
+				},
+				{
+					"#Align" : "Enum&TopLeft,Top,TopRight,Left,Center,Right,BottomLeft,Bottom,BottomRight",
+					"#Color" : "Color",
+					"#ColorFont" : "Color",
+					"#ID" : 10,
+					"#Style" : "Enum&Regular,Bold,Italic,Underline,Strikeout",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Align" : 4,
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"ColorButton" : 
+					[
+						225,
+						225,
+						225,
+						255
+					],
+					"ColorFont" : 
+					[
+						0,
+						0,
+						0,
+						255
+					],
+					"ColorOutline" : 
+					[
+						173,
+						173,
+						173,
+						255
+					],
+					"Enable" : true,
+					"FontName" : "malgun.ttf",
+					"FontSize" : 20,
+					"Height" : "25",
+					"Image" : 
+					{
+						"bottom" : 1.0,
+						"filename" : "PlusClose.png",
+						"left" : 0.0,
+						"right" : 0.5,
+						"top" : 0.0
+					},
+					"LocalFromX" : "0",
+					"LocalFromY" : "0",
+					"LocalToX" : "0",
+					"LocalToY" : "0",
+					"LocalX" : "352",
+					"LocalY" : "434",
+					"Name" : "btnMP",
+					"Style" : 0,
+					"Text" : "text",
+					"Type" : 1,
+					"Visiable" : true,
+					"Width" : "25"
+				},
+				{
+					"#Align" : "Enum&TopLeft,Top,TopRight,Left,Center,Right,BottomLeft,Bottom,BottomRight",
+					"#Color" : "Color",
+					"#ColorFont" : "Color",
+					"#ID" : 11,
+					"#Style" : "Enum&Regular,Bold,Italic,Underline,Strikeout",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Align" : 4,
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"ColorFont" : 
+					[
+						255,
+						255,
+						255,
+						255
+					],
+					"Enable" : true,
+					"FontName" : "malgun.ttf",
+					"FontSize" : 20,
+					"Height" : "30",
+					"LocalFromX" : "0",
+					"LocalFromY" : "0",
+					"LocalToX" : "0",
+					"LocalToY" : "0",
+					"LocalX" : "195",
+					"LocalY" : "124",
+					"Name" : "lbPA",
+					"Style" : 0,
+					"Text" : "0",
+					"Type" : 3,
+					"Visiable" : true,
+					"Width" : "80"
+				},
+				{
+					"#Align" : "Enum&TopLeft,Top,TopRight,Left,Center,Right,BottomLeft,Bottom,BottomRight",
+					"#Color" : "Color",
+					"#ColorFont" : "Color",
+					"#ID" : 12,
+					"#Style" : "Enum&Regular,Bold,Italic,Underline,Strikeout",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Align" : 4,
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"ColorFont" : 
+					[
+						255,
+						255,
+						255,
+						255
+					],
+					"Enable" : true,
+					"FontName" : "malgun.ttf",
+					"FontSize" : 20,
+					"Height" : "30",
+					"LocalFromX" : "0",
+					"LocalFromY" : "0",
+					"LocalToX" : "0",
+					"LocalToY" : "0",
+					"LocalX" : "196",
+					"LocalY" : "186",
+					"Name" : "lbMA",
+					"Style" : 0,
+					"Text" : "0",
+					"Type" : 3,
+					"Visiable" : true,
+					"Width" : "80"
+				},
+				{
+					"#Align" : "Enum&TopLeft,Top,TopRight,Left,Center,Right,BottomLeft,Bottom,BottomRight",
+					"#Color" : "Color",
+					"#ColorFont" : "Color",
+					"#ID" : 13,
+					"#Style" : "Enum&Regular,Bold,Italic,Underline,Strikeout",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Align" : 4,
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"ColorFont" : 
+					[
+						255,
+						255,
+						255,
+						255
+					],
+					"Enable" : true,
+					"FontName" : "malgun.ttf",
+					"FontSize" : 20,
+					"Height" : "30",
+					"LocalFromX" : "0",
+					"LocalFromY" : "0",
+					"LocalToX" : "0",
+					"LocalToY" : "0",
+					"LocalX" : "196",
+					"LocalY" : "248",
+					"Name" : "lbPD",
+					"Style" : 0,
+					"Text" : "0",
+					"Type" : 3,
+					"Visiable" : true,
+					"Width" : "80"
+				},
+				{
+					"#Align" : "Enum&TopLeft,Top,TopRight,Left,Center,Right,BottomLeft,Bottom,BottomRight",
+					"#Color" : "Color",
+					"#ColorFont" : "Color",
+					"#ID" : 14,
+					"#Style" : "Enum&Regular,Bold,Italic,Underline,Strikeout",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Align" : 4,
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"ColorFont" : 
+					[
+						255,
+						255,
+						255,
+						255
+					],
+					"Enable" : true,
+					"FontName" : "malgun.ttf",
+					"FontSize" : 20,
+					"Height" : "30",
+					"LocalFromX" : "0",
+					"LocalFromY" : "0",
+					"LocalToX" : "0",
+					"LocalToY" : "0",
+					"LocalX" : "196",
+					"LocalY" : "313",
+					"Name" : "lbMD",
+					"Style" : 0,
+					"Text" : "0",
+					"Type" : 3,
+					"Visiable" : true,
+					"Width" : "80"
+				},
+				{
+					"#Align" : "Enum&TopLeft,Top,TopRight,Left,Center,Right,BottomLeft,Bottom,BottomRight",
+					"#Color" : "Color",
+					"#ColorFont" : "Color",
+					"#ID" : 15,
+					"#Style" : "Enum&Regular,Bold,Italic,Underline,Strikeout",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Align" : 4,
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"ColorFont" : 
+					[
+						255,
+						255,
+						255,
+						255
+					],
+					"Enable" : true,
+					"FontName" : "malgun.ttf",
+					"FontSize" : 20,
+					"Height" : "30",
+					"LocalFromX" : "0",
+					"LocalFromY" : "0",
+					"LocalToX" : "0",
+					"LocalToY" : "0",
+					"LocalX" : "195",
+					"LocalY" : "371",
+					"Name" : "lbHP",
+					"Style" : 0,
+					"Text" : "0",
+					"Type" : 3,
+					"Visiable" : true,
+					"Width" : "80"
+				},
+				{
+					"#Align" : "Enum&TopLeft,Top,TopRight,Left,Center,Right,BottomLeft,Bottom,BottomRight",
+					"#Color" : "Color",
+					"#ColorFont" : "Color",
+					"#ID" : 16,
+					"#Style" : "Enum&Regular,Bold,Italic,Underline,Strikeout",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Align" : 4,
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"ColorFont" : 
+					[
+						255,
+						255,
+						255,
+						255
+					],
+					"Enable" : true,
+					"FontName" : "malgun.ttf",
+					"FontSize" : 20,
+					"Height" : "30",
+					"LocalFromX" : "0",
+					"LocalFromY" : "0",
+					"LocalToX" : "0",
+					"LocalToY" : "0",
+					"LocalX" : "194",
+					"LocalY" : "433",
+					"Name" : "lbMP",
+					"Style" : 0,
+					"Text" : "0",
+					"Type" : 3,
+					"Visiable" : true,
+					"Width" : "80"
+				},
+				{
+					"#Align" : "Enum&TopLeft,Top,TopRight,Left,Center,Right,BottomLeft,Bottom,BottomRight",
+					"#Color" : "Color",
+					"#ColorFont" : "Color",
+					"#ID" : 17,
+					"#Style" : "Enum&Regular,Bold,Italic,Underline,Strikeout",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Align" : 3,
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"ColorFont" : 
+					[
+						255,
+						255,
+						255,
+						255
+					],
+					"Enable" : true,
+					"FontName" : "malgun.ttf",
+					"FontSize" : 16,
+					"Height" : "30",
+					"LocalFromX" : "0",
+					"LocalFromY" : "0",
+					"LocalToX" : "0",
+					"LocalToY" : "0",
+					"LocalX" : "100",
+					"LocalY" : "82",
+					"Name" : "lbLevel",
+					"Style" : 0,
+					"Text" : "Level : ",
+					"Type" : 3,
+					"Visiable" : true,
+					"Width" : "119"
+				},
+				{
+					"#Align" : "Enum&TopLeft,Top,TopRight,Left,Center,Right,BottomLeft,Bottom,BottomRight",
+					"#Color" : "Color",
+					"#ColorFont" : "Color",
+					"#ID" : 18,
+					"#Style" : "Enum&Regular,Bold,Italic,Underline,Strikeout",
+					"#Type" : "Enum&View,Button,Font,Image,Grid",
+					"Align" : 3,
+					"Childs" : null,
+					"Color" : 
+					[
+						240,
+						240,
+						240,
+						255
+					],
+					"ColorFont" : 
+					[
+						255,
+						255,
+						255,
+						255
+					],
+					"Enable" : true,
+					"FontName" : "malgun.ttf",
+					"FontSize" : 16,
+					"Height" : "30",
+					"LocalFromX" : "0",
+					"LocalFromY" : "0",
+					"LocalToX" : "0",
+					"LocalToY" : "0",
+					"LocalX" : "250",
+					"LocalY" : "82",
+					"Name" : "lbRemain",
+					"Style" : 0,
+					"Text" : "Remain : ",
+					"Type" : 3,
+					"Visiable" : true,
+					"Width" : "141"
+				}
+			],
+			"ClipRateBottom" : 0.0,
+			"ClipRateLeft" : 0.0,
+			"ClipRateRight" : 0.0,
+			"ClipRateTop" : 0.0,
+			"Color" : 
+			[
+				240,
+				240,
+				240,
+				255
+			],
+			"Enable" : true,
+			"Height" : "590",
+			"Image" : 
+			{
+				"bottom" : 1.0,
+				"filename" : "panelStat.png",
+				"left" : 0.0,
+				"right" : 1.0,
+				"top" : 0.0
+			},
+			"LocalFromX" : "",
+			"LocalFromY" : "",
+			"LocalToX" : "",
+			"LocalToY" : "",
+			"LocalX" : "5",
+			"LocalY" : "5",
+			"Name" : "BackStat",
+			"Type" : 2,
+			"Visiable" : true,
+			"Width" : "450"
+		}
+	],
+	"Color" : 
+	[
+		240,
+		240,
+		240,
+		255
+	],
+	"Enable" : true,
+	"Height" : "600",
+	"LocalFromX" : "",
+	"LocalFromY" : "",
+	"LocalToX" : "",
+	"LocalToY" : "",
+	"LocalX" : "15",
+	"LocalY" : "15",
+	"Name" : "StatePanel",
+	"Type" : 0,
+	"Visiable" : true,
+	"Width" : "460"
+}

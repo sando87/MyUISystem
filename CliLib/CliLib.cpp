@@ -14,6 +14,7 @@
 using namespace CliLib;
 using namespace msclr::interop;
 
+jUISystem* gUISystem = new jUISystem();
 
 UIEngine::UIEngine()
 {
@@ -32,63 +33,60 @@ void UIEngine::Init(UIEngineCallbacks^ ops)
 {
 	mParam = gcnew RenderParams();
 	mOps = ops;
-	jUISystem *system = jUISystem::GetInst();
-	system->EventDrawFill = UIEngine::DrawFill;
-	system->EventDrawOutline = UIEngine::DrawOutline;
-	system->EventDrawTexture = UIEngine::DrawTexture;
-	system->OpLoadTexture = UIEngine::LoadTexture;
-	system->OpReleaseTexture = UIEngine::ReleaseTexture;
+	gUISystem->EventDrawFill = UIEngine::DrawFill;
+	gUISystem->EventDrawOutline = UIEngine::DrawOutline;
+	gUISystem->EventDrawTexture = UIEngine::DrawTexture;
+	gUISystem->OpLoadTexture = UIEngine::LoadTexture;
+	gUISystem->OpReleaseTexture = UIEngine::ReleaseTexture;
 }
 void UIEngine::SetResourcePath(String^ path)
 {
 	std::string _path = marshal_as<std::string>(path);
-	jUISystem::GetInst()->SetResourcePath(_path);
+	gUISystem->SetResourcePath(_path);
 }
 void UIEngine::Load(String ^fullname)
 {
 	std::string name = marshal_as<std::string>(fullname);
 
-	jUISystem *system = jUISystem::GetInst();
-	system->ParseJson(name);
-	system->LoadViews();
+	gUISystem->ParseJson(name);
+	gUISystem->LoadViews();
 }
 void UIEngine::LoadJson(String ^jsonText)
 {
 	std::string text = marshal_as<std::string>(jsonText);
 
-	jUISystem *system = jUISystem::GetInst();
-	system->ParseJsonString(text);
-	system->LoadViews();
+	gUISystem->ParseJsonString(text);
+	gUISystem->LoadViews();
 }
 void UIEngine::DoMouseEvent()
 {
-	jUISystem::GetInst()->MouseEventCall();
+	gUISystem->MouseEventCall();
 }
 void UIEngine::SetMouseEvent(int mouseX, int mouseY, bool down, bool triggered)
 {
-	jUISystem::GetInst()->SetMouseEvent(Point2(mouseX, mouseY), down, triggered);
+	gUISystem->SetMouseEvent(Point2(mouseX, mouseY), down, triggered);
 }
 void UIEngine::Draw()
 {
-	jUISystem::GetInst()->Draw();
+	gUISystem->Draw();
 }
 void CliLib::UIEngine::ChangeParent(int id, int parentID)
 {
-	jUISystem::GetInst()->ChangeParent(id, parentID);
+	gUISystem->ChangeParent(id, parentID);
 }
 void CliLib::UIEngine::ChangeNeighbor(int id, int neighborID)
 {
-	jUISystem::GetInst()->ChangeNeighbor(id, neighborID);
+	gUISystem->ChangeNeighbor(id, neighborID);
 }
 String^ UIEngine::ToJsonString()
 {
-	string ret = jUISystem::GetInst()->ToJsonString();
+	string ret = gUISystem->ToJsonString();
 	String^ str = marshal_as<String^>(ret);
 	return str;
 }
 ViewInfo^ UIEngine::FindTopView(int mouseX, int mouseY)
 {
-	jView *topView = jUISystem::GetInst()->FindTopView(mouseX, mouseY);
+	jView *topView = gUISystem->FindTopView(mouseX, mouseY);
 	if (topView == nullptr)
 		return nullptr;
 
@@ -100,7 +98,7 @@ ViewInfo^ UIEngine::FindTopView(int mouseX, int mouseY)
 }
 ViewInfo^ UIEngine::FindView(int id)
 {
-	jView *findView = jUISystem::GetInst()->FindView(id);
+	jView *findView = gUISystem->FindView(id);
 	if (findView == nullptr)
 		return nullptr;
 
@@ -113,7 +111,7 @@ ViewInfo^ UIEngine::FindView(int id)
 ViewInfo^ UIEngine::CreateView(int type)
 {
 	ViewInfo^ view = gcnew ViewInfo();
-	jView *newView = jUISystem::GetInst()->CreateView((jViewType)type);
+	jView *newView = gUISystem->CreateView((jViewType)type);
 	if (newView != nullptr)
 	{
 		string str = newView->ToJsonString();
@@ -124,7 +122,7 @@ ViewInfo^ UIEngine::CreateView(int type)
 }
 void UIEngine::RemoveView(int id)
 {
-	jUISystem::GetInst()->DeleteView(id);
+	gUISystem->DeleteView(id);
 }
 void UIEngine::DrawFill(DrawingParams param)
 {
@@ -150,6 +148,9 @@ void* UIEngine::LoadTexture(jUIBitmap *bitmap)
 	info->buf = bitmap->buf.empty() ? IntPtr(nullptr) : IntPtr(&bitmap->buf[0]);
 	info->fullname = marshal_as<String^>(bitmap->fullname);
 	void* ptr = (void*)mInst->mOps->OnLoadTexture(info);
+	bitmap->width = info->width;
+	bitmap->height = info->height;
+	bitmap->byteperpixel = info->byteperpixel;
 	return ptr;
 }
 void UIEngine::ReleaseTexture(void *ptr)
@@ -160,7 +161,7 @@ void ViewInfo::Update(String ^json)
 {
 	jsonString = json;
 	string str = marshal_as<string>(json);
-	jUISystem::GetInst()->UpdateView(view, str);
+	gUISystem->UpdateView(view, str);
 }
 System::Drawing::Rectangle ^ViewInfo::GetRectAbsolute()
 {
